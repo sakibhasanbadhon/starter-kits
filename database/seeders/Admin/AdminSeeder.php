@@ -16,8 +16,8 @@ class AdminSeeder extends Seeder
     {
         Admin::updateOrcreate(['email' => 'admin@gmail.com'],[
             'role_id'    => 1,
-            'first_name' => 'Sohag',
-            'last_name'  => 'Hamjah',
+            'first_name' => 'Super',
+            'last_name'  => 'Admin',
             'user_name'  => 'admin',
             'email'      => 'admin@gmail.com',
             'password'   => Hash::make('admin'),

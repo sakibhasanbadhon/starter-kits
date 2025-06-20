@@ -83,7 +83,67 @@
                         <li class="nav-item">
                             <a href="{{ route('admin.manage-admins.index') }}" class="nav-link {{ isMenuActive('admin/manage-admins*') }}">
                                 <i class="fas fa-angle-right nav-icon"></i>
-                                <p>Home Banner</p>
+                                <p>Banner</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('admin.manage-admins.user.index') }}" class="nav-link {{ isMenuActive('admin/manage-admins*') }}">
+                                <i class="fas fa-angle-right nav-icon"></i>
+                                <p>About</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('admin.web.settings') }}" class="nav-link {{ isMenuActive('admin/manage-admins*') }}">
+                                <i class="fas fa-angle-right nav-icon"></i>
+                                <p>Testimonial</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('admin.web.settings') }}" class="nav-link {{ isMenuActive('admin/manage-admins*') }}">
+                                <i class="fas fa-angle-right nav-icon"></i>
+                                <p>Services</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('admin.web.settings') }}" class="nav-link {{ isMenuActive('admin/manage-admins*') }}">
+                                <i class="fas fa-angle-right nav-icon"></i>
+                                <p>Faq</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('admin.web.settings') }}" class="nav-link {{ isMenuActive('admin/manage-admins*') }}">
+                                <i class="fas fa-angle-right nav-icon"></i>
+                                <p>Blog</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('admin.web.settings') }}" class="nav-link {{ isMenuActive('admin/manage-admins*') }}">
+                                <i class="fas fa-angle-right nav-icon"></i>
+                                <p>Login</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('admin.web.settings') }}" class="nav-link {{ isMenuActive('admin/manage-admins*') }}">
+                                <i class="fas fa-angle-right nav-icon"></i>
+                                <p>Registration</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li class="nav-item {{ isMenuExpand('admin/manage-admins*') }}">
+                    <a href="#" class="nav-link">
+                        <i class="nav-icon fas fa-user-cog"></i>
+                        <p>
+                            Settings
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="{{ route('admin.manage-admins.index') }}" class="nav-link {{ isMenuActive('admin/manage-admins*') }}">
+                                <i class="fas fa-angle-right nav-icon"></i>
+                                <p>Basic Settings</p>
                             </a>
                         </li>
                         <li class="nav-item">
@@ -120,6 +180,23 @@
                         <i class="fa fa-user"></i>
                         <p>
                             Useful Links
+                        </p>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a href="{{ route('admin.contact.message') }}" class="nav-link {{ isMenuActive('admin/contact/message*') }}">
+                        <i class="fa fa-user"></i>
+                        <p>
+                            Maintenance Mode
+                        </p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ route('admin.contact.message') }}" class="nav-link {{ isMenuActive('admin/contact/message*') }}">
+                        <i class="fa fa-user"></i>
+                        <p>
+                            Mail Configaretion
                         </p>
                     </a>
                 </li>
