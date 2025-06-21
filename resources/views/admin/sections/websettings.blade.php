@@ -57,33 +57,37 @@
 
             <div class="mb-3">
                 <label for="siteName" class="form-label">Site name</label>
-                <input type="text" name="sitename" class="form-control" id="siteName" value="{{ $websettiongs->sitename }}" placeholder="Ishop">
+                <input type="text" name="sitename" class="form-control" id="siteName" value="{{ @$websettiongs->sitename }}" placeholder="Ishop">
             </div>
 
             <div class="mb-3">
                 <label for="siteUrl" class="form-label">Site URL</label>
-                <input type="url" class="form-control" name="siteurl" id="siteUrl" value="{{ $websettiongs->siteurl }}" placeholder="http://ishop.clickoshop.com">
+                <input type="url" class="form-control" name="siteurl" id="siteUrl" value="{{ @$websettiongs->siteurl }}" placeholder="http://ishop.clickoshop.com">
             </div>
 
             <div class="mb-3">
                 <label for="metaTitle" class="form-label">Meta title</label>
-                <input type="text" class="form-control" name="metatitle" id="metaTitle" value="{{ $websettiongs->metatitle }}" placeholder="Online Shopping for Men, Electronics, Apparel, Computers, Books, DVDs & more">
+                <input type="text" class="form-control" name="metatitle" id="metaTitle" value="{{ @$websettiongs->metatitle }}" placeholder="Online Shopping for Men, Electronics, Apparel, Computers, Books, DVDs & more">
             </div>
 
             <div class="mb-3">
                 <label for="metaDescription" class="form-label">Meta description</label>
-                <textarea class="form-control" name="metadescription" id="metaDescription" rows="3" placeholder="Ishop is shopping platform for baby & kids essentials..."> {{ $websettiongs->metadescription }}</textarea>
+                <textarea class="form-control" name="metadescription" id="metaDescription" rows="3" placeholder="Ishop is shopping platform for baby & kids essentials..."> {{ @$websettiongs->metadescription }}</textarea>
             </div>
 
             <div class="mb-3">
                 <label for="copyrightText" class="form-label">Copyright text</label>
-                <input type="text" class="form-control" name="copyright_text" value="{{ $websettiongs->copyright_text }}" id="copyrightText" placeholder="All rights reserved by Ishop">
+                <input type="text" class="form-control" name="copyright_text" value="{{ @$websettiongs->copyright_text }}" id="copyrightText" placeholder="All rights reserved by Ishop">
             </div>
 
             <div class="row">
                 <div class="col-md-6 mb-3">
                     <label for="primaryColor" class="form-label">Primary color</label>
-                    <input type="text" name="primary_color" class="form-control" value="{{ $websettiongs->primary_color }}" id="primaryColor" placeholder="Primary color">
+                    <input type="text" name="primary_color" class="form-control" value="{{ @$websettiongs->primary_color }}" id="primaryColor" placeholder="Primary color">
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="baseColor" class="form-label">Base color</label>
+                    <input type="text" id="baseColor" name="primary_color" class="form-control" value="{{ @$websettiongs->primary_color }}" id="primaryColor" placeholder="Primary color">
                 </div>
 
             </div>

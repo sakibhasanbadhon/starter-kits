@@ -47,11 +47,9 @@
                                    @php
                                         $status = (int) $item->status; // Make sure it's a strict integer
                                     @endphp
-                                    {{-- <input type="checkbox" class="statusToggle" data-id="{{ $item->id }}" {{ $item->status == 1 ? 'checked' : '' }}> --}}
                                     <input type="checkbox" class="statusToggle" data-id="{{ $item->id }}" {{ $status === 1 ? 'checked' : '' }}>
                                     <span class="slider round"></span>
                                 </label>
-                                {{-- <span class="statusText-{{ $item->id }}">{{ $item->status ? 'Active' : 'Deactive' }}</span> --}}
                                 <span class="ml-3 badge statusText-{{ $item->id }} {{ $status === 1 ? 'badge-success' : 'badge-warning' }}">
                                     {{ $status === 1 ? 'Active' : 'Deactive' }}
                                 </span>
