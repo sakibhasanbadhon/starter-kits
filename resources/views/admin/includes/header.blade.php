@@ -45,7 +45,7 @@
        <!--  Profile -->
        <li class="nav-item dropdown profile">
         <a class="nav-link" data-toggle="dropdown" href="javascript:void(0)">
-          <img src="{{ asset('public/backend') }}/img/user1-128x128.jpg" alt="User Avatar" class="profile-image">
+          <img src="{{ asset('backend') }}/img/user1-128x128.jpg" alt="User Avatar" class="profile-image">
         </a>
         <div class="dropdown-menu dropdown-menu-sm">
           <a href="{{ route('admin.manage-admins.edit', auth()->user()->id) }}" class="dropdown-item">
