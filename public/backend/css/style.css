@@ -238,3 +238,9 @@ input[type=number] {
   }
 
   /* end switcher */
+.nav li a i{
+    width: 20px;
+}
+li.nav-header{
+    color: #515d76 !important;
+}

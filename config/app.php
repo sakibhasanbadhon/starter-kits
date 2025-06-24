@@ -161,6 +161,7 @@ return [
          */
         Intervention\Image\ImageServiceProvider::class,
         Buglinjo\LaravelWebp\WebpServiceProvider::class,
+        Barryvdh\Debugbar\ServiceProvider::class,
         /*
          * Application Service Providers...
          */
