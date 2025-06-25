@@ -9,7 +9,19 @@ class Role extends Model
 {
     use HasFactory;
 
-    protected $guarded = ['id'];
+    /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    protected $table = 'roles';
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<string>
+     */
+    protected $fillable = ['role_name','slug','description','deletable','created_by','updated_by'];
 
     public function permissions(){
         return $this->belongsToMany(Permission::class);

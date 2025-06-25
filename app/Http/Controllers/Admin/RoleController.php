@@ -6,7 +6,9 @@ use App\Models\Admin\Role;
 use Illuminate\Support\Str;
 use App\Models\Admin\Module;
 use Illuminate\Http\Request;
+use App\Services\RoleService;
 use App\Http\Helpers\JsonResponse;
+use App\Http\Requests\RoleRequest;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Gate;
 use Yajra\DataTables\Facades\DataTables;
@@ -14,6 +16,13 @@ use Illuminate\Support\Facades\Validator;
 
 class RoleController extends Controller
 {
+    protected $roleService;
+
+    public function __construct(RoleService $roleService)
+    {
+        $this->roleService = $roleService;
+    }
+
     /**
      * Role index page show
      *
@@ -50,34 +59,11 @@ class RoleController extends Controller
      * @return Illuminate\Http\Request Response
      */
 
-    public function store(Request $request){
+    public function store(RoleRequest $request){
 
         Gate::authorize('create-role');
-
-        if($request->update_id){
-            $request->validate([
-                'role_name' => 'required|string|unique:roles,name,'.$request->update_id,
-            ]);
-        }else{
-            $request->validate([
-                'role_name' => 'required|string|unique:roles,name',
-            ]);
-        }
-
-        $role = Role::updateOrCreate(['id' => $request->update_id],[
-            'name' => $request->role_name,
-            'slug' => Str::slug($request->role_name),
-        ]);
-
-        $role->permissions()->sync($request->permission);
-
-
-        if($request->update_id){
-            $message = ['Role updated successfull!'];
-        }else{
-            $message = ['Role created successfull!'];
-        }
-
+        $this->roleService->storeOrUpdateData($request);
+        $message = ['Role has been saved successfull.'];
         return redirect()->route('admin.manage-admins.roles.index')->with(['success' => $message]);
     }
 
