@@ -49,8 +49,8 @@
 
                 <li class="nav-header">BLOG</li>
                 <li class="nav-item">
-                    <a href="#"
-                        class="nav-link {{ isMenuActive('admin.pages*') }}">
+                    <a href="{{ route('admin.posts.index') }}"
+                        class="nav-link {{ isMenuActive('admin/posts*') }}">
                         <i class="fas fa-file-alt fa-sm"></i>
                         <p>
                             Post
@@ -58,8 +58,8 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="#"
-                        class="nav-link {{ isMenuActive('admin.pages*') }}">
+                    <a href="{{ route('admin.categories.index') }}"
+                        class="nav-link {{ isMenuActive('admin/categories*') }}">
                         <i class="fa fa-tags fa-sm"></i>
                         <p>
                             Categories

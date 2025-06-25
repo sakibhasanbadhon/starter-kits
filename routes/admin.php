@@ -1,13 +1,15 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Blog\PostController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\PagesController;
 use App\Http\Controllers\Admin\GlobalController;
+use App\Http\Controllers\Blog\CategoryController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\UsefulLinkController;
 use App\Http\Controllers\Admin\UserManageController;
 use App\Http\Controllers\Admin\AdminManagementController;
-use App\Http\Controllers\Admin\UsefulLinkController;
 
 Route::controller(DashboardController::class)->group(function(){
     Route::get('dashboard', 'dashboard')->name('dashboard');
@@ -51,7 +53,6 @@ Route::controller(GlobalController::class)->group(function(){
 Route::controller(PagesController::class)->prefix('pages')->name('pages.')->group(function(){
     Route::get('index', 'index')->name('index');
     Route::post('status/update', 'statusUpdate')->name('status.update');
-
 });
 
 Route::controller(UsefulLinkController::class)->prefix('useful-links')->name('useful-links.')->group(function(){
@@ -61,5 +62,25 @@ Route::controller(UsefulLinkController::class)->prefix('useful-links')->name('us
     Route::post('delete', 'delete')->name('delete');
     Route::post('update', 'update')->name('update');
 });
+
+
+// Category Routes
+Route::prefix('categories')->name('categories.')->group(function(){
+    Route::get('/',[CategoryController::class, 'index'])->name('index');
+    Route::post('store-or-update',[CategoryController::class, 'storeOrUpdate'])->name('store-or-update');
+    Route::get('edit',[CategoryController::class, 'edit'])->name('edit');
+    Route::post('status-change',[CategoryController::class, 'statusChange'])->name('status-change');
+    Route::post('delete',[CategoryController::class, 'delete'])->name('delete');
+});
+
+// Post Routes
+Route::prefix('posts')->name('posts.')->group(function(){
+    Route::get('/',[PostController::class, 'index'])->name('index');
+    Route::post('store-or-update',[PostController::class, 'storeOrUpdate'])->name('store-or-update');
+    Route::get('edit',[PostController::class, 'edit'])->name('edit');
+    Route::post('status-change',[PostController::class, 'statusChange'])->name('status-change');
+    Route::post('delete',[PostController::class, 'delete'])->name('delete');
+});
+
 
 
