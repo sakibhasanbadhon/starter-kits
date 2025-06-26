@@ -4,26 +4,27 @@ use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
+use Mews\Purifier\Facades\Purifier;
 use Illuminate\Support\Facades\File;
 use Intervention\Image\Facades\Image;
 use Buglinjo\LaravelWebp\Facades\Webp;
+use Illuminate\Support\Facades\Storage;
 
 /**************************************
  *  Static Variables Start
  ***********/
 define('SOMETHING_WRONG', 'Something Went Wrong, Please Try Again!');
+define('STATUS',[1 => 'Active', 2 => 'Inactive']);
 
  /**************************************
  *  Static Variables End
  ***********/
-
-
 function isMenuActive($url){
    return request()->is($url) ? 'active' : '';
 }
 
 function isMenuExpand($url){
-    return request()->is($url) ? 'menu-is-opening menu-open' : ''; 
+    return request()->is($url) ? 'menu-is-opening menu-open' : '';
 }
 
 /**************************************
@@ -32,9 +33,7 @@ function isMenuExpand($url){
 function filesPath($slug)
 {
     $data = [
-        'admin-profile'         => [
-            'path'              => 'media/backend/images/admin/profile',
-        ],
+        'admin-profile' => ['path' => 'media/backend/images/admin/profile'],
     ];
     return (object) $data[$slug];
 }
@@ -111,26 +110,26 @@ function uploadLocalImage($file,$destination_path,$old_file = null) {
 function uploadImage($files_path, $destination_path, $old_files = null)
 {
     $output_files_name = [];
-    
+
     foreach ($files_path as $path) {
         $file_name      = File::name($path);
         $file_extension = File::extension($path);
         $file_base_name = $file_name . "." . $file_extension;
         $file_mime_type = File::mimeType($path);
         $file_size      = File::size($path);
-        
+
         $save_path = getFilesPath($destination_path);
-        
+
         $file_mime_type_array = explode('/', $file_mime_type);
         if (array_shift($file_mime_type_array) == "image" && $file_extension != "svg") {
             $file = Image::make($path)->orientate();
-            
+
             $width = $file->width();
             $height = $file->height();
-            
+
             $resulation_break_point = [2048, 2340, 2730, 3276, 4096, 5460, 8192];
             $reduce_percentage = [12.5, 25, 37.5, 50, 62.5, 75];
-            
+
             // Dynamically Image Resizing & Move to Targeted folder
             if ($width > 0 && $width < 2048) {
                 $new_width = $width;
@@ -273,7 +272,6 @@ function getImagePath($image_name, $path_type = null)
 /**************************************
  *  Image Uploader Start
  ***********/
-
 function filterStringToLower($string) {
     $username = preg_replace('/ /i','',$string);
     $username = preg_replace('/[^A-Za-z0-9\-]/', '', $username);
@@ -363,4 +361,70 @@ function generateUsername($first_name,$last_name,$table = "users") {
     }while($loop);
 
     return $generate_name;
+}
+
+
+if (!function_exists('table_image')) {
+    function table_image($path, $name = null)
+    {
+        return $path ? "<img src='" .file_path($path). "' alt='" . $name . "' style='width:40px;height: 40px;'/>"
+            : "<img src='" . asset('/') . "img/default.svg' alt='Default Image' style='width:40px;height: 40px;'/>";
+    }
+}
+
+if (!function_exists('user_image')) {
+    function user_image($path, $gender = '', $name='', $class = '', $style='')
+    {
+        if ($path) {
+            return '<img src="' .file_path($path).'" alt="' . $name . '" style="' . $style . '" class="' . $class . '">';
+        } else {
+            $img = $gender == '1' ? 'male' : 'female';
+            return '<img src="' . asset('/') . 'img/' . $img . '.svg" alt="' . $name . '" style="' . $style . '">';
+        }
+    }
+}
+
+if (!function_exists('change_status')) {
+    function change_status(int $id, int $status, string $name = null)
+    {
+        return $status == 1 ? '<span class="badge badge-success change_status" data-id="' . $id . '" data-name="' . $name . '" data-status="2" style="cursor:pointer;">Active</span>' :
+            '<span class="badge badge-danger change_status" data-id="' . $id . '" data-name="' . $name . '" data-status="1" style="cursor:pointer;">Inactive</span>';
+    }
+}
+
+if (!function_exists('tooltip')) {
+    function tooltip($title, $direction = 'top')
+    {
+        return 'data-toggle="tooltip" data-placement="' . $direction . '" title="' . $title . '"';
+    }
+}
+
+if(!function_exists('safe_html'))
+{
+    function safe_html($html) {
+        return Purifier::clean($html);
+    }
+}
+
+if(!function_exists('datetime_format'))
+{
+    function datetime_format($date, $format = 'd-m-Y h:i A') {
+        if(config('settings.datetime_format')){
+            return date(config('settings.datetime_format'), strtotime($date));
+        }
+        return date($format, strtotime($date));
+    }
+}
+
+if(!function_exists('file_path')){
+    function file_path($path){
+        if(!empty($path)){
+            if (config('filesystems.default') == 'local') {
+                return Storage::disk('public')->url($path);
+            }
+            return Storage::disk('s3')->url($path);
+        }else{
+            return null;
+        }
+    }
 }

@@ -1,95 +1,59 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="csrf-token" content="{{ csrf_token() }}">
-  <title>{{ $title ?? 'Dashboard' }} | Starter Kits</title>
-  @include('admin.partials.style')
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <title>@yield('title') | Starter Kits</title>
+    @include('admin.partials.style')
+    @stack('styles')
 </head>
+
 <body class="hold-transition sidebar-mini">
-<div class="wrapper">
+    <div class="wrapper">
+        @include('admin.includes.preloader')
 
-  @include('admin.includes.preloader')
+        @include('admin.includes.header')
 
-  @include('admin.includes.header')
+        @include('admin.includes.side-nav')
 
-  @include('admin.includes.side-nav')
+        <!-- Content Wrapper. Contains page content -->
+        <div class="content-wrapper">
 
-  <!-- Content Wrapper. Contains page content -->
-  <div class="content-wrapper">
+            @include('admin.includes.breadcrumb')
 
-    @include('admin.includes.breadcrumb')
-
-    <!-- Main content -->
-    <div class="content">
-      <div class="container-fluid">
-        @yield('content')
-      </div><!-- /.container-fluid -->
+            <!-- Main content -->
+            <div class="content">
+                <div class="container-fluid">
+                    @yield('content')
+                </div><!-- /.container-fluid -->
+            </div>
+            <!-- /.content -->
+        </div>
+        <!-- /.content-wrapper -->
+        @include('admin.includes.footer')
+        @include('admin.includes.modals.alert')
     </div>
-    <!-- /.content -->
-  </div>
-  <!-- /.content-wrapper -->
-  @include('admin.includes.footer')
-  @include('admin.includes.modals.alert')
-</div>
-<!-- ./wrapper -->
-<!-- REQUIRED SCRIPTS -->
-@include('admin.partials.script')
-@include('admin.includes.noty')
+    <!-- ./wrapper -->
+    <!-- REQUIRED SCRIPTS -->
+    @include('admin.partials.script')
+    @include('admin.includes.noty')
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
-<script>
-
-        const xValues = ["Italy", "France", "Spain", "USA", "Argentina"];
-        const yValues = [55, 49, 44, 24, 15];
-        const barColors = ["red", "green","blue","orange","brown"];
-
-        new Chart("myChart", {
-        type: "bar",
-        data: {
-            labels: xValues,
-            datasets: [{
-            backgroundColor: barColors,
-            data: yValues
-            }]
-        },
-        options: {
-            legend: {display: false},
-            title: {
-            display: true,
-            text: "World Wine Production 2018"
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+    <script>
+        // ajax header setup
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
-        }
         });
 
-        // var xValues = ["Italy", "France", "Spain", "USA", "Argentina"];
-        // var yValues = [55, 49, 44, 24, 15];
-        // var barColors = [
-        // "#b91d47",
-        // "#00aba9",
-        // "#2b5797",
-        // "#e8c3b9",
-        // "#1e7145"
-        // ];
-
-        // new Chart("myChart1", {
-        // type: "doughnut",
-        // data: {
-        //     labels: xValues,
-        //     datasets: [{
-        //     backgroundColor: barColors,
-        //     data: yValues
-        //     }]
-        // },
-        // options: {
-        //     title: {
-        //     display: true,
-        //     text: "World Wide Wine Production 2018"
-        //     }
-        // }
-        // });
-
-</script>
+        // token
+        var _token = "{{ csrf_token() }}";
+        var table;
+    </script>
+    @stack('scripts')
 </body>
+
 </html>

@@ -41,10 +41,13 @@
 }
 .required::after{
     content: '*';
-    top: 0;
     color: #ff2e2e;
-    position: absolute;
 }
+label {
+    margin-bottom: 0;
+    font-weight: 500 !important;
+}
+
 /* Chrome, Safari, Edge, Opera */
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
