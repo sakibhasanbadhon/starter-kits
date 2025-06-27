@@ -294,8 +294,31 @@ h2#swal2-title {
     background: rgba(52, 152, 219,1.0);
 }
 
+/* datatables */
 .pagination li a.page-link {
     padding: 0.1rem 0.6rem !important;
     font-size: 15px;
 }
+.dataTables_info {
+    padding-top: 0 !important;
+}
+.table-btn {
+    padding: 2px 8px !important;
+    font-size: 12px;
+    border: 1px solid #ccc;
+    background: white !important;
+    color: #004085;
+    font-weight: 600;
+    border-radius: 3px;
+}
+.custom-csv {
 
+}
+
+.custom-excel {
+
+}
+
+.custom-pdf {
+
+}

@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Blog;
 
-use App\Models\Category;
 use App\Traits\ResponseData;
 use Illuminate\Http\Request;
 use App\Services\CategoryService;

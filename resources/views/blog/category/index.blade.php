@@ -78,7 +78,23 @@
                 lengthMenu: `<div class='d-flex align-items-center w-100 justify-content-between'>_MENU_
                     <input name='search_here' class='form-control form-control-sm ml-2 shadow-none' autocomplete="off" placeholder="Search here..."/>
                     </div>`,
-            }
+            },
+            dom: "<'row'<'col-sm-6'l><'col-sm-6 text-right'Bf>>" +"<'row'<'col-sm-12'tr>>" +
+                "<'row'<'col-sm-5'i><'col-sm-7'p>>",
+            buttons: [
+                {
+                    extend: 'csv',
+                    className: 'table-btn custom-csv'
+                },
+                {
+                    extend: 'excel',
+                    className: 'table-btn custom-excel'
+                },
+                {
+                    extend: 'pdf',
+                    className: 'table-btn custom-pdf'
+                }
+            ]
         });
 
         // save category
