@@ -10,15 +10,16 @@ use Illuminate\Support\Facades\Gate;
 class DashboardController extends Controller
 {
     public function dashboard(){
-        Gate::authorize('access-dashboard');
+        if(permission('access-dashboard')){
         $this->setPageTitle('Dashboard');
         $breadcrumb = ['Dashboard' => ''];
         return view('admin.sections.dashboard', compact('breadcrumb'));
+        }
     }
 
     /**
      * Logout method
-     * 
+     *
      * @return Illuminate\Http\Request
      * @method POST
      */

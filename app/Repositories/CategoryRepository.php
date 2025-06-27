@@ -45,7 +45,7 @@ class CategoryRepository implements CategoryInterface {
     public function storeOrUpdate($data){
         $collection = collect($data->validated());
         $created_at = $updated_at = Carbon::now();
-        $created_by = $updated_by = auth()->user()->name ?? 'Admin';
+        $created_by = $updated_by = auth()->admin()->name;
         if ($data->update_id) {
             $collection = $collection->merge(compact('updated_by','updated_at'));
         }else{

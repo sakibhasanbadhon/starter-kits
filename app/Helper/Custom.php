@@ -428,3 +428,12 @@ if(!function_exists('file_path')){
         }
     }
 }
+
+if(!function_exists('permission')){
+    function permission(string $value){
+        if(collect(\Illuminate\Support\Facades\Session::get('permission'))->contains($value)){
+            return true;
+        }
+        return false;
+    }
+}
