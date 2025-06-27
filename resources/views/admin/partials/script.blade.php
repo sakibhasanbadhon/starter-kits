@@ -6,7 +6,9 @@
 <script src="{{ asset('backend/js/select2.min.js') }}"></script>
 <!-- spartan multi image picker -->
 <script src="{{ asset('backend/js/spartan-multi-image-picker-min.js') }}"></script>
-
+{{-- Toastr --}}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 {{-- Datatables --}}
 <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/1.11.3/js/dataTables.bootstrap4.min.js"></script>

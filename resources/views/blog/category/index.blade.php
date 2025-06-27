@@ -9,7 +9,7 @@
             <div class="card">
                 <div class="card-header py-2">
                     <h4 class="mb-0 cd-title d-flex align-items-center justify-content-between">{{ $title }}
-                        <button class="btn btn-sm btn-primary rounded-0" onclick="showFormModal('Add Category', 'Save')"><i class="fas fa-plus fa-sm"></i> Add Category</button>
+                        <button class="btn btn-sm btn-primary rounded-0" onclick="showFormModal('New Category', 'Save')"><i class="fas fa-plus fa-sm"></i> Add Category</button>
                     </h4>
                 </div>
                 <div class="card-body">
@@ -21,7 +21,7 @@
                                 <th>Status</th>
                                 <th>Created By</th>
                                 <th>Created At</th>
-                                <th>Action</th>
+                                <th class="text-right">Action</th>
                             </thead>
                             <tbody></tbody>
                         </table>
@@ -39,7 +39,7 @@
         table = $('#category-datatable').DataTable({
             processing: true,
             serverSide: true,
-            responsive: true,
+            responsive: false,
             order: [], //Initial no order
             bInfo: true, //TO show the total number of data
             bFilter: false, //For datatable default search box show/hide
@@ -81,10 +81,10 @@
             }
         });
 
-        // save user
+        // save category
         $(document).on('click', '#save-btn', function () {
-            var form_data = document.getElementById('store_or_update_form');
-            var form = new FormData(form_data);
+            var form = document.getElementById('store_or_update_form');
+            var formData = new FormData(form);
             let url = "{{ route('admin.categories.store-or-update') }}";
             let id = $('#update_id').val();
             let method;
@@ -93,44 +93,51 @@
             } else {
                 method = 'add';
             }
-            $.ajax({
-                url: url,
-                type: "POST",
-                data: form,
-                dataType: "JSON",
-                contentType: false,
-                processData: false,
-                cache: false,
-                beforeSend: function(){
-                    $('#save-btn span').addClass('spinner-border spinner-border-sm text-light');
-                },
-                complete: function(){
-                    $('#save-btn span').removeClass('spinner-border spinner-border-sm text-light');
-                },
-                success: function (data) {
-                    $('#store_or_update_form').find('.is-invalid').removeClass('is-invalid');
-                    $('#store_or_update_form').find('.error').remove();
-                    if (data.status == false) {
-                        $.each(data.errors, function (key, value) {
-                            $('#store_or_update_form #' + key).addClass('is-invalid');
-                            $('#store_or_update_form #' + key).parent().append('<small class="error text-danger">' + value + '</small>');
-                        });
-                    } else {
-                        notification(data.status, data.message);
-                        if (data.status == 'success') {
-                            if (method == 'update') {
-                                table.ajax.reload(null, false);
-                            } else {
-                                table.ajax.reload();
-                            }
-                            $('#store_or_update_modal').modal('hide');
+            store_or_update_data(method, url, formData);
+        });
+
+        // edit category
+        $(document).on('click', '.edit_data', function () {
+            let id = $(this).data('id');
+            $('#store_or_update_form')[0].reset();
+            $('#store_or_update_form').find('.is-invalid').removeClass('is-invalid');
+            $('#store_or_update_form').find('.error').remove();
+            if (id) {
+                $.ajax({
+                    url: "{{ route('admin.categories.edit') }}",
+                    type: "GET",
+                    data: {id:id,_token: _token},
+                    dataType: "JSON",
+                    success: function (data) {
+                        if(data.status == 'success'){
+                            $('#store_or_update_form #update_id').val(data.data.id);
+                            $('#store_or_update_form #name').val(data.data.name);
+                            $('#store_or_update_form #status').val(data.data.status);
+
+                            $('#store_or_update_modal').modal({
+                                keyboard: false,
+                                backdrop: 'static',
+                            });
+                            $('#store_or_update_modal .modal-title').html('<span>Edit ' + data.data.name + '</span>');
+                            $('#store_or_update_modal #save-btn').html('<span></span> Update');
+                        } else{
+                            notification(data.status,data.message)
                         }
+                    },
+                    error: function (xhr, ajaxOption, thrownError) {
+                        console.log(thrownError + '\r\n' + xhr.statusText + '\r\n' + xhr.responseText);
                     }
-                },
-                error: function (xhr, ajaxOption, thrownError) {
-                    console.log(thrownError + '\r\n' + xhr.statusText + '\r\n' + xhr.responseText);
-                }
-            });
+                });
+            }
+        });
+
+        // delete category
+        $(document).on('click', '.delete_data', function () {
+            let id = $(this).data('id');
+            let name = $(this).data('name');
+            let row = table.row($(this).parent('tr'));
+            let url = "{{ route('admin.categories.delete') }}";
+            delete_data(id,url,row,name);
         });
 
         // status changes

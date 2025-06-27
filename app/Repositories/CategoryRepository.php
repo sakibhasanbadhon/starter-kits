@@ -3,15 +3,14 @@
 namespace App\Repositories;
 
 use Carbon\Carbon;
-use App\Models\User;
 use App\Models\Category;
-use App\Models\Admin\Role;
-use Illuminate\Support\Str;
-use Illuminate\Support\Facades\DB;
+use App\Traits\ResponseData;
 use App\Interfaces\CategoryInterface;
 use Yajra\DataTables\Facades\DataTables;
 
 class CategoryRepository implements CategoryInterface {
+
+    use ResponseData;
 
     public function get($data){
         $getData = Category::orderBy('created_at', 'desc');
@@ -32,7 +31,9 @@ class CategoryRepository implements CategoryInterface {
 
             ->addColumn('action', function ($row) {
                 $action = '<div class="d-flex align-items-center justify-content-end">';
-                $action .= '<button type="button" class="btn-style btn-style-danger delete_data ml-1" data-id="' . $row->id . '" data-name="' . $row->role_name . '"><i class="fa fa-trash fa-sm"></i></button>';
+                $action .= '<button type="button" class="btn-style btn-style-edit edit_data" data-id="' . $row->id . '"><i class="fa fa-edit fa-sm"></i></button>';
+
+                $action .= '<button type="button" class="btn-style btn-style-danger delete_data ml-1" data-id="' . $row->id . '" data-name="' . $row->name . '"><i class="fa fa-trash fa-sm"></i></button>';
                 $action .= '</div>';
 
                 return $action;
@@ -42,24 +43,53 @@ class CategoryRepository implements CategoryInterface {
     }
 
     public function storeOrUpdate($data){
-        $collection = collect($data->validated())->except('permissions');
-        $slug       = Str::slug($data->name);
+        $collection = collect($data->validated());
         $created_at = $updated_at = Carbon::now();
-        $created_by = $updated_by = auth()->user()->name;
+        $created_by = $updated_by = auth()->user()->name ?? 'Admin';
         if ($data->update_id) {
-            $users = User::where('role_id',$data->update_id)->pluck('id')->toArray();
-            DB::table('sessions')->whereIn('user_id', $users)->delete();
-            $collection = $collection->merge(compact('updated_by','updated_at','slug'));
+            $collection = $collection->merge(compact('updated_by','updated_at'));
         }else{
-            $collection = $collection->merge(compact('created_by','created_at','slug'));
+            $collection = $collection->merge(compact('created_by','created_at'));
         }
 
-        $result = Role::updateOrCreate(['id'=>$data->update_id],$collection->all());
-        if($result){
-            $result->permissions()->sync($data->permission);
-            return true;
+        try {
+            Category::updateOrCreate(['id'=>$data->update_id],$collection->all());
+            if($data->update_id){
+                return $this->responseJson('success','Category updated successfull.');
+            }else{
+                return $this->responseJson('success','Category saved successfull.');
+            }
+        } catch (\Exception $e) {
+            return $this->responseJson('error','Category cannot be saved.');
+        }
+    }
+
+    public function edit($id){
+        $data = Category::find($id);
+        if($data){
+            return $this->responseJson('success',null,$data);
         }else{
-            return false;
+            return $this->responseJson('error','Category not found!');
+        }
+    }
+
+    public function delete($id){
+        $data = Category::find($id);
+        if($data){
+            $data->delete();
+            return $this->responseJson('success','Category deleted successfull.');
+        }else{
+            return $this->responseJson('error','Category not found!');
+        }
+    }
+
+    public function status($id, $status){
+        $data = Category::find($id);
+        if($data){
+            $data->update(['status'=>$status]);
+            return $this->responseJson('success','Category status updated successfull.');
+        }else{
+            return $this->responseJson('error','Category not found!');
         }
     }
 

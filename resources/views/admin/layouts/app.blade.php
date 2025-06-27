@@ -52,6 +52,79 @@
         // token
         var _token = "{{ csrf_token() }}";
         var table;
+
+        // toastr alert message
+        function notification(status, message){
+            toastr.options = {
+                "closeButton": true,
+                "debug": false,
+                "newestOnTop": false,
+                "progressBar": true,
+                "positionClass": "toast-top-right",
+                "preventDuplicates": false,
+                "onclick": null,
+                "showDuration": "500",
+                "hideDuration": "1000",
+                "timeOut": "5000",
+                "extendedTimeOut": "1000",
+                "showEasing": "swing",
+                "hideEasing": "linear",
+                "showMethod": "fadeIn",
+                "hideMethod": "fadeOut"
+            }
+
+            switch (status) {
+                case 'success':
+                toastr.success(message);
+                break;
+
+                case 'error':
+                toastr.error(message);
+                break;
+
+                case 'warning':
+                toastr.warning(message);
+                break;
+
+                case 'info':
+                toastr.info(message);
+                break;
+            }
+        }
+
+        $(document).ready(function(){
+            // session flash message
+            @if (Session::get('success'))
+                notification('success',"{{ Session::get('success') }}")
+            @elseif (Session::get('error'))
+                notification('error',"{{ Session::get('error') }}")
+            @elseif (Session::get('info'))
+                notification('info',"{{ Session::get('info') }}")
+            @elseif (Session::get('warning'))
+                notification('warning',"{{ Session::get('warning') }}")
+            @endif
+
+            // tooltip
+            $('[data-toggle="tooltip"]').tooltip();
+
+            // datatable reload
+            $(document).on('click', 'button.table-reload', function(){
+                table.ajax.reload();
+            });
+
+            // reset btn
+            $(document).on('click','.reset_btn',function(){
+                $('form#store_or_update_form').find('.schedule-error').remove();
+                $('#store_or_update_form select').selectpicker('val','');
+                $('form#store_or_update_form')[0].reset();
+            });
+
+            // search table
+            $(document).on('keyup keypress', 'input[name="search_here"]', function(){
+                table.ajax.reload();
+            });
+        });
+
     </script>
     @stack('scripts')
 </body>

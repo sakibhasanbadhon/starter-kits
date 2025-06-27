@@ -63,7 +63,6 @@ Route::controller(UsefulLinkController::class)->prefix('useful-links')->name('us
     Route::post('update', 'update')->name('update');
 });
 
-
 // Category Routes
 Route::prefix('categories')->name('categories.')->group(function(){
     Route::get('/',[CategoryController::class, 'index'])->name('index');
