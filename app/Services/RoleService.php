@@ -21,8 +21,8 @@ class RoleService {
         return $this->repo->storeOrUpdate($requestData);
     }
 
-    public function deleteData($requestData){
-        return $this->repo->delete($requestData);
+    public function deleteData($id){
+        return $this->repo->delete($id);
     }
 
 }

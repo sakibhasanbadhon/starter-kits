@@ -1,80 +1,139 @@
-<!doctype html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<!DOCTYPE html>
+<html lang="en">
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
-    <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
-
-    <title>{{ config('app.name', 'Laravel') }}</title>
-
-    <!-- Fonts -->
-    <link rel="dns-prefetch" href="//fonts.bunny.net">
-    <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">
-
-    <!-- Scripts -->
-    @vite(['resources/sass/app.scss', 'resources/js/app.js'])
+    <title>@yield('title') | Starter Kits</title>
+    @include('partials.style')
+    @stack('styles')
 </head>
-<body>
-    <div id="app">
-        <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
-            <div class="container">
-                <a class="navbar-brand" href="{{ url('/') }}">
-                    {{ config('app.name', 'Laravel') }}
-                </a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
 
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <!-- Left Side Of Navbar -->
-                    <ul class="navbar-nav me-auto">
+<body class="hold-transition sidebar-mini">
+    <div class="wrapper">
+        {{-- preloader --}}
+        @include('include.preloader')
 
-                    </ul>
+        {{-- header --}}
+        @include('include.header')
 
-                    <!-- Right Side Of Navbar -->
-                    <ul class="navbar-nav ms-auto">
-                        <!-- Authentication Links -->
-                        @guest
-                            @if (Route::has('login'))
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
-                                </li>
-                            @endif
+        {{-- navber --}}
+        @include('include.side-nav')
 
-                            @if (Route::has('register'))
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
-                                </li>
-                            @endif
-                        @else
-                            <li class="nav-item dropdown">
-                                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                    {{ Auth::user()->name }}
-                                </a>
+        <!-- Content Wrapper. Contains page content -->
+        <div class="content-wrapper">
+            {{-- breadcrumb --}}
+            @include('include.breadcrumb')
 
-                                <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" href="{{ route('logout') }}"
-                                       onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">
-                                        {{ __('Logout') }}
-                                    </a>
-
-                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                                        @csrf
-                                    </form>
-                                </div>
-                            </li>
-                        @endguest
-                    </ul>
-                </div>
+            <!-- Main content -->
+            <div class="content">
+                <div class="container-fluid">
+                    @yield('content')
+                </div><!-- /.container-fluid -->
             </div>
-        </nav>
+            <!-- /.content -->
+        </div>
+        <!-- /.content-wrapper -->
 
-        <main class="py-4">
-            @yield('content')
-        </main>
+        {{-- footer --}}
+        @include('include.footer')
+
+        {{-- alert --}}
+        @include('modals.alert')
     </div>
+    <!-- ./wrapper -->
+
+    <!-- REQUIRED SCRIPTS -->
+    @include('partials.script')
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+    <script>
+        // ajax header setup
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+
+        // token
+        var _token = "{{ csrf_token() }}";
+        var table;
+
+        // toastr alert message
+        function notification(status, message){
+            toastr.options = {
+                "closeButton": true,
+                "debug": false,
+                "newestOnTop": false,
+                "progressBar": true,
+                "positionClass": "toast-top-right",
+                "preventDuplicates": false,
+                "onclick": null,
+                "showDuration": "500",
+                "hideDuration": "1000",
+                "timeOut": "5000",
+                "extendedTimeOut": "1000",
+                "showEasing": "swing",
+                "hideEasing": "linear",
+                "showMethod": "fadeIn",
+                "hideMethod": "fadeOut"
+            }
+
+            switch (status) {
+                case 'success':
+                toastr.success(message);
+                break;
+
+                case 'error':
+                toastr.error(message);
+                break;
+
+                case 'warning':
+                toastr.warning(message);
+                break;
+
+                case 'info':
+                toastr.info(message);
+                break;
+            }
+        }
+
+        $(document).ready(function(){
+            // session flash message
+            @if (Session::get('success'))
+                notification('success',"{{ Session::get('success') }}")
+            @elseif (Session::get('error'))
+                notification('error',"{{ Session::get('error') }}")
+            @elseif (Session::get('info'))
+                notification('info',"{{ Session::get('info') }}")
+            @elseif (Session::get('warning'))
+                notification('warning',"{{ Session::get('warning') }}")
+            @endif
+
+            // tooltip
+            $('[data-toggle="tooltip"]').tooltip();
+
+            // datatable reload
+            $(document).on('click', 'button.table-reload', function(){
+                table.ajax.reload();
+            });
+
+            // reset btn
+            $(document).on('click','.reset_btn',function(){
+                $('form#store_or_update_form').find('.schedule-error').remove();
+                $('#store_or_update_form select').selectpicker('val','');
+                $('form#store_or_update_form')[0].reset();
+            });
+
+            // search table
+            $(document).on('keyup keypress', 'input[name="search_here"]', function(){
+                table.ajax.reload();
+            });
+        });
+    </script>
+
+    @stack('scripts')
 </body>
+
 </html>

@@ -32,6 +32,8 @@ return new class extends Migration
             $table->boolean('status')->default(false);
             $table->boolean('delatable')->default(true);
             $table->boolean("login_status")->default(false);
+            $table->string("created_by")->nullable();
+            $table->string("updated_by")->nullable();
             $table->timestamps();
         });
     }

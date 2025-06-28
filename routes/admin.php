@@ -1,12 +1,13 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\Blog\PostController;
-use App\Http\Controllers\Admin\RoleController;
+use App\Http\Controllers\RoleController;
 use App\Http\Controllers\Admin\PagesController;
 use App\Http\Controllers\Admin\GlobalController;
 use App\Http\Controllers\Blog\CategoryController;
-use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Admin\UsefulLinkController;
 use App\Http\Controllers\Admin\UserManageController;
 use App\Http\Controllers\Admin\AdminManagementController;
@@ -23,6 +24,16 @@ Route::controller(RoleController::class)->prefix('roles')->name('roles.')->group
     Route::post('store-or-update', 'storeOrUpdate')->name('store-or-update');
     Route::get('edit/{id}', 'edit')->name('edit');
     Route::post('delete', 'delete')->name('delete');
+});
+
+// Admin Routes
+Route::controller(AdminController::class)->prefix('admins')->name('admins.')->group(function(){
+    Route::get('/', 'index')->name('index');
+    Route::get('create', 'create')->name('create');
+    Route::post('store-or-update', 'storeOrUpdate')->name('store-or-update');
+    Route::get('edit/{id}', 'edit')->name('edit');
+    Route::post('delete', 'delete')->name('delete');
+    Route::post('status-change', 'statusChange')->name('status-change');
 });
 
 Route::controller(AdminManagementController::class)->prefix('manage-admins')->name('manage-admins.')->group(function(){

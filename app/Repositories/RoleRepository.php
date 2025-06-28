@@ -70,8 +70,8 @@ class RoleRepository implements RoleInterface {
         }
     }
 
-    public function delete($data){
-        $role = Role::find($data->id);
+    public function delete($id){
+        $role = Role::find($id);
         if($role){
             $role->permissions()->delete();
             $role->delete();

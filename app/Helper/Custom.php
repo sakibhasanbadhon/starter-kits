@@ -370,7 +370,7 @@ if (!function_exists('table_image')) {
     function table_image($path, $name = null)
     {
         return $path ? "<img src='" .file_path($path). "' alt='" . $name . "' style='width:40px;height: 40px;'/>"
-            : "<img src='" . asset('/') . "img/default.svg' alt='Default Image' style='width:40px;height: 40px;'/>";
+            : "<img src='" . asset('/') . "backend/img/default.svg' alt='Default Image' style='width:40px;height: 40px;'/>";
     }
 }
 

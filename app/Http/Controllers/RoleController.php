@@ -1,18 +1,15 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers;
 
 use App\Models\Admin\Role;
 use App\Models\Admin\Module;
 use App\Traits\ResponseData;
 use Illuminate\Http\Request;
 use App\Services\RoleService;
-use App\Http\Helpers\JsonResponse;
 use App\Http\Requests\RoleRequest;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
-use Illuminate\Support\Facades\Validator;
 
 class RoleController extends Controller
 {
@@ -41,7 +38,7 @@ class RoleController extends Controller
 
         $breadcrumb = ["Role List" => ''];
         $this->setPageTitle('Role List');
-        return view('admin.roles.index', compact('breadcrumb'));
+        return view('roles.index', compact('breadcrumb'));
     }
 
     /**
@@ -57,7 +54,7 @@ class RoleController extends Controller
         $this->setPageTitle('Create Role');
         $breadcrumb = ["Role List" => route('admin.roles.index'), "Create" => ''];
         $modules = Module::with('permissions')->latest()->get();
-        return view('admin.roles.form', compact('breadcrumb', 'modules'));
+        return view('roles.form', compact('breadcrumb', 'modules'));
     }
 
     /**
@@ -101,7 +98,7 @@ class RoleController extends Controller
 
         $this->setPageTitle('Edit Role');
         $data['breadcrumb'] = ["Role List" => route('admin.roles.index') , "Edit Role" => ''];
-        return view('admin.roles.form', $data);
+        return view('roles.form', $data);
     }
 
 
@@ -115,7 +112,7 @@ class RoleController extends Controller
     public function delete(Request $request){
         if($request->ajax()){
             if(permission('delete-role')){
-                return $this->role->deleteData($request);
+                return $this->role->deleteData($request->id);
             }else{
                 return $this->responseJson('error', UNAUTHORIZED_MSG);
             }
