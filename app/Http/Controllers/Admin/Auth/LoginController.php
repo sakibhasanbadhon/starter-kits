@@ -66,17 +66,17 @@ class LoginController extends Controller
         }
 
         $this->updateInfo($user);
-        return redirect()->intended(route('admin.dashboard'))->with(['success' => ['Congrs, You Are logged In']]);
+        return redirect()->intended(route('admin.dashboard'))->with('success','Congrs, You Are logged In');
     }
 
     protected function updateInfo($admin) {
         try{
             $admin->update([
-                'last_logged_in'    => now(),
-                'login_status'      => true,
+                'last_logged_in' => now(),
+                'login_status'   => true,
             ]);
-        }catch(Exception $e) {
-            // handle error
+        } catch(Exception $e) {
+
         }
     }
 

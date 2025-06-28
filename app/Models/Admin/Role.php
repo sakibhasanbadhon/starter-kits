@@ -21,7 +21,7 @@ class Role extends Model
      *
      * @var array<string>
      */
-    protected $fillable = ['role_name','slug','description','deletable','created_by','updated_by'];
+    protected $fillable = ['name','slug','description','deletable','created_by','updated_by'];
 
     public function permissions(){
         return $this->belongsToMany(Permission::class);

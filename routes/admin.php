@@ -16,6 +16,15 @@ Route::controller(DashboardController::class)->group(function(){
     Route::post('logout', 'logout')->name('logout');
 });
 
+// Role Routes
+Route::controller(RoleController::class)->prefix('roles')->name('roles.')->group(function(){
+    Route::get('/', 'index')->name('index');
+    Route::get('create', 'create')->name('create');
+    Route::post('store-or-update', 'storeOrUpdate')->name('store-or-update');
+    Route::get('edit/{id}', 'edit')->name('edit');
+    Route::post('delete', 'delete')->name('delete');
+});
+
 Route::controller(AdminManagementController::class)->prefix('manage-admins')->name('manage-admins.')->group(function(){
     Route::get('/', 'index')->name('index');
     Route::get('/create', 'create')->name('create');
@@ -23,16 +32,6 @@ Route::controller(AdminManagementController::class)->prefix('manage-admins')->na
     Route::get('/edit/{id}', 'edit')->name('edit');
     Route::post('/delete', 'delete')->name('delete');
     Route::post('/search', 'search')->name('search');
-
-    Route::controller(RoleController::class)->prefix('roles')->name('roles.')->group(function(){
-        Route::get('/', 'index')->name('index');
-        Route::get('/create', 'create')->name('create');
-        Route::post('/store', 'store')->name('store');
-        Route::get('/edit/{id}', 'edit')->name('edit');
-        Route::post('/delete', 'delete')->name('delete');
-        Route::post('/search', 'search')->name('search');
-    });
-
 
     Route::controller(UserManageController::class)->prefix('user')->name('user.')->group(function(){
         Route::get('/', 'index')->name('index');

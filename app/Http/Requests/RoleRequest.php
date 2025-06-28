@@ -22,12 +22,12 @@ class RoleRequest extends FormRequest
     public function rules()
     {
         $rules = [
-            'role_name'        => ['required','string','max:100','unique:roles,role_name'],
-            'permissions' => ['required','array']
+            'name'        => ['required','string','max:100','unique:roles,name'],
+            'permission' => ['required','array']
         ];
 
         if(request()->update_id){
-            $rules['name'][3] = 'unique:roles,role_name,'.request()->update_id;
+            $rules['name'][3] = 'unique:roles,name,'.request()->update_id;
         }
 
         return $rules;

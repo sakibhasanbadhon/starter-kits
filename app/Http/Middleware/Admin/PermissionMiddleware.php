@@ -19,7 +19,7 @@ class PermissionMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if(Auth::check()){
+        if(Auth::guard('admin')->check()){
             if (session()->has('permission')) {
                 foreach (session('permission') as $permission) {
                     Gate::define($permission, function ($user) use ($permission) {
@@ -28,6 +28,7 @@ class PermissionMiddleware
                 }
             }
         }
+
         return $next($request);
     }
 }

@@ -12,15 +12,18 @@
 
 <body class="hold-transition sidebar-mini">
     <div class="wrapper">
+        {{-- preloader --}}
         @include('admin.includes.preloader')
 
+        {{-- header --}}
         @include('admin.includes.header')
 
+        {{-- navber --}}
         @include('admin.includes.side-nav')
 
         <!-- Content Wrapper. Contains page content -->
         <div class="content-wrapper">
-
+            {{-- breadcrumb --}}
             @include('admin.includes.breadcrumb')
 
             <!-- Main content -->
@@ -32,13 +35,17 @@
             <!-- /.content -->
         </div>
         <!-- /.content-wrapper -->
+
+        {{-- footer --}}
         @include('admin.includes.footer')
+
+        {{-- alert --}}
         @include('admin.includes.modals.alert')
     </div>
     <!-- ./wrapper -->
+
     <!-- REQUIRED SCRIPTS -->
     @include('admin.partials.script')
-    @include('admin.includes.noty')
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
     <script>
@@ -124,8 +131,8 @@
                 table.ajax.reload();
             });
         });
-
     </script>
+    
     @stack('scripts')
 </body>
 

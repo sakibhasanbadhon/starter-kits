@@ -14,82 +14,82 @@ class PermissionSeeder extends Seeder
      */
     public function run(): void
     {
-        // Dashboard
-        $module_dashboard = Module::updateOrCreate(['name' => 'Dashboard Management'],['name' => 'Dashboard Management']);
+        // Dashboard Permission
+        $module_dashboard = Module::updateOrCreate(['name' => 'Dashboard'],['name' => 'Dashboard']);
         Permission::updateOrCreate(['slug' => 'access-dashboard'],[
             'module_id' => $module_dashboard->id,
-            'name' => 'Access Dashboard',
+            'name' => 'Access',
             'slug' => 'access-dashboard',
         ]);
 
-        // Role
-        $module_role = Module::updateOrCreate(['name' => 'Role Management'],['name' => 'Role Management']);
+        // Role Permissions
+        $module_role = Module::updateOrCreate(['name' => 'Role'],['name' => 'Role']);
         Permission::updateOrCreate(['slug' => 'access-role'],[
             'module_id' => $module_role->id,
-            'name' => 'Access Role',
+            'name' => 'Access',
             'slug' => 'access-role',
         ]);
         Permission::updateOrCreate(['slug' => 'create-role'],[
             'module_id' => $module_role->id,
-            'name' => 'Create Role',
+            'name' => 'Create',
             'slug' => 'create-role',
         ]);
         Permission::updateOrCreate(['slug' => 'edit-role'],[
             'module_id' => $module_role->id,
-            'name' => 'Edit Role',
+            'name' => 'Edit',
             'slug' => 'edit-role',
         ]);
         Permission::updateOrCreate(['slug' => 'delete-role'],[
             'module_id' => $module_role->id,
-            'name' => 'Delete Role',
+            'name' => 'Delete',
             'slug' => 'delete-role',
         ]);
 
 
-        // Role
-        $module_admin = Module::updateOrCreate(['name' => 'Admin Management'],['name' => 'Admin Management']);
+        // Admin Permissions
+        $module_admin = Module::updateOrCreate(['name' => 'Admin'],['name' => 'Admin']);
         Permission::updateOrCreate(['slug' => 'access-admin'],[
             'module_id' => $module_admin->id,
-            'name' => 'Access admin',
+            'name' => 'Access',
             'slug' => 'access-admin',
         ]);
         Permission::updateOrCreate(['slug' => 'create-admin'],[
             'module_id' => $module_admin->id,
-            'name' => 'Create admin',
+            'name' => 'Create',
             'slug' => 'create-admin',
         ]);
         Permission::updateOrCreate(['slug' => 'edit-admin'],[
             'module_id' => $module_admin->id,
-            'name' => 'Edit admin',
+            'name' => 'Edit',
             'slug' => 'edit-admin',
         ]);
         Permission::updateOrCreate(['slug' => 'delete-admin'],[
             'module_id' => $module_admin->id,
-            'name' => 'Delete admin',
+            'name' => 'Delete',
             'slug' => 'delete-admin',
         ]);
 
 
-        // Role
-        $module_user = Module::updateOrCreate(['name' => 'User Management'],['name' => 'User Management']);
+        // User Permissions
+        $module_user = Module::updateOrCreate(['name' => 'User'],['name' => 'User']);
         Permission::updateOrCreate(['slug' => 'access-user'],[
             'module_id' => $module_user->id,
-            'name' => 'Access user',
+            'name' => 'Access',
             'slug' => 'access-user',
         ]);
         Permission::updateOrCreate(['slug' => 'create-user'],[
             'module_id' => $module_user->id,
-            'name' => 'Create user',
+            'name' => 'Create',
             'slug' => 'create-user',
         ]);
         Permission::updateOrCreate(['slug' => 'edit-user'],[
             'module_id' => $module_user->id,
-            'name' => 'Edit user',
+            'name' => 'Edit',
             'slug' => 'edit-user',
         ]);
         Permission::updateOrCreate(['slug' => 'delete-user'],[
             'module_id' => $module_user->id,
-            'name' => 'Delete user',
+            'name' => 'Delete',
             'slug' => 'delete-user',
         ]);
 

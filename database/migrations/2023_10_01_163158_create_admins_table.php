@@ -16,7 +16,7 @@ return new class extends Migration
             $table->unsignedBigInteger('role_id');
             $table->string('first_name',100);
             $table->string('last_name',100);
-            $table->string('user_name',100)->index();
+            $table->string('username',100)->index();
             $table->string('email',191)->index();
             $table->string('password',255);
             $table->string('image',191)->unique()->nullable();

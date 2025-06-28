@@ -15,6 +15,8 @@ use Illuminate\Support\Facades\Storage;
  ***********/
 define('SOMETHING_WRONG', 'Something Went Wrong, Please Try Again!');
 define('STATUS',[1 => 'Active', 2 => 'Inactive']);
+define('UNAUTHORIZED_MSG', 'Unauthozied Access!');
+
 
  /**************************************
  *  Static Variables End

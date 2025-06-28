@@ -27,7 +27,7 @@
 <script src="{{ asset('backend') }}/js/adminlte.min.js"></script>
 <script src="{{ asset('backend') }}/js/main.js"></script>
 <script src="{{ asset('backend') }}/js/custom.js"></script>
-<script>
+<script>   
     $(document).ready(function () {
         $(document).on('click', '.logout-btn', function(){
             let method = 'POST';

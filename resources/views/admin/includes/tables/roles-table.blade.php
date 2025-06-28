@@ -24,7 +24,7 @@
                 </td>
                 <td>{{ $item->created_at->diffForHumans() }}</td>
                 <td>
-                    <a href="{{ route('admin.manage-admins.roles.edit', $item->id) }}" title="Edit" class="action-btn"><i class="fas fa-edit"></i></a>
+                    <a href="{{ route('admin.roles.edit', $item->id) }}" title="Edit" class="action-btn"><i class="fas fa-edit"></i></a>
                     @if ($item->delatable == true)
                     <a href="javascript:void(0)" title="Delete" data-target="{{ $item->id }}" class="action-btn delete-btn action-danger mr-1"><i class="fas fa-trash-alt"></i></a>
                     @endif

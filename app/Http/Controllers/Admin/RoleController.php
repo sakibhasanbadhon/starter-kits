@@ -3,24 +3,26 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\Admin\Role;
-use Illuminate\Support\Str;
 use App\Models\Admin\Module;
+use App\Traits\ResponseData;
 use Illuminate\Http\Request;
 use App\Services\RoleService;
 use App\Http\Helpers\JsonResponse;
 use App\Http\Requests\RoleRequest;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
-use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Facades\Validator;
 
 class RoleController extends Controller
 {
-    protected $roleService;
+    use ResponseData;
+
+    protected $role;
 
     public function __construct(RoleService $roleService)
     {
-        $this->roleService = $roleService;
+        $this->role = $roleService;
     }
 
     /**
@@ -29,12 +31,17 @@ class RoleController extends Controller
      * @method GET
      * @return Illuminate\Http\Request Response
      */
-    public function index(){
+    public function index(Request $request){
+        if($request->ajax()){
+            return $this->role->allData($request);
+        }
+
+        // authorized 403
         Gate::authorize('access-role');
-        $breadcrumb = ['Dashboard' => route('admin.dashboard'), "Roles" => ''];
-        $this->setPageTitle('Roles');
-        $roles = Role::with('permissions')->paginate(15);
-        return view('admin.sections.roles.index', compact('breadcrumb','roles'));
+
+        $breadcrumb = ["Role List" => ''];
+        $this->setPageTitle('Role List');
+        return view('admin.roles.index', compact('breadcrumb'));
     }
 
     /**
@@ -44,11 +51,13 @@ class RoleController extends Controller
      * @return Illuminate\Http\Request Response
      */
     public function create(){
+        // authorized 403
         Gate::authorize('create-role');
+
         $this->setPageTitle('Create Role');
-        $breadcrumb = ['Dashboard' => route('admin.dashboard'), "Roles" => route('admin.manage-admins.roles.index'), "Add" => ''];
+        $breadcrumb = ["Role List" => route('admin.roles.index'), "Create" => ''];
         $modules = Module::with('permissions')->latest()->get();
-        return view('admin.sections.roles.form', compact('breadcrumb', 'modules'));
+        return view('admin.roles.form', compact('breadcrumb', 'modules'));
     }
 
     /**
@@ -59,12 +68,20 @@ class RoleController extends Controller
      * @return Illuminate\Http\Request Response
      */
 
-    public function store(RoleRequest $request){
-
+    public function storeOrUpdate(RoleRequest $request){
+        // authorized 403
         Gate::authorize('create-role');
-        $this->roleService->storeOrUpdateData($request);
-        $message = ['Role has been saved successfull.'];
-        return redirect()->route('admin.manage-admins.roles.index')->with(['success' => $message]);
+
+        $result = $this->role->storeOrUpdateData($request);
+        if($result){
+            if($request->update_id){
+                return redirect()->route('admin.roles.index')->with('success','Role updated successfull.');
+            }else{
+                return redirect()->route('admin.roles.index')->with('success','Role saved successfull.');
+            }
+        }else{
+            return redirect()->back()->with('error','Role cannot be created!');
+        }
     }
 
     /**
@@ -75,17 +92,16 @@ class RoleController extends Controller
      * @return Illuminate\Http\Request Response
      */
 
-     public function edit($id){
-
+     public function edit(int $id){
+        // authorized 403
         Gate::authorize('edit-role');
 
+        $data['role'] = Role::with('permissions')->findOrFail($id);
+        $data['modules'] = Module::with('permissions')->latest()->get();
+
         $this->setPageTitle('Edit Role');
-        $breadcrumb = ['Dashboard' => route('admin.dashboard'), "Roles" => route('admin.manage-admins.roles.index') , "Edit Role" => ''];
-
-        $role = Role::with('permissions')->findOrFail($id);
-        $modules = Module::with('permissions')->latest()->get();
-
-        return view('admin.sections.roles.form', compact('breadcrumb','modules','role'));
+        $data['breadcrumb'] = ["Role List" => route('admin.roles.index') , "Edit Role" => ''];
+        return view('admin.roles.form', $data);
     }
 
 
@@ -97,41 +113,17 @@ class RoleController extends Controller
      * @return Illuminate\Http\Request Response
      */
     public function delete(Request $request){
-
-        Gate::authorize('delete-role');
-
-        $validator = Validator::make($request->all(),[
-            'target' => 'required',
-        ]);
-
-        if($validator->fails()){
-            return back()->withErrors($validator)->withInput();
-        }
-
-        $validated = $validator->validated();
-
-        try {
-            $role = Role::with('permissions')->find($validated['target']);
-
-            if($role->delatable == true){
-                $role->permissions()->detach();
-                $role->delete();
-            }else{
-                return back()->with(['error' => ['Can\'t Delete Default Role']]);
-            }
-        } catch (\Exception $th) {
-            return back()->with(['error' => ['Something Went Wrong, Please Try Again']]);
-        }
-
-        return redirect()->route('admin.manage-admins.roles.index')->with(['success' => ['Role Deleted Successful']]);
-    }
-
-
-    public function search(Request $request){
         if($request->ajax()){
-            $roles = Role::search($request->text)->limit(15)->get();
-            $returnHTML = view('admin.includes.search.roles-table', compact('roles'))->render();
-            return JsonResponse::success(['success' => ['Roles Search Successfully!']], $returnHTML);
+            if(permission('delete-role')){
+                return $this->role->deleteData($request);
+            }else{
+                return $this->responseJson('error', UNAUTHORIZED_MSG);
+            }
         }
     }
+
+
 }
+
+
+

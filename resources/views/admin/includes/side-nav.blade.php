@@ -23,7 +23,7 @@
 
                 <li class="nav-header">AUTHORIZATIONS</li>
                 <li class="nav-item">
-                    <a href="{{ route('admin.manage-admins.roles.index') }}" class="nav-link {{ isMenuActive('admin/dashboard*') }}">
+                    <a href="{{ route('admin.roles.index') }}" class="nav-link {{ isMenuActive('admin/roles*') }}">
                         <i class="fas fa-user-cog fa-sm"></i>
                         <p>
                             Role

@@ -9,12 +9,16 @@ use Illuminate\Support\Facades\Gate;
 
 class DashboardController extends Controller
 {
+    /**
+     * Dashboard
+     */
     public function dashboard(){
-        if(permission('access-dashboard')){
+        // authorized
+        Gate::authorize('access-dashboard');
+
         $this->setPageTitle('Dashboard');
         $breadcrumb = ['Dashboard' => ''];
         return view('admin.sections.dashboard', compact('breadcrumb'));
-        }
     }
 
     /**
@@ -25,6 +29,6 @@ class DashboardController extends Controller
      */
     public function logout(Request $request){
         Auth::logout();
-        return redirect()->route('admin.login')->with(['success' => ['Logout Successfully!']]);
+        return redirect()->route('admin.login')->with('success','Logout Successfully!');
     }
 }
