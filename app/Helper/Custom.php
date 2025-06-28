@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Storage;
 /**************************************
  *  Static Variables Start
  ***********/
+define('ADMIN_IMAGE_PATH', 'admin');
 define('SOMETHING_WRONG', 'Something Went Wrong, Please Try Again!');
 define('STATUS',[1 => 'Active', 2 => 'Inactive']);
 define('UNAUTHORIZED_MSG', 'Unauthozied Access!');
@@ -326,7 +327,7 @@ function generateUsername($first_name,$last_name,$table = "users") {
         }
 
         // Find User is already exists or not
-        $chekUser = DB::table($table)->where('user_name',$generate_name)->first();
+        $chekUser = DB::table($table)->where('username',$generate_name)->first();
 
         if($chekUser == null) {
             $loop = false;

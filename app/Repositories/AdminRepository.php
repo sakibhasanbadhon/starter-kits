@@ -6,14 +6,16 @@ use Carbon\Carbon;
 use App\Models\Admin\Admin;
 use App\Traits\ResponseData;
 use App\Interfaces\AdminInterface;
+use App\Traits\UploadAble;
 use Yajra\DataTables\Facades\DataTables;
 
 class AdminRepository implements AdminInterface {
 
-    use ResponseData;
+    use ResponseData, UploadAble;
 
     public function get($data){
         $getData = Admin::orderBy('created_at', 'desc');
+
         return DataTables::eloquent($getData)
             ->addIndexColumn()
             ->filter(function ($query) use ($data) {
@@ -48,36 +50,39 @@ class AdminRepository implements AdminInterface {
         $collection = collect($data->validated());
         $created_at = $updated_at = Carbon::now();
         $created_by = $updated_by = auth()->admin()->username;
+        $image      = $data->old_image;
+        $username   = generateUsername($data->first_name,$data->last_name,"admins"); // username generate
+        // new image upload and old image delete
+        if($data->hasFile('image')){
+            $image = $this->uploadFile($data->file('image'),ADMIN_IMAGE_PATH);
+            if($data->old_image){
+                $this->deleteFile($data->old_image);
+            }
+        }
+
         if ($data->update_id) {
-            $collection = $collection->merge(compact('updated_by','updated_at'));
+            $collection = $collection->merge(compact('updated_by','updated_at','image'));
         }else{
-            $collection = $collection->merge(compact('created_by','created_at'));
+            $collection = $collection->merge(compact('created_by','created_at','username','image'));
         }
 
         try {
-            Category::updateOrCreate(['id'=>$data->update_id],$collection->all());
-            if($data->update_id){
-                return $this->responseJson('success','Category updated successfull.');
+            $result = Admin::updateOrCreate(['id'=>$data->update_id],$collection->all());
+            if($result){
+                return true;
             }else{
-                return $this->responseJson('success','Category saved successfull.');
+                return false;
             }
         } catch (\Exception $e) {
-            return $this->responseJson('error','Category cannot be saved.');
+            return true;
         }
     }
 
-    public function edit($id){
-        $data = Category::find($id);
-        if($data){
-            return $this->responseJson('success',null,$data);
-        }else{
-            return $this->responseJson('error','Category not found!');
-        }
-    }
 
     public function delete($id){
-        $data = Category::find($id);
+        $data = Admin::find($id);
         if($data){
+            $this->deleteFile($data->image);
             $data->delete();
             return $this->responseJson('success','Category deleted successfull.');
         }else{
@@ -86,12 +91,12 @@ class AdminRepository implements AdminInterface {
     }
 
     public function status($id, $status){
-        $data = Category::find($id);
+        $data = Admin::find($id);
         if($data){
             $data->update(['status'=>$status]);
-            return $this->responseJson('success','Category status updated successfull.');
+            return $this->responseJson('success','Admin status updated successfull.');
         }else{
-            return $this->responseJson('error','Category not found!');
+            return $this->responseJson('error','Admin not found!');
         }
     }
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Backend;
 
 use App\Models\Admin\Role;
 use App\Models\Admin\Module;
@@ -38,7 +38,7 @@ class RoleController extends Controller
 
         $breadcrumb = ["Role List" => ''];
         $this->setPageTitle('Role List');
-        return view('roles.index', compact('breadcrumb'));
+        return view('backend.roles.index', compact('breadcrumb'));
     }
 
     /**
@@ -54,7 +54,7 @@ class RoleController extends Controller
         $this->setPageTitle('Create Role');
         $breadcrumb = ["Role List" => route('admin.roles.index'), "Create" => ''];
         $modules = Module::with('permissions')->latest()->get();
-        return view('roles.form', compact('breadcrumb', 'modules'));
+        return view('backend.roles.form', compact('breadcrumb', 'modules'));
     }
 
     /**

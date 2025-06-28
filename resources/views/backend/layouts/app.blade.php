@@ -6,25 +6,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title') | Starter Kits</title>
-    @include('partials.style')
+    @include('backend.partials.style')
     @stack('styles')
 </head>
 
 <body class="hold-transition sidebar-mini">
     <div class="wrapper">
         {{-- preloader --}}
-        @include('include.preloader')
+        @include('backend.include.preloader')
 
         {{-- header --}}
-        @include('include.header')
+        @include('backend.include.header')
 
         {{-- navber --}}
-        @include('include.side-nav')
+        @include('backend.include.side-nav')
 
         <!-- Content Wrapper. Contains page content -->
         <div class="content-wrapper">
             {{-- breadcrumb --}}
-            @include('include.breadcrumb')
+            @include('backend.include.breadcrumb')
 
             <!-- Main content -->
             <div class="content">
@@ -37,15 +37,15 @@
         <!-- /.content-wrapper -->
 
         {{-- footer --}}
-        @include('include.footer')
+        @include('backend.include.footer')
 
         {{-- alert --}}
-        @include('modals.alert')
+        @include('backend.modals.alert')
     </div>
     <!-- ./wrapper -->
 
     <!-- REQUIRED SCRIPTS -->
-    @include('partials.script')
+    @include('backend.partials.script')
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
     <script>

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Backend;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -18,7 +18,7 @@ class DashboardController extends Controller
 
         $this->setPageTitle('Dashboard');
         $breadcrumb = ['Dashboard' => ''];
-        return view('dashboard', compact('breadcrumb'));
+        return view('backend.dashboard', compact('breadcrumb'));
     }
 
     /**

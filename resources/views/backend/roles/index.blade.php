@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('backend.layouts.app')
 @section('title', $title)
 @push('styles')
 
@@ -9,21 +9,16 @@
             <div class="card">
                 <div class="card-header py-2">
                     <h4 class="mb-0 cd-title d-flex align-items-center justify-content-between">{{ $title }}
-                        <a href="{{ route('admin.admins.create') }}" class="btn btn-sm btn-primary rounded-0"><i class="fas fa-plus fa-sm"></i> Add Admin</a>
+                        <a href="{{ route('admin.roles.create') }}" class="btn btn-sm btn-primary rounded-0"><i class="fas fa-plus fa-sm"></i> Add Role</a>
                     </h4>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table class="table table-bordered table-sm table-hover table-striped" id="admin-datatable">
+                        <table class="table table-bordered table-sm table-hover table-striped" id="role-datatable">
                             <thead>
                                 <th>SL</th>
-                                <th>Image</th>
-                                <th>First Name</th>
-                                <th>Last Name</th>
-                                <th>Username</th>
-                                <th>Phone</th>
-                                <th>Email</th>
-                                <th>Status</th>
+                                <th>Name</th>
+                                <th>Permission</th>
                                 <th>Created By</th>
                                 <th>Created At</th>
                                 <th class="text-right">Action</th>
@@ -35,12 +30,11 @@
             </div>
         </div>
     </div>
-
 @endsection
 
 @push('scripts')
     <script>
-        table = $('#admin-datatable').DataTable({
+        table = $('#role-datatable').DataTable({
             processing: true,
             serverSide: true,
             responsive: false,
@@ -54,7 +48,7 @@
             ],
             pageLength: 10, //number of data show per page
             ajax: {
-                url: "{{ route('admin.admins.index') }}",
+                url: "{{ route('admin.roles.index') }}",
                 type: "GET",
                 dataType: "JSON",
                 data: function(d) {
@@ -64,13 +58,8 @@
             },
             columns: [
                 {data: 'DT_RowIndex'},
-                {data: 'image'},
-                {data: 'first_name'},
-                {data: 'last_name'},
-                {data: 'username'},
-                {data: 'phone'},
-                {data: 'email'},
-                {data: 'status'},
+                {data: 'name'},
+                {data: 'permissions'},
                 {data: 'created_by'},
                 {data: 'created_at'},
                 {data: 'action'}
@@ -111,17 +100,8 @@
             let id = $(this).data('id');
             let name = $(this).data('name');
             let row = table.row($(this).parent('tr'));
-            let url = "{{ route('admin.admins.delete') }}";
+            let url = "{{ route('admin.roles.delete') }}";
             delete_data(id,url,row,name);
-        });
-
-        // status changes
-        $(document).on('click', '.change_status', function() {
-            var id = $(this).data('id');
-            var name = $(this).data('name');
-            var status = $(this).data('status');
-            var url = "{{ route('admin.admins.status-change') }}"
-            change_status(id, status, name, url);
         });
     </script>
 @endpush

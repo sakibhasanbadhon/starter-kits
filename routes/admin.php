@@ -1,16 +1,16 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\AdminController;
-use App\Http\Controllers\Blog\PostController;
-use App\Http\Controllers\RoleController;
 use App\Http\Controllers\Admin\PagesController;
 use App\Http\Controllers\Admin\GlobalController;
-use App\Http\Controllers\Blog\CategoryController;
-use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\Backend\RoleController;
+use App\Http\Controllers\Backend\AdminController;
 use App\Http\Controllers\Admin\UsefulLinkController;
 use App\Http\Controllers\Admin\UserManageController;
+use App\Http\Controllers\Backend\Blog\PostController;
+use App\Http\Controllers\Backend\DashboardController;
 use App\Http\Controllers\Admin\AdminManagementController;
+use App\Http\Controllers\Backend\Blog\CategoryController;
 
 Route::controller(DashboardController::class)->group(function(){
     Route::get('dashboard', 'dashboard')->name('dashboard');

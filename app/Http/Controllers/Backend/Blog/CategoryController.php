@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Blog;
+namespace App\Http\Controllers\Backend\Blog;
 
 use App\Traits\ResponseData;
 use Illuminate\Http\Request;
@@ -26,7 +26,7 @@ class CategoryController extends Controller
 
         $this->setPageTitle('Category List');
         $data['breadcrumb'] = ['Categories' => ''];
-        return view('blog.category.index', $data);
+        return view('backend.blog.category.index', $data);
     }
 
     public function storeOrUpdate(CategoryRequest $request){

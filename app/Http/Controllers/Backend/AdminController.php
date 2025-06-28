@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Backend;
 
 use App\Models\Admin\Role;
 use App\Models\Admin\Admin;
@@ -8,6 +8,7 @@ use App\Traits\ResponseData;
 use Illuminate\Http\Request;
 use App\Services\AdminService;
 use App\Http\Requests\AdminRequest;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Gate;
 
 class AdminController extends Controller
@@ -37,7 +38,7 @@ class AdminController extends Controller
 
         $breadcrumb = ["Admin List" => ''];
         $this->setPageTitle('Admin List');
-        return view('admin.index', compact('breadcrumb'));
+        return view('backend.admin.index', compact('breadcrumb'));
     }
 
     /**
@@ -50,11 +51,10 @@ class AdminController extends Controller
         // authorized 403
         Gate::authorize('create-admin');
 
-        $this->setPageTitle('Create Role');
+        $this->setPageTitle('Create Admin');
         $data['breadcrumb'] = ["Admin List" => route('admin.admins.index'), "Create" => ''];
         $data['roles'] = Role::latest()->get();
-        $data['form_type'] = 'create';
-        return view('admin.form', $data);
+        return view('backend.admin.form', $data);
     }
 
     /**
@@ -64,12 +64,12 @@ class AdminController extends Controller
      * @param @return Illuminate\Http\Request $request
      * @return Illuminate\Http\Request Response
      */
-
     public function storeOrUpdate(AdminRequest $request){
         // authorized 403
         Gate::authorize('create-admin');
 
         $result = $this->admin->storeOrUpdateData($request);
+        // dd($result);
         if($result){
             if($request->update_id){
                 return redirect()->route('admin.admins.index')->with('success','Admin updated successfull.');
@@ -88,20 +88,36 @@ class AdminController extends Controller
      * @param Illuminate\Http\Request $request
      * @return Illuminate\Http\Request Response
      */
-
      public function edit(int $id){
         // authorized 403
         Gate::authorize('edit-admin');
 
-        $data['role'] = Admin::findOrFail($id);
+        $data['edit'] = Admin::findOrFail($id);
 
         $this->setPageTitle('Edit Admin');
-        $data['breadcrumb'] = ["Admin List" => route('admin.admins.index') , "Edit Admin" => ''];
-        return view('admin.form', $data);
+        $data['breadcrumb'] = ["Edit Admin" => route('admin.admins.index') , "Edit Admin" => ''];
+        $data['roles'] = Role::latest()->get();
+        return view('backend.admin.form', $data);
     }
 
+    /**
+     * Admin Status
+     *
+     * @method DELETE
+     * @param Illuminate\Http\Request $request
+     * @return Illuminate\Http\Request Response
+     */
+    public function statusChange(Request $request){
+        if($request->ajax()){
+            if(permission('delete-admin')){
+                return $this->admin->statusData($request->id,$request->status);
+            }else{
+                return $this->responseJson('error', UNAUTHORIZED_MSG);
+            }
+        }
+    }
 
-     /**
+    /**
      * Role Delete
      *
      * @method DELETE
