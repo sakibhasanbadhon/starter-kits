@@ -15,8 +15,11 @@ use Illuminate\Support\Facades\Storage;
  ***********/
 define('ADMIN_IMAGE_PATH', 'admin');
 define('USER_IMAGE_PATH', 'user');
+define('POST_IMAGE_PATH', 'post');
 define('SOMETHING_WRONG', 'Something Went Wrong, Please Try Again!');
 define('STATUS',[1 => 'Active', 2 => 'Inactive']);
+define('POST_STATUS',[1 => 'Published', 2 => 'Pending', 3 => 'Draft']);
+define('IS_FEATURED',[1 => 'Yes', 2 => 'No']);
 define('UNAUTHORIZED_MSG', 'Unauthozied Access!');
 
 

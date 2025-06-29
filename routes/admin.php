@@ -98,7 +98,8 @@ Route::prefix('categories')->name('categories.')->group(function(){
 Route::prefix('posts')->name('posts.')->group(function(){
     Route::get('/',[PostController::class, 'index'])->name('index');
     Route::post('store-or-update',[PostController::class, 'storeOrUpdate'])->name('store-or-update');
-    Route::get('edit',[PostController::class, 'edit'])->name('edit');
+    Route::get('create',[PostController::class, 'create'])->name('create');
+    Route::get('edit/{id}',[PostController::class, 'edit'])->name('edit');
     Route::post('status-change',[PostController::class, 'statusChange'])->name('status-change');
     Route::post('delete',[PostController::class, 'delete'])->name('delete');
 });

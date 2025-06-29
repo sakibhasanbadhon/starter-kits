@@ -69,7 +69,6 @@ class AdminController extends Controller
         Gate::authorize('create-admin');
 
         $result = $this->admin->storeOrUpdateData($request);
-        // dd($result);
         if($result){
             if($request->update_id){
                 return redirect()->route('admin.admins.index')->with('success','Admin updated successfull.');
