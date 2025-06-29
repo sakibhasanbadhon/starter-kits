@@ -9,6 +9,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\PostRequest;
 use App\Models\Category;
 use App\Models\Post;
+use Illuminate\Support\Facades\Gate;
 
 class PostController extends Controller
 {
@@ -22,6 +23,9 @@ class PostController extends Controller
     }
 
     public function index(Request $request){
+        // authorized 403
+        Gate::authorize('post-access');
+
         if($request->ajax()){
             return $this->post->allData($request);
         }
@@ -32,6 +36,9 @@ class PostController extends Controller
     }
 
     public function create(){
+        // authorized 403
+        Gate::authorize('post-create');
+
         $data['categories'] = Category::status(1)->latest()->pluck('name','id');
 
         $this->setPageTitle('New Post');
@@ -40,19 +47,26 @@ class PostController extends Controller
     }
 
     public function storeOrUpdate(PostRequest $request){
-        $result = $this->post->storeOrUpdateData($request);
-        if($result){
-            if($request->update_id){
-                return redirect()->route('admin.posts.index')->with('success','Post updated successfull.');
+        if(permission('post-create') || permission('post-edit')){
+            $result = $this->post->storeOrUpdateData($request);
+            if($result){
+                if($request->update_id){
+                    return redirect()->route('admin.posts.index')->with('success','Post updated successfull.');
+                }else{
+                    return redirect()->route('admin.posts.index')->with('success','Post saved successfull.');
+                }
             }else{
-                return redirect()->route('admin.posts.index')->with('success','Post saved successfull.');
+                return redirect()->back()->with('error','Post cannot be created!');
             }
         }else{
-            return redirect()->back()->with('error','Post cannot be created!');
+            return redirect()->back()->with('error', UNAUTHORIZED_MSG);
         }
     }
 
     public function edit(int $id){
+        // authorized 403
+        Gate::authorize('post-edit');
+
         $data['edit']  = Post::findOrFail($id);
         $data['categories'] = Category::status(1)->latest()->pluck('name','id');
 
@@ -63,13 +77,21 @@ class PostController extends Controller
 
     public function delete(Request $request){
         if($request->ajax()){
-            return $this->post->deleteData($request->id);
+            if(permission('post-delete')){
+                return $this->post->deleteData($request->id);
+            } else{
+                return $this->responseJson('error',UNAUTHORIZED_MSG);
+            }
         }
     }
 
     public function statusChange(Request $request){
         if($request->ajax()){
-            return $this->post->statusData($request->id, $request->status);
+            if(permission('post-status')){
+                return $this->post->statusData($request->id, $request->status);
+            } else{
+                return $this->responseJson('error',UNAUTHORIZED_MSG);
+            }
         }
     }
 }

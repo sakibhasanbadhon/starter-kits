@@ -29,12 +29,12 @@ class AdminController extends Controller
      * @return Illuminate\Http\Request Response
      */
     public function index(Request $request){
+        // authorized 403
+        Gate::authorize('admin-access');
+
         if($request->ajax()){
             return $this->admin->allData($request);
         }
-
-        // authorized 403
-        Gate::authorize('access-admin');
 
         $breadcrumb = ["Admin List" => ''];
         $this->setPageTitle('Admin List');
@@ -49,7 +49,7 @@ class AdminController extends Controller
      */
     public function create(){
         // authorized 403
-        Gate::authorize('create-admin');
+        Gate::authorize('admin-create');
 
         $this->setPageTitle('Create Admin');
         $data['breadcrumb'] = ["Admin List" => route('admin.admins.index'), "Create" => ''];
@@ -65,18 +65,19 @@ class AdminController extends Controller
      * @return Illuminate\Http\Request Response
      */
     public function storeOrUpdate(AdminRequest $request){
-        // authorized 403
-        Gate::authorize('create-admin');
-
-        $result = $this->admin->storeOrUpdateData($request);
-        if($result){
-            if($request->update_id){
-                return redirect()->route('admin.admins.index')->with('success','Admin updated successfull.');
+        if(permission('admin-create') || permission('admin-edit')){
+            $result = $this->admin->storeOrUpdateData($request);
+            if($result){
+                if($request->update_id){
+                    return redirect()->route('admin.admins.index')->with('success','Admin updated successfull.');
+                }else{
+                    return redirect()->route('admin.admins.index')->with('success','Admin saved successfull.');
+                }
             }else{
-                return redirect()->route('admin.admins.index')->with('success','Admin saved successfull.');
+                return redirect()->back()->with('error','Admin cannot be created!');
             }
-        }else{
-            return redirect()->back()->with('error','Admin cannot be created!');
+        }else {
+            return abort(403);
         }
     }
 
@@ -89,7 +90,7 @@ class AdminController extends Controller
      */
      public function edit(int $id){
         // authorized 403
-        Gate::authorize('edit-admin');
+        Gate::authorize('admin-edit');
 
         $data['edit'] = Admin::findOrFail($id);
 
@@ -108,7 +109,7 @@ class AdminController extends Controller
      */
     public function statusChange(Request $request){
         if($request->ajax()){
-            if(permission('delete-admin')){
+            if(permission('admin-status')){
                 return $this->admin->statusData($request->id,$request->status);
             }else{
                 return $this->responseJson('error', UNAUTHORIZED_MSG);
@@ -125,7 +126,7 @@ class AdminController extends Controller
      */
     public function delete(Request $request){
         if($request->ajax()){
-            if(permission('delete-admin')){
+            if(permission('admin-delete')){
                 return $this->admin->deleteData($request->id);
             }else{
                 return $this->responseJson('error', UNAUTHORIZED_MSG);

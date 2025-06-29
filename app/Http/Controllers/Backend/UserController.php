@@ -29,12 +29,12 @@ class UserController extends Controller
      * @return Illuminate\Http\Request Response
      */
     public function index(Request $request){
+        // authorized 403
+        Gate::authorize('user-access');
+
         if($request->ajax()){
             return $this->user->allData($request);
         }
-
-        // authorized 403
-        Gate::authorize('access-admin');
 
         $breadcrumb = ["User List" => ''];
         $this->setPageTitle('User List');
@@ -49,7 +49,7 @@ class UserController extends Controller
      */
     public function create(){
         // authorized 403
-        Gate::authorize('create-admin');
+        Gate::authorize('user-create');
 
         $this->setPageTitle('New User');
         $data['breadcrumb'] = ["User List" => route('admin.users.index'), "New User" => ''];
@@ -64,19 +64,20 @@ class UserController extends Controller
      * @return Illuminate\Http\Request Response
      */
     public function storeOrUpdate(UserRequest $request){
-        // authorized 403
-        Gate::authorize('create-admin');
+        if(permission('user-create') || permission('user-edit')){
+            $result = $this->user->storeOrUpdateData($request);
 
-        $result = $this->user->storeOrUpdateData($request);
-
-        if($result){
-            if($request->update_id){
-                return redirect()->route('admin.users.index')->with('success','User updated successfull.');
+            if($result){
+                if($request->update_id){
+                    return redirect()->route('admin.users.index')->with('success','User updated successfull.');
+                }else{
+                    return redirect()->route('admin.users.index')->with('success','User saved successfull.');
+                }
             }else{
-                return redirect()->route('admin.users.index')->with('success','User saved successfull.');
+                return redirect()->back()->with('error','User cannot be created!');
             }
         }else{
-            return redirect()->back()->with('error','User cannot be created!');
+            return abort(403);
         }
     }
 
@@ -89,7 +90,7 @@ class UserController extends Controller
      */
      public function edit(int $id){
         // authorized 403
-        Gate::authorize('edit-admin');
+        Gate::authorize('edit');
 
         $data['edit'] = User::findOrFail($id);
 
@@ -107,7 +108,7 @@ class UserController extends Controller
      */
     public function statusChange(Request $request){
         if($request->ajax()){
-            if(permission('delete-admin')){
+            if(permission('user-status')){
                 return $this->user->statusData($request->id,$request->status);
             }else{
                 return $this->responseJson('error', UNAUTHORIZED_MSG);
@@ -124,7 +125,7 @@ class UserController extends Controller
      */
     public function delete(Request $request){
         if($request->ajax()){
-            if(permission('delete-admin')){
+            if(permission('user-delete')){
                 return $this->user->deleteData($request->id);
             }else{
                 return $this->responseJson('error', UNAUTHORIZED_MSG);

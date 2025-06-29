@@ -35,9 +35,13 @@ class RoleRepository implements RoleInterface {
             })
             ->addColumn('action', function ($row) {
                 $action = '<div class="d-flex align-items-center justify-content-end">';
+                if(permission('role-edit')){
                 $action .= '<a href="'.route('admin.roles.edit', $row->id).'" class="btn-style btn-style-edit"><i class="fa fa-edit fa-sm"></i></a>';
-                if ($row->delatable == true){
-                    $action .= '<button type="button" class="btn-style btn-style-danger delete_data ml-1" data-id="' . $row->id . '" data-name="' . $row->name . '"><i class="fa fa-trash fa-sm"></i></button>';
+                }
+                if(permission('role-delete')){
+                    if ($row->delatable == true){
+                        $action .= '<button type="button" class="btn-style btn-style-danger delete_data ml-1" data-id="' . $row->id . '" data-name="' . $row->name . '"><i class="fa fa-trash fa-sm"></i></button>';
+                    }
                 }
                 $action .= '</div>';
 

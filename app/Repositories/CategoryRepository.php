@@ -23,17 +23,24 @@ class CategoryRepository implements CategoryInterface {
                 }
             })
             ->addColumn('status', function ($row) {
-                return change_status($row->id, $row->status, $row->title);
+                if(permission('category-status')){
+                    return change_status($row->id, $row->status, $row->title);
+                }else{
+                    return STATUS_LABEL[$row->status];
+                }
             })
             ->addColumn('created_at', function ($row) {
                 return datetime_format($row->created_at);
             })
-
             ->addColumn('action', function ($row) {
                 $action = '<div class="d-flex align-items-center justify-content-end">';
+                if(permission('category-edit')){
                 $action .= '<button type="button" class="btn-style btn-style-edit edit_data" data-id="' . $row->id . '"><i class="fa fa-edit fa-sm"></i></button>';
+                }
 
+                if(permission('category-delete')){
                 $action .= '<button type="button" class="btn-style btn-style-danger delete_data ml-1" data-id="' . $row->id . '" data-name="' . $row->name . '"><i class="fa fa-trash fa-sm"></i></button>';
+                }
                 $action .= '</div>';
 
                 return $action;

@@ -18,7 +18,16 @@ define('USER_IMAGE_PATH', 'user');
 define('POST_IMAGE_PATH', 'post');
 define('SOMETHING_WRONG', 'Something Went Wrong, Please Try Again!');
 define('STATUS',[1 => 'Active', 2 => 'Inactive']);
+define('STATUS_LABEL',[
+    1 => '<span class="badge badge-sm badge-success rounded-0">Active</span>',
+    2 => '<span class="badge badge-sm badge-danger rounded-0">Inactive</span>'
+]);
 define('POST_STATUS',[1 => 'Published', 2 => 'Pending', 3 => 'Draft']);
+define('POST_STATUS_LABEL',[
+    1 => '<span class="badge badge-sm badge-success rounded-0">Published</span>',
+    2 => '<span class="badge badge-sm badge-danger rounded-0">Pending</span>',
+    3 => '<span class="badge badge-sm badge-secondary rounded-0">Draft</span>'
+]);
 define('IS_FEATURED',[1 => 'Yes', 2 => 'No']);
 define('IS_FEATURED_LABEL',[
     1 => '<span class="badge badge-sm badge-success rounded-0">Yes</span>',

@@ -14,7 +14,7 @@ class DashboardController extends Controller
      */
     public function dashboard(){
         // authorized
-        Gate::authorize('access-dashboard');
+        Gate::authorize('dashboard-access');
 
         $this->setPageTitle('Dashboard');
         $breadcrumb = ['Dashboard' => ''];

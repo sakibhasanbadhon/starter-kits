@@ -15,85 +15,149 @@ class PermissionSeeder extends Seeder
     public function run(): void
     {
         // Dashboard Permission
-        $module_dashboard = Module::updateOrCreate(['name' => 'Dashboard'],['name' => 'Dashboard']);
-        Permission::updateOrCreate(['slug' => 'access-dashboard'],[
-            'module_id' => $module_dashboard->id,
+        $moduleDashboard = Module::updateOrCreate(['name' => 'Dashboard'],['name' => 'Dashboard']);
+        Permission::updateOrCreate(['slug' => 'dashboard-access'],[
+            'module_id' => $moduleDashboard->id,
             'name' => 'Access',
-            'slug' => 'access-dashboard',
+            'slug' => 'dashboard-access',
         ]);
 
         // Role Permissions
-        $module_role = Module::updateOrCreate(['name' => 'Role'],['name' => 'Role']);
-        Permission::updateOrCreate(['slug' => 'access-role'],[
-            'module_id' => $module_role->id,
+        $moduleRole = Module::updateOrCreate(['name' => 'Role'],['name' => 'Role']);
+        Permission::updateOrCreate(['slug' => 'role-access'],[
+            'module_id' => $moduleRole->id,
             'name' => 'Access',
-            'slug' => 'access-role',
+            'slug' => 'role-access',
         ]);
-        Permission::updateOrCreate(['slug' => 'create-role'],[
-            'module_id' => $module_role->id,
+        Permission::updateOrCreate(['slug' => 'role-create'],[
+            'module_id' => $moduleRole->id,
             'name' => 'Create',
-            'slug' => 'create-role',
+            'slug' => 'role-create',
         ]);
-        Permission::updateOrCreate(['slug' => 'edit-role'],[
-            'module_id' => $module_role->id,
-            'name' => 'Edit',
-            'slug' => 'edit-role',
+        Permission::updateOrCreate(['slug' => 'role-edit'],[
+            'module_id' => $moduleRole->id,
+            'name' => 'Edit/Update',
+            'slug' => 'role-edit',
         ]);
-        Permission::updateOrCreate(['slug' => 'delete-role'],[
-            'module_id' => $module_role->id,
+        Permission::updateOrCreate(['slug' => 'role-delete'],[
+            'module_id' => $moduleRole->id,
             'name' => 'Delete',
-            'slug' => 'delete-role',
+            'slug' => 'role-delete',
         ]);
 
 
         // Admin Permissions
-        $module_admin = Module::updateOrCreate(['name' => 'Admin'],['name' => 'Admin']);
-        Permission::updateOrCreate(['slug' => 'access-admin'],[
-            'module_id' => $module_admin->id,
+        $moduleAdmin = Module::updateOrCreate(['name' => 'Admin'],['name' => 'Admin']);
+        Permission::updateOrCreate(['slug' => 'admin-access'],[
+            'module_id' => $moduleAdmin->id,
             'name' => 'Access',
-            'slug' => 'access-admin',
+            'slug' => 'admin-access',
         ]);
-        Permission::updateOrCreate(['slug' => 'create-admin'],[
-            'module_id' => $module_admin->id,
+        Permission::updateOrCreate(['slug' => 'admin-create'],[
+            'module_id' => $moduleAdmin->id,
             'name' => 'Create',
-            'slug' => 'create-admin',
+            'slug' => 'admin-create',
         ]);
-        Permission::updateOrCreate(['slug' => 'edit-admin'],[
-            'module_id' => $module_admin->id,
-            'name' => 'Edit',
-            'slug' => 'edit-admin',
+        Permission::updateOrCreate(['slug' => 'admin-edit'],[
+            'module_id' => $moduleAdmin->id,
+            'name' => 'Edit/Update',
+            'slug' => 'admin-edit',
         ]);
-        Permission::updateOrCreate(['slug' => 'delete-admin'],[
-            'module_id' => $module_admin->id,
+        Permission::updateOrCreate(['slug' => 'admin-delete'],[
+            'module_id' => $moduleAdmin->id,
             'name' => 'Delete',
-            'slug' => 'delete-admin',
+            'slug' => 'admin-delete',
+        ]);
+        Permission::updateOrCreate(['slug' => 'admin-status'],[
+            'module_id' => $moduleAdmin->id,
+            'name' => 'Status Change',
+            'slug' => 'admin-status',
         ]);
 
 
         // User Permissions
-        $module_user = Module::updateOrCreate(['name' => 'User'],['name' => 'User']);
-        Permission::updateOrCreate(['slug' => 'access-user'],[
-            'module_id' => $module_user->id,
+        $moduleUser = Module::updateOrCreate(['name' => 'User'],['name' => 'User']);
+        Permission::updateOrCreate(['slug' => 'user-access'],[
+            'module_id' => $moduleUser->id,
             'name' => 'Access',
-            'slug' => 'access-user',
+            'slug' => 'user-access',
         ]);
-        Permission::updateOrCreate(['slug' => 'create-user'],[
-            'module_id' => $module_user->id,
+        Permission::updateOrCreate(['slug' => 'user-create'],[
+            'module_id' => $moduleUser->id,
             'name' => 'Create',
-            'slug' => 'create-user',
+            'slug' => 'user-create',
         ]);
-        Permission::updateOrCreate(['slug' => 'edit-user'],[
-            'module_id' => $module_user->id,
-            'name' => 'Edit',
-            'slug' => 'edit-user',
+        Permission::updateOrCreate(['slug' => 'user-edit'],[
+            'module_id' => $moduleUser->id,
+            'name' => 'Edit/Update',
+            'slug' => 'user-edit',
         ]);
-        Permission::updateOrCreate(['slug' => 'delete-user'],[
-            'module_id' => $module_user->id,
+        Permission::updateOrCreate(['slug' => 'user-delete'],[
+            'module_id' => $moduleUser->id,
             'name' => 'Delete',
-            'slug' => 'delete-user',
+            'slug' => 'user-delete',
+        ]);
+        Permission::updateOrCreate(['slug' => 'user-status'],[
+            'module_id' => $moduleUser->id,
+            'name' => 'Status Change',
+            'slug' => 'user-status',
         ]);
 
+        // Category Permissions
+        $moduleCategory = Module::updateOrCreate(['name' => 'Category'],['name' => 'Category']);
+        Permission::updateOrCreate(['slug' => 'category-access'],[
+            'module_id' => $moduleCategory->id,
+            'name' => 'Access',
+            'slug' => 'category-access',
+        ]);
+        Permission::updateOrCreate(['slug' => 'category-create'],[
+            'module_id' => $moduleCategory->id,
+            'name' => 'Create',
+            'slug' => 'category-create',
+        ]);
+        Permission::updateOrCreate(['slug' => 'category-edit'],[
+            'module_id' => $moduleCategory->id,
+            'name' => 'Edit/Update',
+            'slug' => 'category-edit',
+        ]);
+        Permission::updateOrCreate(['slug' => 'category-delete'],[
+            'module_id' => $moduleCategory->id,
+            'name' => 'Delete',
+            'slug' => 'category-delete',
+        ]);
+        Permission::updateOrCreate(['slug' => 'category-status'],[
+            'module_id' => $moduleCategory->id,
+            'name' => 'Status Change',
+            'slug' => 'category-status',
+        ]);
 
+        // Post Permissions
+        $modulePost = Module::updateOrCreate(['name' => 'Post'],['name' => 'Post']);
+        Permission::updateOrCreate(['slug' => 'post-access'],[
+            'module_id' => $modulePost->id,
+            'name' => 'Access',
+            'slug' => 'post-access',
+        ]);
+        Permission::updateOrCreate(['slug' => 'post-create'],[
+            'module_id' => $modulePost->id,
+            'name' => 'Create',
+            'slug' => 'post-create',
+        ]);
+        Permission::updateOrCreate(['slug' => 'post-edit'],[
+            'module_id' => $modulePost->id,
+            'name' => 'Edit/Update',
+            'slug' => 'post-edit',
+        ]);
+        Permission::updateOrCreate(['slug' => 'post-delete'],[
+            'module_id' => $modulePost->id,
+            'name' => 'Delete',
+            'slug' => 'post-delete',
+        ]);
+        Permission::updateOrCreate(['slug' => 'post-status'],[
+            'module_id' => $modulePost->id,
+            'name' => 'Status Change',
+            'slug' => 'post-status',
+        ]);
 
     }
 }

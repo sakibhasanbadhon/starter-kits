@@ -29,12 +29,12 @@ class RoleController extends Controller
      * @return Illuminate\Http\Request Response
      */
     public function index(Request $request){
+        // authorized 403
+        Gate::authorize('role-access');
+
         if($request->ajax()){
             return $this->role->allData($request);
         }
-
-        // authorized 403
-        Gate::authorize('access-role');
 
         $breadcrumb = ["Role List" => ''];
         $this->setPageTitle('Role List');
@@ -49,7 +49,7 @@ class RoleController extends Controller
      */
     public function create(){
         // authorized 403
-        Gate::authorize('create-role');
+        Gate::authorize('role-create');
 
         $this->setPageTitle('Create Role');
         $breadcrumb = ["Role List" => route('admin.roles.index'), "Create" => ''];
@@ -66,18 +66,19 @@ class RoleController extends Controller
      */
 
     public function storeOrUpdate(RoleRequest $request){
-        // authorized 403
-        Gate::authorize('create-role');
-
-        $result = $this->role->storeOrUpdateData($request);
-        if($result){
-            if($request->update_id){
-                return redirect()->route('admin.roles.index')->with('success','Role updated successfull.');
+        if(permission('role-create') || permission('role-edit')){
+            $result = $this->role->storeOrUpdateData($request);
+            if($result){
+                if($request->update_id){
+                    return redirect()->route('admin.roles.index')->with('success','Role updated successfull.');
+                }else{
+                    return redirect()->route('admin.roles.index')->with('success','Role saved successfull.');
+                }
             }else{
-                return redirect()->route('admin.roles.index')->with('success','Role saved successfull.');
+                return redirect()->back()->with('error','Role cannot be created!');
             }
-        }else{
-            return redirect()->back()->with('error','Role cannot be created!');
+        } else{
+            return abort(403);
         }
     }
 
@@ -91,7 +92,7 @@ class RoleController extends Controller
 
      public function edit(int $id){
         // authorized 403
-        Gate::authorize('edit-role');
+        Gate::authorize('role-edit');
 
         $data['role'] = Role::with('permissions')->findOrFail($id);
         $data['modules'] = Module::with('permissions')->latest()->get();
@@ -111,7 +112,7 @@ class RoleController extends Controller
      */
     public function delete(Request $request){
         if($request->ajax()){
-            if(permission('delete-role')){
+            if(permission('role-delete')){
                 return $this->role->deleteData($request->id);
             }else{
                 return $this->responseJson('error', UNAUTHORIZED_MSG);
