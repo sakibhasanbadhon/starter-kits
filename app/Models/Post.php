@@ -48,4 +48,8 @@ class Post extends Model
         return $query->where('status', $status);
     }
 
+    public function category(){
+        return $this->belongsTo(Category::class, 'category_id');
+    }
+
 }

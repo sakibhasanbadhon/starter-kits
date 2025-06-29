@@ -20,6 +20,10 @@ define('SOMETHING_WRONG', 'Something Went Wrong, Please Try Again!');
 define('STATUS',[1 => 'Active', 2 => 'Inactive']);
 define('POST_STATUS',[1 => 'Published', 2 => 'Pending', 3 => 'Draft']);
 define('IS_FEATURED',[1 => 'Yes', 2 => 'No']);
+define('IS_FEATURED_LABEL',[
+    1 => '<span class="badge badge-sm badge-success rounded-0">Yes</span>',
+    2 => '<span class="badge badge-sm badge-danger rounded-0">No</span>'
+]);
 define('UNAUTHORIZED_MSG', 'Unauthozied Access!');
 
 
@@ -394,8 +398,8 @@ if (!function_exists('user_image')) {
 if (!function_exists('change_status')) {
     function change_status(int $id, int $status, string $name = null)
     {
-        return $status == 1 ? '<span class="badge badge-success change_status" data-id="' . $id . '" data-name="' . $name . '" data-status="2" style="cursor:pointer;">Active</span>' :
-            '<span class="badge badge-danger change_status" data-id="' . $id . '" data-name="' . $name . '" data-status="1" style="cursor:pointer;">Inactive</span>';
+        return $status == 1 ? '<span class="badge badge-success rounded-0 change_status" data-id="' . $id . '" data-name="' . $name . '" data-status="2" style="cursor:pointer;">Active</span>' :
+            '<span class="badge badge-danger rounded-0 change_status" data-id="' . $id . '" data-name="' . $name . '" data-status="1" style="cursor:pointer;">Inactive</span>';
     }
 }
 

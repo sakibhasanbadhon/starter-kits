@@ -4,9 +4,10 @@ namespace App\Repositories;
 
 use Carbon\Carbon;
 use App\Models\Post;
-use App\Interfaces\PostInterface;
-use App\Traits\ResponseData;
 use App\Traits\UploadAble;
+use Illuminate\Support\Str;
+use App\Traits\ResponseData;
+use App\Interfaces\PostInterface;
 use Yajra\DataTables\Facades\DataTables;
 
 class PostRepository implements PostInterface {
@@ -14,7 +15,7 @@ class PostRepository implements PostInterface {
     use ResponseData, UploadAble;
 
     public function get($data){
-        $getData = Post::orderBy('created_at', 'desc');
+        $getData = Post::with('category')->orderBy('created_at', 'desc');
         return DataTables::eloquent($getData)
             ->addIndexColumn()
             ->filter(function ($query) use ($data) {
@@ -23,8 +24,14 @@ class PostRepository implements PostInterface {
                     $query->where('name', 'LIKE', $searchTerm);
                 }
             })
+            ->addColumn('category', function ($row) {
+                return $row->category->name;
+            })
             ->addColumn('feature_image', function ($row) {
-                return table_image($row->feature_image, $row->title);
+                return table_image($row->featured_image, $row->title);
+            })
+            ->addColumn('is_featured', function ($row) {
+                return IS_FEATURED_LABEL[$row->is_featured];
             })
             ->addColumn('status', function ($row) {
                 return change_status($row->id, $row->status, $row->title);
@@ -34,14 +41,14 @@ class PostRepository implements PostInterface {
             })
             ->addColumn('action', function ($row) {
                 $action = '<div class="d-flex align-items-center justify-content-end">';
-                $action .= '<button type="button" class="btn-style btn-style-edit edit_data" data-id="' . $row->id . '"><i class="fa fa-edit fa-sm"></i></button>';
+                $action .= '<a href="'.route('admin.posts.edit', $row->id).'" class="btn-style btn-style-edit" ><i class="fa fa-edit fa-sm"></i></a>';
 
                 $action .= '<button type="button" class="btn-style btn-style-danger delete_data ml-1" data-id="' . $row->id . '" data-name="' . $row->name . '"><i class="fa fa-trash fa-sm"></i></button>';
                 $action .= '</div>';
 
                 return $action;
             })
-            ->rawColumns(['feature_image','status', 'action'])
+            ->rawColumns(['is_featured','feature_image','status', 'action'])
             ->make(true);
     }
 
@@ -49,37 +56,39 @@ class PostRepository implements PostInterface {
         $collection    = collect($data->validated())->except('feature_image');
         $created_at    = $updated_at = Carbon::now();
         $created_by    = $updated_by = auth()->admin()->username;
-        $feature_image = $data->old_feature_image;
+        $user_id       = auth()->admin()->id;
+        $slug          = Str::slug($data->title);
+        $featured_image = $data->old_feature_image;
         // new image upload and old image delete
         if($data->hasFile('feature_image')){
-            $feature_image = $this->uploadFile($data->file('feature_image'),POST_IMAGE_PATH);
+            $featured_image = $this->uploadFile($data->file('feature_image'),POST_IMAGE_PATH);
             if($data->old_feature_image){
                 $this->deleteFile($data->old_feature_image);
             }
         }
 
         if ($data->update_id) {
-            $collection = $collection->merge(compact('updated_by','updated_at','feature_image'));
+            $collection = $collection->merge(compact('updated_by','updated_at','featured_image','slug','user_id'));
         }else{
-            $collection = $collection->merge(compact('created_by','created_at','feature_image'));
+            $collection = $collection->merge(compact('created_by','created_at','featured_image','slug','user_id'));
         }
 
         try {
-            Post::updateOrCreate(['id'=>$data->update_id],$collection->all());
-            if($data->update_id){
+            $result = Post::updateOrCreate(['id'=>$data->update_id],$collection->all());
+            if($result){
                 return true;
             }else{
                 return false;
             }
         } catch (\Exception $e) {
-            return false;
+            return $e->getMessage();
         }
     }
 
     public function delete($id){
         $data = Post::find($id);
         if($data){
-            $this->deleteFile($data->feature_image);
+            $this->deleteFile($data->featured_image);
             $data->delete();
             return $this->responseJson('success','Post deleted successfull.');
         }else{

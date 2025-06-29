@@ -14,7 +14,7 @@
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table class="table table-bordered table-sm table-hover table-striped" id="category-datatable">
+                        <table class="table table-bordered table-sm table-hover table-striped" id="post-datatable">
                             <thead>
                                 <th>SL</th>
                                 <th>Feature Image</th>
@@ -39,7 +39,7 @@
 
 @push('scripts')
     <script>
-        table = $('#category-datatable').DataTable({
+        table = $('#post-datatable').DataTable({
             processing: true,
             serverSide: true,
             responsive: false,
@@ -63,11 +63,11 @@
             },
             columns: [
                 {data: 'DT_RowIndex'},
-                {data: 'image'},
+                {data: 'feature_image'},
                 {data: 'category'},
                 {data: 'title'},
                 {data: 'excerpt'},
-                {data: 'is_feature'},
+                {data: 'is_featured'},
                 {data: 'status'},
                 {data: 'created_by'},
                 {data: 'created_at'},

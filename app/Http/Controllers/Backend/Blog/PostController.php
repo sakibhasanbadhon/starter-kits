@@ -40,17 +40,15 @@ class PostController extends Controller
     }
 
     public function storeOrUpdate(PostRequest $request){
-        if($request->ajax()){
-            $result = $this->post->storeOrUpdateData($request);
-            if($result){
-                if($request->update_id){
-                    return redirect()->route('admin.posts.index')->with('success','Post updated successfull.');
-                }else{
-                    return redirect()->route('admin.posts.index')->with('success','Post saved successfull.');
-                }
+        $result = $this->post->storeOrUpdateData($request);
+        if($result){
+            if($request->update_id){
+                return redirect()->route('admin.posts.index')->with('success','Post updated successfull.');
             }else{
-                return redirect()->back()->with('error','Post cannot be created!');
+                return redirect()->route('admin.posts.index')->with('success','Post saved successfull.');
             }
+        }else{
+            return redirect()->back()->with('error','Post cannot be created!');
         }
     }
 
@@ -58,8 +56,8 @@ class PostController extends Controller
         $data['edit']  = Post::findOrFail($id);
         $data['categories'] = Category::status(1)->latest()->pluck('name','id');
 
-        $this->setPageTitle('New Post');
-        $data['breadcrumb'] = ['Post List'=>route('admin.posts.index'),'New Post' => ''];
+        $this->setPageTitle('Edit Post');
+        $data['breadcrumb'] = ['Post List'=>route('admin.posts.index'),'Edit Post' => ''];
         return view('backend.blog.store-or-update', $data);
     }
 
