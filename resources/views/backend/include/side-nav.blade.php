@@ -39,7 +39,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('admin.manage-admins.user.index') }}" class="nav-link {{ isMenuActive('admin/dashboard*') }}">
+                    <a href="{{ route('admin.users.index') }}" class="nav-link {{ isMenuActive('admin/users*') }}">
                         <i class="fas fa-users fa-sm"></i>
                         <p>
                             Users

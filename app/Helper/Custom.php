@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Storage;
  *  Static Variables Start
  ***********/
 define('ADMIN_IMAGE_PATH', 'admin');
+define('USER_IMAGE_PATH', 'user');
 define('SOMETHING_WRONG', 'Something Went Wrong, Please Try Again!');
 define('STATUS',[1 => 'Active', 2 => 'Inactive']);
 define('UNAUTHORIZED_MSG', 'Unauthozied Access!');

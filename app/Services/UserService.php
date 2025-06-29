@@ -2,15 +2,15 @@
 
 namespace App\Services;
 
-use App\Repositories\AdminRepository;
+use App\Repositories\UserRepository;
 
-class AdminService {
+class UserService {
 
     protected $repo;
 
-    public function __construct(AdminRepository $adminRepository)
+    public function __construct(UserRepository $userRepository)
     {
-        $this->repo = $adminRepository;
+        $this->repo = $userRepository;
     }
 
     public function allData($data){

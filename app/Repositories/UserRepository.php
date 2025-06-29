@@ -3,18 +3,18 @@
 namespace App\Repositories;
 
 use Carbon\Carbon;
-use App\Models\Admin\Admin;
+use App\Models\User;
 use App\Traits\ResponseData;
-use App\Interfaces\AdminInterface;
+use App\Interfaces\UserInterface;
 use App\Traits\UploadAble;
 use Yajra\DataTables\Facades\DataTables;
 
-class AdminRepository implements AdminInterface {
+class UserRepository implements UserInterface {
 
     use ResponseData, UploadAble;
 
     public function get($data){
-        $getData = Admin::orderBy('created_at', 'desc');
+        $getData = User::orderBy('created_at', 'desc');
 
         return DataTables::eloquent($getData)
             ->addIndexColumn()
@@ -35,7 +35,7 @@ class AdminRepository implements AdminInterface {
             })
             ->addColumn('action', function ($row) {
                 $action = '<div class="d-flex align-items-center justify-content-end">';
-                $action .= '<a href="'.route('admin.admins.edit',$row->id).'" type="button" class="btn-style btn-style-edit"><i class="fa fa-edit fa-sm"></i></a>';
+                $action .= '<a href="'.route('admin.users.edit',$row->id).'" type="button" class="btn-style btn-style-edit"><i class="fa fa-edit fa-sm"></i></a>';
 
                 $action .= '<button type="button" class="btn-style btn-style-danger delete_data ml-1" data-id="' . $row->id . '" data-name="' . $row->name . '"><i class="fa fa-trash fa-sm"></i></button>';
                 $action .= '</div>';
@@ -51,10 +51,10 @@ class AdminRepository implements AdminInterface {
         $created_at = $updated_at = Carbon::now();
         $created_by = $updated_by = auth()->admin()->username;
         $image      = $data->old_image;
-        $username   = generateUsername($data->first_name,$data->last_name,"admins"); // username generate
+        $username   = generateUsername($data->first_name,$data->last_name,"users"); // username generate
         // new image upload and old image delete
         if($data->hasFile('image')){
-            $image = $this->uploadFile($data->file('image'),ADMIN_IMAGE_PATH);
+            $image = $this->uploadFile($data->file('image'),USER_IMAGE_PATH);
             if($data->old_image){
                 $this->deleteFile($data->old_image);
             }
@@ -67,7 +67,7 @@ class AdminRepository implements AdminInterface {
         }
 
         try {
-            $result = Admin::updateOrCreate(['id'=>$data->update_id],$collection->all());
+            $result = User::updateOrCreate(['id'=>$data->update_id],$collection->all());
             if($result){
                 return true;
             }else{
@@ -79,7 +79,7 @@ class AdminRepository implements AdminInterface {
     }
 
     public function delete($id){
-        $data = Admin::find($id);
+        $data = User::find($id);
         if($data){
             $this->deleteFile($data->image);
             $data->delete();
@@ -90,7 +90,7 @@ class AdminRepository implements AdminInterface {
     }
 
     public function status($id, $status){
-        $data = Admin::find($id);
+        $data = User::find($id);
         if($data){
             $data->update(['status'=>$status]);
             return $this->responseJson('success','Admin status updated successfull.');

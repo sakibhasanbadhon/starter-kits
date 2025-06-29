@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('mobile_code')->nullable();
             $table->string('mobile')->nullable();
             $table->string('full_mobile', 191)->nullable()->unique();
-            $table->string('password');
+            $table->string('password')->nullable();
             $table->string('image')->nullable();
             $table->text('address')->nullable();
             $table->boolean('email_verified')->comment('1 == Verifiend, 0 == Not verifiend')->default(false);
@@ -31,8 +31,10 @@ return new class extends Migration
             $table->string('two_factor_secret')->nullable();
             $table->string('device_id')->nullable();
             $table->timestamp('email_verified_at')->nullable();
-            $table->boolean('status')->comment('1 = Active, 0 == Banned')->default(true);
+            $table->enum('status',[1,2])->default(1)->comment('1 = Active, 2 == Inactive');
             $table->rememberToken();
+            $table->string('created_by')->nullable();
+            $table->string('updated_by')->nullable();
             $table->timestamps();
         });
     }

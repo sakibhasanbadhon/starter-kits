@@ -12,7 +12,7 @@
                 <h4 class="mb-0 card-title">{{ $title }}</h4>
             </div>
             <div class="card-body">
-                <form action="{{ route('admin.admins.store-or-update') }}" method="POST" enctype="multipart/form-data">
+                <form action="{{ route('admin.users.store-or-update') }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     @isset($edit)
                         <input type="hidden" name="update_id" value="{{ $edit->id }}">
@@ -20,7 +20,7 @@
                     <x-forms.inputbox labelName="First Name" name="first_name" required="required" placeholder="Enter first name" value="{{ $edit->first_name ?? old('first_name') }}"/>
                     <x-forms.inputbox labelName="Last Name" name="last_name" required="required" placeholder="Enter last name" value="{{ $edit->last_name ?? old('last_name') }}"/>
                     <x-forms.inputbox type="email" labelName="Email" name="email" required="required" placeholder="Enter email" value="{{ $edit->email ?? old('email') }}"/>
-                    <x-forms.inputbox type="tel" labelName="Phone" name="phone" required="required" placeholder="Enter phone no." value="{{ $edit->phone ?? old('phone') }}"/>
+                    <x-forms.inputbox type="tel" labelName="Mobile" name="mobile" required="required" placeholder="Enter mobile no." value="{{ $edit->mobile ?? old('mobile') }}"/>
                     <div class="form-group">
                         <label for="password" class="required">Password</label>
                         <div class="input-group">
@@ -49,12 +49,6 @@
                             <small class="text-danger d-block">{{ $message }}</small>
                         @enderror
                     </div>
-                    <x-forms.selectbox labelName="Role" name="role_id" required="required">
-                        <option value="">-- Select Role --</option>
-                        @foreach ($roles as $role)
-                            <option value="{{ $role->id }}" @isset($edit) {{ $role->id == $edit->role_id ? 'selected' : '' }}@endisset>{{ $role->name }}</option>
-                        @endforeach
-                    </x-forms.selectbox>
                     <x-forms.selectbox labelName="Status" name="status" required="required">
                         @foreach (STATUS as $id=>$name)
                             <option value="{{ $id }}" @isset($edit) {{ $id == $edit->status ? 'selected' : '' }}@endisset>{{ $name }}</option>

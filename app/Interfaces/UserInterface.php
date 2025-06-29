@@ -2,7 +2,7 @@
 
 namespace App\Interfaces;
 
-interface AdminInterface {
+interface UserInterface {
 
     public function get($data);
     public function storeOrUpdate($data);

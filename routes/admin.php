@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\PagesController;
 use App\Http\Controllers\Admin\GlobalController;
 use App\Http\Controllers\Backend\RoleController;
+use App\Http\Controllers\Backend\UserController;
 use App\Http\Controllers\Backend\AdminController;
 use App\Http\Controllers\Admin\UsefulLinkController;
 use App\Http\Controllers\Admin\UserManageController;
@@ -35,6 +36,17 @@ Route::controller(AdminController::class)->prefix('admins')->name('admins.')->gr
     Route::post('delete', 'delete')->name('delete');
     Route::post('status-change', 'statusChange')->name('status-change');
 });
+
+// User Routes
+Route::controller(UserController::class)->prefix('users')->name('users.')->group(function(){
+    Route::get('/', 'index')->name('index');
+    Route::get('create', 'create')->name('create');
+    Route::post('store-or-update', 'storeOrUpdate')->name('store-or-update');
+    Route::get('edit/{id}', 'edit')->name('edit');
+    Route::post('delete', 'delete')->name('delete');
+    Route::post('status-change', 'statusChange')->name('status-change');
+});
+
 
 Route::controller(AdminManagementController::class)->prefix('manage-admins')->name('manage-admins.')->group(function(){
     Route::get('/', 'index')->name('index');
