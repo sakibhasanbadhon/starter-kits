@@ -10,6 +10,7 @@ use App\Http\Controllers\Admin\UsefulLinkController;
 use App\Http\Controllers\Admin\UserManageController;
 use App\Http\Controllers\Backend\Blog\PostController;
 use App\Http\Controllers\Backend\DashboardController;
+use App\Http\Controllers\Backend\TestimonialController;
 use App\Http\Controllers\Admin\AdminManagementController;
 use App\Http\Controllers\Backend\Blog\CategoryController;
 
@@ -39,6 +40,35 @@ Route::controller(AdminController::class)->prefix('admins')->name('admins.')->gr
 
 // User Routes
 Route::controller(UserController::class)->prefix('users')->name('users.')->group(function(){
+    Route::get('/', 'index')->name('index');
+    Route::get('create', 'create')->name('create');
+    Route::post('store-or-update', 'storeOrUpdate')->name('store-or-update');
+    Route::get('edit/{id}', 'edit')->name('edit');
+    Route::post('delete', 'delete')->name('delete');
+    Route::post('status-change', 'statusChange')->name('status-change');
+});
+
+// Category Routes
+Route::prefix('categories')->name('categories.')->group(function(){
+    Route::get('/',[CategoryController::class, 'index'])->name('index');
+    Route::post('store-or-update',[CategoryController::class, 'storeOrUpdate'])->name('store-or-update');
+    Route::get('edit',[CategoryController::class, 'edit'])->name('edit');
+    Route::post('status-change',[CategoryController::class, 'statusChange'])->name('status-change');
+    Route::post('delete',[CategoryController::class, 'delete'])->name('delete');
+});
+
+// Post Routes
+Route::prefix('posts')->name('posts.')->group(function(){
+    Route::get('/',[PostController::class, 'index'])->name('index');
+    Route::post('store-or-update',[PostController::class, 'storeOrUpdate'])->name('store-or-update');
+    Route::get('create',[PostController::class, 'create'])->name('create');
+    Route::get('edit/{id}',[PostController::class, 'edit'])->name('edit');
+    Route::post('status-change',[PostController::class, 'statusChange'])->name('status-change');
+    Route::post('delete',[PostController::class, 'delete'])->name('delete');
+});
+
+// Testimonial Routes
+Route::controller(TestimonialController::class)->prefix('testimonials')->name('testimonials.')->group(function(){
     Route::get('/', 'index')->name('index');
     Route::get('create', 'create')->name('create');
     Route::post('store-or-update', 'storeOrUpdate')->name('store-or-update');
@@ -85,24 +115,7 @@ Route::controller(UsefulLinkController::class)->prefix('useful-links')->name('us
     Route::post('update', 'update')->name('update');
 });
 
-// Category Routes
-Route::prefix('categories')->name('categories.')->group(function(){
-    Route::get('/',[CategoryController::class, 'index'])->name('index');
-    Route::post('store-or-update',[CategoryController::class, 'storeOrUpdate'])->name('store-or-update');
-    Route::get('edit',[CategoryController::class, 'edit'])->name('edit');
-    Route::post('status-change',[CategoryController::class, 'statusChange'])->name('status-change');
-    Route::post('delete',[CategoryController::class, 'delete'])->name('delete');
-});
 
-// Post Routes
-Route::prefix('posts')->name('posts.')->group(function(){
-    Route::get('/',[PostController::class, 'index'])->name('index');
-    Route::post('store-or-update',[PostController::class, 'storeOrUpdate'])->name('store-or-update');
-    Route::get('create',[PostController::class, 'create'])->name('create');
-    Route::get('edit/{id}',[PostController::class, 'edit'])->name('edit');
-    Route::post('status-change',[PostController::class, 'statusChange'])->name('status-change');
-    Route::post('delete',[PostController::class, 'delete'])->name('delete');
-});
 
 
 

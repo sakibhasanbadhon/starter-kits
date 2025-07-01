@@ -159,5 +159,60 @@ class PermissionSeeder extends Seeder
             'slug' => 'post-status',
         ]);
 
+        // Testimonial Permissions
+        $modulePost = Module::updateOrCreate(['name' => 'Testimonial'],['name' => 'Testimonial']);
+        Permission::updateOrCreate(['slug' => 'testimonial-access'],[
+            'module_id' => $modulePost->id,
+            'name' => 'Access',
+            'slug' => 'testimonial-access',
+        ]);
+        Permission::updateOrCreate(['slug' => 'testimonial-create'],[
+            'module_id' => $modulePost->id,
+            'name' => 'Create',
+            'slug' => 'testimonial-create',
+        ]);
+        Permission::updateOrCreate(['slug' => 'testimonial-edit'],[
+            'module_id' => $modulePost->id,
+            'name' => 'Edit/Update',
+            'slug' => 'testimonial-edit',
+        ]);
+        Permission::updateOrCreate(['slug' => 'testimonial-delete'],[
+            'module_id' => $modulePost->id,
+            'name' => 'Delete',
+            'slug' => 'testimonial-delete',
+        ]);
+        Permission::updateOrCreate(['slug' => 'testimonial-status'],[
+            'module_id' => $modulePost->id,
+            'name' => 'Status Change',
+            'slug' => 'testimonial-status',
+        ]);
+
+        // FAQ Permissions
+        $modulePost = Module::updateOrCreate(['name' => 'FAQ'],['name' => 'FAQ']);
+        Permission::updateOrCreate(['slug' => 'faq-access'],[
+            'module_id' => $modulePost->id,
+            'name' => 'Access',
+            'slug' => 'faq-access',
+        ]);
+        Permission::updateOrCreate(['slug' => 'faq-create'],[
+            'module_id' => $modulePost->id,
+            'name' => 'Create',
+            'slug' => 'faq-create',
+        ]);
+        Permission::updateOrCreate(['slug' => 'faq-edit'],[
+            'module_id' => $modulePost->id,
+            'name' => 'Edit/Update',
+            'slug' => 'faq-edit',
+        ]);
+        Permission::updateOrCreate(['slug' => 'faq-delete'],[
+            'module_id' => $modulePost->id,
+            'name' => 'Delete',
+            'slug' => 'faq-delete',
+        ]);
+        Permission::updateOrCreate(['slug' => 'faq-status'],[
+            'module_id' => $modulePost->id,
+            'name' => 'Status Change',
+            'slug' => 'faq-status',
+        ]);
     }
 }

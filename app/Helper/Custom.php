@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Storage;
 define('ADMIN_IMAGE_PATH', 'admin');
 define('USER_IMAGE_PATH', 'user');
 define('POST_IMAGE_PATH', 'post');
+define('TESTIMONIAL_IMAGE_PATH', 'testimonial');
 define('SOMETHING_WRONG', 'Something Went Wrong, Please Try Again!');
 define('STATUS',[1 => 'Active', 2 => 'Inactive']);
 define('STATUS_LABEL',[
@@ -34,7 +35,7 @@ define('IS_FEATURED_LABEL',[
     2 => '<span class="badge badge-sm badge-danger rounded-0">No</span>'
 ]);
 define('UNAUTHORIZED_MSG', 'Unauthozied Access!');
-
+define('RATING',[1,2,3,4,5]);
 
  /**************************************
  *  Static Variables End

@@ -58,8 +58,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('admin.categories.index') }}"
-                        class="nav-link {{ isMenuActive('admin/categories*') }}">
+                    <a href="{{ route('admin.categories.index') }}" class="nav-link {{ isMenuActive('admin/categories*') }}">
                         <i class="fa fa-tags fa-sm"></i>
                         <p>
                             Categories
@@ -69,8 +68,7 @@
 
                 <li class="nav-header">CONTENT MANAGES</li>
                 <li class="nav-item">
-                    <a href="#"
-                        class="nav-link {{ isMenuActive('admin.pages*') }}">
+                    <a href="{{ route('admin.testimonials.index') }}" class="nav-link {{ isMenuActive('admin/testimonials*') }}">
                         <i class="fa fa-link fa-sm"></i>
                         <p>
                             Testimonials

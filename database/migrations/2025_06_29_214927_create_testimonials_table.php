@@ -20,7 +20,10 @@ return new class extends Migration
             $table->text('content');
             $table->integer('rating')->nullable();
             $table->enum('is_social', [1,2])->default(2)->comment('1 = Yes, 2 = No');
-            $table->json('social_media')->nullable();
+            $table->text('facebook')->nullable();
+            $table->text('twitter')->nullable();
+            $table->text('linkedin')->nullable();
+            $table->text('youtube')->nullable();
             $table->enum('status', [1,2])->default(2)->comment('1 = Active, 2 = Inactive');
             $table->integer('ordering')->default(0);
             $table->string('created_by')->nullable();
