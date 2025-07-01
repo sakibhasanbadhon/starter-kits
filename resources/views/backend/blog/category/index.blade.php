@@ -9,7 +9,9 @@
             <div class="card">
                 <div class="card-header py-2">
                     <h4 class="mb-0 cd-title d-flex align-items-center justify-content-between">{{ $title }}
+                        @permission('category-access')
                         <button class="btn btn-sm btn-primary rounded-0" onclick="showFormModal('New Category', 'Save')"><i class="fas fa-plus fa-sm"></i> Add Category</button>
+                        @endpermission
                     </h4>
                 </div>
                 <div class="card-body">
@@ -31,7 +33,9 @@
         </div>
     </div>
 
+    @if (permission('category-create') || permission('category-edit'))
     @include('backend.blog.category.store-or-update')
+    @endif
 @endsection
 
 @push('scripts')
@@ -64,7 +68,9 @@
                 {data: 'status'},
                 {data: 'created_by'},
                 {data: 'created_at'},
+                @if (permission('category-delete') || permission('category-edit'))
                 {data: 'action'}
+                @endif
             ],
             language: {
                 processing: "<img src='{{ asset('backend/img/table-loading.svg') }}'>",
@@ -97,6 +103,7 @@
             ]
         });
 
+        @if (permission('category-create') || permission('category-edit'))
         // save category
         $(document).on('click', '#save-btn', function () {
             var form = document.getElementById('store_or_update_form');
@@ -111,7 +118,9 @@
             }
             store_or_update_data(method, url, formData);
         });
+        @endif
 
+        @permission('category-edit')
         // edit category
         $(document).on('click', '.edit_data', function () {
             let id = $(this).data('id');
@@ -146,7 +155,9 @@
                 });
             }
         });
+        @endpermission
 
+        @permission('category-delete')
         // delete category
         $(document).on('click', '.delete_data', function () {
             let id = $(this).data('id');
@@ -155,7 +166,9 @@
             let url = "{{ route('admin.categories.delete') }}";
             delete_data(id,url,row,name);
         });
+        @endpermission
 
+        @permission('category-status')
         // status changes
         $(document).on('click', '.change_status', function() {
             var id = $(this).data('id');
@@ -164,5 +177,6 @@
             var url = "{{ route('admin.categories.status-change') }}"
             change_status(id, status, name, url);
         });
+        @endpermission
     </script>
 @endpush

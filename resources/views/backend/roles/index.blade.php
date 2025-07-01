@@ -9,7 +9,9 @@
             <div class="card">
                 <div class="card-header py-2">
                     <h4 class="mb-0 cd-title d-flex align-items-center justify-content-between">{{ $title }}
+                        @permission('role-access')
                         <a href="{{ route('admin.roles.create') }}" class="btn btn-sm btn-primary rounded-0"><i class="fas fa-plus fa-sm"></i> Add Role</a>
+                        @endpermission
                     </h4>
                 </div>
                 <div class="card-body">
@@ -21,7 +23,9 @@
                                 <th>Permission</th>
                                 <th>Created By</th>
                                 <th>Created At</th>
+                                @if (permission('role-delete') || permission('role-edit'))
                                 <th class="text-right">Action</th>
+                                @endif
                             </thead>
                             <tbody></tbody>
                         </table>
@@ -62,7 +66,9 @@
                 {data: 'permissions'},
                 {data: 'created_by'},
                 {data: 'created_at'},
+                @if (permission('role-delete') || permission('role-edit'))
                 {data: 'action'}
+                @endif
             ],
             language: {
                 processing: "<img src='{{ asset('backend/img/table-loading.svg') }}'>",
@@ -95,7 +101,8 @@
             ]
         });
 
-        // delete category
+        @permission('role-delete')
+        // delete role
         $(document).on('click', '.delete_data', function () {
             let id = $(this).data('id');
             let name = $(this).data('name');
@@ -103,5 +110,6 @@
             let url = "{{ route('admin.roles.delete') }}";
             delete_data(id,url,row,name);
         });
+        @endpermission
     </script>
 @endpush

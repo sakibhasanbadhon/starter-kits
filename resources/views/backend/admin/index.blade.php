@@ -9,7 +9,9 @@
             <div class="card">
                 <div class="card-header py-2">
                     <h4 class="mb-0 cd-title d-flex align-items-center justify-content-between">{{ $title }}
+                        @permission('admin-access')
                         <a href="{{ route('admin.admins.create') }}" class="btn btn-sm btn-primary rounded-0"><i class="fas fa-plus fa-sm"></i> Add Admin</a>
+                        @endpermission
                     </h4>
                 </div>
                 <div class="card-body">
@@ -26,7 +28,9 @@
                                 <th>Status</th>
                                 <th>Created By</th>
                                 <th>Created At</th>
+                                @if (permission('admin-edit') || permission('admin-delete'))
                                 <th class="text-right">Action</th>
+                                @endif
                             </thead>
                             <tbody></tbody>
                         </table>
@@ -73,7 +77,9 @@
                 {data: 'status'},
                 {data: 'created_by'},
                 {data: 'created_at'},
+                @if (permission('admin-edit') || permission('admin-delete'))
                 {data: 'action'}
+                @endif
             ],
             language: {
                 processing: "<img src='{{ asset('backend/img/table-loading.svg') }}'>",
@@ -106,6 +112,7 @@
             ]
         });
 
+        @permission('admin-delete')
         // delete category
         $(document).on('click', '.delete_data', function () {
             let id = $(this).data('id');
@@ -114,7 +121,9 @@
             let url = "{{ route('admin.admins.delete') }}";
             delete_data(id,url,row,name);
         });
+        @endpermission
 
+        @permission('admin-status')
         // status changes
         $(document).on('click', '.change_status', function() {
             var id = $(this).data('id');
@@ -123,5 +132,6 @@
             var url = "{{ route('admin.admins.status-change') }}"
             change_status(id, status, name, url);
         });
+        @endpermission
     </script>
 @endpush

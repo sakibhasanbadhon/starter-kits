@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Backend;
 
-use App\Models\Admin\Role;
 use App\Traits\ResponseData;
 use Illuminate\Http\Request;
 use App\Services\UserService;
