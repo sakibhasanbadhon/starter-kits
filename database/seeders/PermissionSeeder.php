@@ -216,21 +216,39 @@ class PermissionSeeder extends Seeder
         ]);
 
         // Subscriber Permissions
-        $modulePost = Module::updateOrCreate(['name' => 'Subscriber'],['name' => 'Subscriber']);
+        $moduleSubscriber = Module::updateOrCreate(['name' => 'Subscriber'],['name' => 'Subscriber']);
         Permission::updateOrCreate(['slug' => 'subscriber-access'],[
-            'module_id' => $modulePost->id,
+            'module_id' => $moduleSubscriber->id,
             'name' => 'Access',
             'slug' => 'subscriber-access',
         ]);
         Permission::updateOrCreate(['slug' => 'subscriber-delete'],[
-            'module_id' => $modulePost->id,
+            'module_id' => $moduleSubscriber->id,
             'name' => 'Delete',
             'slug' => 'subscriber-delete',
         ]);
         Permission::updateOrCreate(['slug' => 'subscriber-broadcast'],[
-            'module_id' => $modulePost->id,
+            'module_id' => $moduleSubscriber->id,
             'name' => 'Broadcast Send',
             'slug' => 'subscriber-broadcast',
+        ]);
+
+        // Contact Message Permissions
+        $moduleContact = Module::updateOrCreate(['name' => 'Contact Message'],['name' => 'Contact Message']);
+        Permission::updateOrCreate(['slug' => 'contact-message-access'],[
+            'module_id' => $moduleContact->id,
+            'name' => 'Access',
+            'slug' => 'contact-message-access',
+        ]);
+        Permission::updateOrCreate(['slug' => 'contact-message-view'],[
+            'module_id' => $moduleContact->id,
+            'name' => 'View',
+            'slug' => 'contact-message-view',
+        ]);
+        Permission::updateOrCreate(['slug' => 'contact-message-reply'],[
+            'module_id' => $moduleContact->id,
+            'name' => 'Contact Reply',
+            'slug' => 'contact-message-reply',
         ]);
     }
 }

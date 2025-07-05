@@ -15,6 +15,7 @@ use App\Http\Controllers\Backend\SubscriberController;
 use App\Http\Controllers\Backend\TestimonialController;
 use App\Http\Controllers\Admin\AdminManagementController;
 use App\Http\Controllers\Backend\Blog\CategoryController;
+use App\Http\Controllers\Backend\ContactMessageController;
 
 Route::controller(DashboardController::class)->group(function(){
     Route::get('dashboard', 'dashboard')->name('dashboard');
@@ -95,6 +96,13 @@ Route::controller(SubscriberController::class)->prefix('subscribers')->name('sub
     Route::post('delete', 'delete')->name('delete');
 });
 
+// Contact Message Routes
+Route::controller(ContactMessageController::class)->prefix('contact-messages')->name('contact-messages.')->group(function(){
+    Route::get('/', 'index')->name('index');
+    Route::post('view', 'details')->name('view');
+    Route::post('reply', 'reply')->name('reply');
+});
+
 
 Route::controller(AdminManagementController::class)->prefix('manage-admins')->name('manage-admins.')->group(function(){
     Route::get('/', 'index')->name('index');
@@ -114,8 +122,6 @@ Route::controller(AdminManagementController::class)->prefix('manage-admins')->na
 
 
 Route::controller(GlobalController::class)->group(function(){
-    Route::get('subscriber/', 'subscriber')->name('subscriber');
-    Route::get('contact/message', 'contactMessage')->name('contact.message');
     Route::get('web/settings', 'webSetting')->name('web.settings');
     Route::post('web/settings/store', 'webSettingStore')->name('web.settings.store');
 });

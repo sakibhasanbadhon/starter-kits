@@ -145,15 +145,17 @@
                 </li>
                 @endpermission
 
+                @permission('contact-message-access')
                 <li class="nav-item">
-                    <a href="{{ route('admin.contact.message') }}"
-                        class="nav-link {{ isMenuActive('admin/contact/message*') }}">
+                    <a href="{{ route('admin.contact-messages.index') }}"
+                        class="nav-link {{ isMenuActive('admin/contact-messages*') }}">
                         <i class="fa fa-comment fa-sm"></i>
                         <p>
                             Contact Message
                         </p>
                     </a>
                 </li>
+                @endpermission
 
                 <li class="nav-header">SETTINGS</li>
                 <li class="nav-item {{ isMenuExpand('admin/manage-admins*') }}">

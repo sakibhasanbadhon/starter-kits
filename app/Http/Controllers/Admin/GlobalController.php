@@ -10,18 +10,7 @@ use Illuminate\Http\Request;
 
 class GlobalController extends Controller
 {
-    public function subscriber() {
-        $breadcrumb = ['Dashboard' => route('admin.dashboard'), 'Subscriber' => ''];
-        $subscribers = Subscriber::paginate(10);
-        return view('admin.sections.subscriber', compact('subscribers','breadcrumb'));
-    }
 
-
-    public function contactMessage() {
-        $breadcrumb = ['Dashboard' => route('admin.dashboard'), 'Contact' => ''];
-        $contacts = Contact::paginate(10);
-        return view('admin.sections.contact', compact('contacts','breadcrumb'));
-    }
 
     public function webSetting() {
         $websettiongs = WebSetting::first();
