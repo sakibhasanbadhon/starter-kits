@@ -214,5 +214,23 @@ class PermissionSeeder extends Seeder
             'name' => 'Status Change',
             'slug' => 'faq-status',
         ]);
+
+        // Subscriber Permissions
+        $modulePost = Module::updateOrCreate(['name' => 'Subscriber'],['name' => 'Subscriber']);
+        Permission::updateOrCreate(['slug' => 'subscriber-access'],[
+            'module_id' => $modulePost->id,
+            'name' => 'Access',
+            'slug' => 'subscriber-access',
+        ]);
+        Permission::updateOrCreate(['slug' => 'subscriber-delete'],[
+            'module_id' => $modulePost->id,
+            'name' => 'Delete',
+            'slug' => 'subscriber-delete',
+        ]);
+        Permission::updateOrCreate(['slug' => 'subscriber-broadcast'],[
+            'module_id' => $modulePost->id,
+            'name' => 'Broadcast Send',
+            'slug' => 'subscriber-broadcast',
+        ]);
     }
 }

@@ -12,6 +12,7 @@
         <!-- Sidebar Menu -->
         <nav class="mt-2">
             <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+                @permission('dashboard-access')
                 <li class="nav-item">
                     <a href="{{ route('admin.dashboard') }}" class="nav-link {{ isMenuActive('admin/dashboard*') }}">
                         <i class="fas fa-home fa-sm"></i>
@@ -20,8 +21,10 @@
                         </p>
                     </a>
                 </li>
+                @endpermission
 
                 <li class="nav-header">AUTHORIZATIONS</li>
+                @permission('role-access')
                 <li class="nav-item">
                     <a href="{{ route('admin.roles.index') }}" class="nav-link {{ isMenuActive('admin/roles*') }}">
                         <i class="fas fa-user-cog fa-sm"></i>
@@ -30,6 +33,9 @@
                         </p>
                     </a>
                 </li>
+                @endpermission
+
+                @permission('admin-access')
                 <li class="nav-item">
                     <a href="{{ route('admin.admins.index') }}" class="nav-link {{ isMenuActive('admin/admins*') }}">
                         <i class="fas fa-users fa-sm"></i>
@@ -38,6 +44,9 @@
                         </p>
                     </a>
                 </li>
+                @endpermission
+
+                @permission('user-access')
                 <li class="nav-item">
                     <a href="{{ route('admin.users.index') }}" class="nav-link {{ isMenuActive('admin/users*') }}">
                         <i class="fas fa-users fa-sm"></i>
@@ -46,8 +55,10 @@
                         </p>
                     </a>
                 </li>
+                @endpermission
 
                 <li class="nav-header">BLOG</li>
+                @permission('post-access')
                 <li class="nav-item">
                     <a href="{{ route('admin.posts.index') }}"
                         class="nav-link {{ isMenuActive('admin/posts*') }}">
@@ -57,6 +68,9 @@
                         </p>
                     </a>
                 </li>
+                @endpermission
+
+                @permission('category-access')
                 <li class="nav-item">
                     <a href="{{ route('admin.categories.index') }}" class="nav-link {{ isMenuActive('admin/categories*') }}">
                         <i class="fa fa-tags fa-sm"></i>
@@ -65,8 +79,10 @@
                         </p>
                     </a>
                 </li>
+                @endpermission
 
                 <li class="nav-header">CONTENT MANAGES</li>
+                @permission('testimonial-access')
                 <li class="nav-item">
                     <a href="{{ route('admin.testimonials.index') }}" class="nav-link {{ isMenuActive('admin/testimonials*') }}">
                         <i class="fa fa-link fa-sm"></i>
@@ -75,7 +91,9 @@
                         </p>
                     </a>
                 </li>
+                @endpermission
 
+                @permission('faq-access')
                 <li class="nav-item">
                     <a href="{{ route('admin.faqs.index') }}"
                         class="nav-link {{ isMenuActive('admin.faqs*') }}">
@@ -85,6 +103,7 @@
                         </p>
                     </a>
                 </li>
+                @endpermission
 
                 <li class="nav-item">
                     <a href="{{ route('admin.pages.index') }}" class="nav-link {{ isMenuActive('admin.pages*') }}">
@@ -115,14 +134,16 @@
                     </a>
                 </li>
 
+                @permission('subscriber-access')
                 <li class="nav-item">
-                    <a href="{{ route('admin.subscriber') }}" class="nav-link {{ isMenuActive('admin/subscriber*') }}">
+                    <a href="{{ route('admin.subscribers.index') }}" class="nav-link {{ isMenuActive('admin/subscribers*') }}">
                         <i class="fa fa-user fa-sm"></i>
                         <p>
                             Subscribers
                         </p>
                     </a>
                 </li>
+                @endpermission
 
                 <li class="nav-item">
                     <a href="{{ route('admin.contact.message') }}"

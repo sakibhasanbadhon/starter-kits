@@ -11,6 +11,7 @@ use App\Http\Controllers\Admin\UsefulLinkController;
 use App\Http\Controllers\Admin\UserManageController;
 use App\Http\Controllers\Backend\Blog\PostController;
 use App\Http\Controllers\Backend\DashboardController;
+use App\Http\Controllers\Backend\SubscriberController;
 use App\Http\Controllers\Backend\TestimonialController;
 use App\Http\Controllers\Admin\AdminManagementController;
 use App\Http\Controllers\Backend\Blog\CategoryController;
@@ -87,6 +88,13 @@ Route::controller(FAQController::class)->prefix('faqs')->name('faqs.')->group(fu
     Route::post('delete', 'delete')->name('delete');
     Route::post('status-change', 'statusChange')->name('status-change');
 });
+
+// Subscriber Routes
+Route::controller(SubscriberController::class)->prefix('subscribers')->name('subscribers.')->group(function(){
+    Route::get('/', 'index')->name('index');
+    Route::post('delete', 'delete')->name('delete');
+});
+
 
 Route::controller(AdminManagementController::class)->prefix('manage-admins')->name('manage-admins.')->group(function(){
     Route::get('/', 'index')->name('index');
