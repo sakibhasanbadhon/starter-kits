@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\PagesController;
+use App\Http\Controllers\Backend\FAQController;
 use App\Http\Controllers\Admin\GlobalController;
 use App\Http\Controllers\Backend\RoleController;
 use App\Http\Controllers\Backend\UserController;
@@ -77,6 +78,15 @@ Route::controller(TestimonialController::class)->prefix('testimonials')->name('t
     Route::post('status-change', 'statusChange')->name('status-change');
 });
 
+// FAQ Routes
+Route::controller(FAQController::class)->prefix('faqs')->name('faqs.')->group(function(){
+    Route::get('/', 'index')->name('index');
+    Route::get('create', 'create')->name('create');
+    Route::post('store-or-update', 'storeOrUpdate')->name('store-or-update');
+    Route::get('edit/{id}', 'edit')->name('edit');
+    Route::post('delete', 'delete')->name('delete');
+    Route::post('status-change', 'statusChange')->name('status-change');
+});
 
 Route::controller(AdminManagementController::class)->prefix('manage-admins')->name('manage-admins.')->group(function(){
     Route::get('/', 'index')->name('index');

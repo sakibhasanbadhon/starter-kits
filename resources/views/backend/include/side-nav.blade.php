@@ -77,9 +77,9 @@
                 </li>
 
                 <li class="nav-item">
-                    <a href="#"
-                        class="nav-link {{ isMenuActive('admin.pages*') }}">
-                        <i class="fa fa-link fa-sm"></i>
+                    <a href="{{ route('admin.faqs.index') }}"
+                        class="nav-link {{ isMenuActive('admin.faqs*') }}">
+                        <i class="fa fa-question fa-sm"></i>
                         <p>
                             FAQ
                         </p>
