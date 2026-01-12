@@ -22,9 +22,21 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        Schema::defaultStringLength(191);
-        Blade::if('permission', function($permission){
-            return Auth::user()->role->permissions->where('slug', $permission)->first() ? true : false;
+        // auth()->admin()
+        Auth::macro('admin', function () {
+            return Auth::guard('admin')->user();
         });
+
+        // string type length define
+        Schema::defaultStringLength(191);
+
+        // custom directive
+        Blade::if('permission', function($permission){
+            if(collect(\Illuminate\Support\Facades\Session::get('permission'))->contains($permission)){
+                return true;
+            }
+            return false;
+        });
+
     }
 }
