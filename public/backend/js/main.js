@@ -21,8 +21,8 @@ function alertModalShow(method,url,title,message,target = null){
                         <p class="mb-0 alert-title">${message}</p>
                         <div class="alert-confirm-modal text-right mt-4">
                             <input type="hidden" name="target" value="${target}">
-                            <button class="btn btn-warning shadow-none" data-dismiss="modal" type="button">Cancel</button>
-                            <button id="confirm-btn" class="btn btn-danger shadow-none" type="submit">Yes! <i class="fa fa-spinner fa-pulse fa-fw btn-loading d-none"></i></button>
+                            <button class="btn btn-warning shadow-none btn-sm" data-dismiss="modal" type="button">Cancel</button>
+                            <button id="confirm-btn" class="btn btn-danger btn-sm shadow-none" type="submit">Yes! <i class="fa fa-spinner fa-pulse fa-fw btn-loading d-none"></i></button>
                         </div>
                     </form>`;
 

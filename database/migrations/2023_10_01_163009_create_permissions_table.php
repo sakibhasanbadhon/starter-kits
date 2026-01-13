@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('permissions', function (Blueprint $table) {
             $table->id();
             $table->foreignId('module_id')->constrained('modules')->cascadeOnDelete();
-            $table->string('name', 60)->unique();
-            $table->string('slug')->unique();
+            $table->string('name', 60);
+            $table->string('slug');
             $table->timestamps();
         });
     }

@@ -70,7 +70,7 @@ return [
     |
     */
 
-    'timezone' => 'UTC',
+    'timezone' => 'Asia/Dhaka',
 
     /*
     |--------------------------------------------------------------------------
@@ -161,6 +161,9 @@ return [
          */
         Intervention\Image\ImageServiceProvider::class,
         Buglinjo\LaravelWebp\WebpServiceProvider::class,
+        Barryvdh\Debugbar\ServiceProvider::class,
+        Yajra\DataTables\DataTablesServiceProvider::class,
+        Mews\Purifier\PurifierServiceProvider::class,
         /*
          * Application Service Providers...
          */
@@ -169,6 +172,7 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
+        App\Providers\SettingServiceProvider::class,
     ])->toArray(),
 
     /*
@@ -186,6 +190,7 @@ return [
         // 'Example' => App\Facades\Example::class,
         'Image' => Intervention\Image\Facades\Image::class,
         'Webp' => Buglinjo\LaravelWebp\Facades\Webp::class,
+        'Purifier' => Mews\Purifier\Facades\Purifier::class,
     ])->toArray(),
 
 ];
