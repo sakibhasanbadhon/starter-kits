@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Intervention\Image\Facades\Image;
 use Buglinjo\LaravelWebp\Facades\Webp;
+use Illuminate\Validation\ValidationException;
 
 /**************************************
  *  Static Variables Start
@@ -23,7 +24,7 @@ function isMenuActive($url){
 }
 
 function isMenuExpand($url){
-    return request()->is($url) ? 'menu-is-opening menu-open' : ''; 
+    return request()->is($url) ? 'menu-is-opening menu-open' : '';
 }
 
 /**************************************
@@ -111,26 +112,26 @@ function uploadLocalImage($file,$destination_path,$old_file = null) {
 function uploadImage($files_path, $destination_path, $old_files = null)
 {
     $output_files_name = [];
-    
+
     foreach ($files_path as $path) {
         $file_name      = File::name($path);
         $file_extension = File::extension($path);
         $file_base_name = $file_name . "." . $file_extension;
         $file_mime_type = File::mimeType($path);
         $file_size      = File::size($path);
-        
+
         $save_path = getFilesPath($destination_path);
-        
+
         $file_mime_type_array = explode('/', $file_mime_type);
         if (array_shift($file_mime_type_array) == "image" && $file_extension != "svg") {
             $file = Image::make($path)->orientate();
-            
+
             $width = $file->width();
             $height = $file->height();
-            
+
             $resulation_break_point = [2048, 2340, 2730, 3276, 4096, 5460, 8192];
             $reduce_percentage = [12.5, 25, 37.5, 50, 62.5, 75];
-            
+
             // Dynamically Image Resizing & Move to Targeted folder
             if ($width > 0 && $width < 2048) {
                 $new_width = $width;
@@ -364,3 +365,298 @@ function generateUsername($first_name,$last_name,$table = "users") {
 
     return $generate_name;
 }
+
+
+function files_path($slug)
+{
+    $data = [
+        'admin-profile'         => [
+            'path'              => 'backend/images/admin/profile',
+            'width'             => 800,
+            'height'            => 800,
+        ],
+        'default'               => [
+            'path'              => 'backend/images/default/default.webp',
+            'width'             => 800,
+            'height'            => 800,
+        ],
+        'profile-default'       => [
+            'path'              => 'backend/images/default/profile-default.webp',
+            'width'             => 800,
+            'height'            => 800,
+        ],
+        'currency-flag'         => [
+            'path'              => 'backend/images/currency-flag',
+            'width'             => 400,
+            'height'            => 400,
+        ],
+        'image-assets'          => [
+            'path'              => 'backend/images/web-settings/image-assets',
+        ],
+        'seo'                   => [
+            'path'              => 'backend/images/seo',
+        ],
+        'app-images'            => [
+            'path'              => 'backend/images/app',
+            'width'             => 414,
+            'height'            => 896,
+        ],
+        'payment-gateways'      => [
+            'path'              => 'backend/images/payment-gateways',
+        ],
+        'extensions'      => [
+            'path'              => 'backend/images/extensions',
+        ],
+        'user-profile'      => [
+            'path'              => 'frontend/user',
+        ],
+        'language-file'     => [
+            'path'          => 'backend/files/language',
+        ],
+        'site-section'         => [
+            'path'          => 'frontend/images/site-section',
+        ],
+        'support-attachment'    => [
+            'path'          => 'frontend/images/support-ticket/attachment',
+        ],
+        'kyc-files'         => [
+            'path'          => 'backend/files/kyc-files'
+        ],
+        'junk-files'        => [
+            'path'      => 'backend/files/junk-files',
+        ],
+        'transaction'   => [
+            'path'      => 'frontend/files/transaction',
+        ],
+        'card-kyc-images'      => [
+            'path'              => 'frontend/user/card-kyc-images',
+        ],
+        'card-api'   => [
+            'path'      => 'backend/images/card-settings',
+        ],
+        'error-images'   => [
+            'path'      => 'error-images',
+        ],
+    ];
+
+    return (object) $data[$slug];
+}
+
+function get_files_path($slug)
+{
+    $data = files_path($slug);
+    $path = $data->path;
+    create_asset_dir($path);
+
+    return public_path($path);
+}
+
+function create_asset_dir($path)
+{
+    $path = "public/" . $path;
+    if (file_exists($path)) return true;
+    return mkdir($path, 0755, true);
+}
+
+
+
+function upload_files_from_path_dynamic($files_path, $destination_path, $old_files = null)
+{
+    $output_files_name = [];
+    foreach ($files_path as $path) {
+        $file_name      = File::name($path);
+        $file_extension = File::extension($path);
+        $file_base_name = $file_name . "." . $file_extension;
+        $file_mime_type = File::mimeType($path);
+        $file_size      = File::size($path);
+
+        $save_path = get_files_path($destination_path);
+
+        $file_mime_type_array = explode('/', $file_mime_type);
+        if (array_shift($file_mime_type_array) == "image" && $file_extension != "svg") { // If Image
+
+            $file = Image::make($path)->orientate();
+
+            $width = $file->width();
+            $height = $file->height();
+
+            $resulation_break_point = [2048, 2340, 2730, 3276, 4096, 5460, 8192];
+            $reduce_percentage = [12.5, 25, 37.5, 50, 62.5, 75];
+
+            // Dynamically Image Resizing & Move to Targeted folder
+            if ($width > 0 && $width < 2048) {
+                $new_width = $width;
+                try {
+                    $file->resize($new_width, null, function ($constraint) {
+                        $constraint->aspectRatio();
+                    })->save($path, 70);
+                } catch (\Exception $e) {
+                    return back()->with(['error' => ['Image Upload Faild!']]);
+                }
+            }
+            if ($width > 5460 && $width <= 6140) {
+                $new_width = 2048;
+                try {
+                    $file->resize($new_width, null, function ($constraint) {
+                        $constraint->aspectRatio();
+                    })->save($path, 70);
+                } catch (\Exception $e) {
+                    return back()->with(['error' => ['Image Upload Faild!']]);
+                }
+            } else {
+                for ($i = 0; $i < count($resulation_break_point); $i++) {
+                    if ($i != count($resulation_break_point) - 1) {
+                        if ($width >= $resulation_break_point[$i] && $width <= $resulation_break_point[$i + 1]) {
+                            $new_width = ceil($width - (($width * $reduce_percentage[$i]) / 100));
+                            try {
+                                $file->resize($new_width, null, function ($constraint) {
+                                    $constraint->aspectRatio();
+                                })->save($path, 70);
+                            } catch (\Exception $e) {
+                                return back()->with(['error' => ['Image Upload Faild!']]);
+                            }
+                        }
+                    }
+                }
+                if ($width > 8192) {
+                    $new_width = 2048;
+                    try {
+                        $file->resize($new_width, null, function ($constraint) {
+                            $constraint->aspectRatio();
+                        })->save($path, 70);
+                    } catch (\Exception $e) {
+                        return back()->with(['error' => ['Image Upload Faild!']]);
+                    }
+                }
+            }
+
+            $file_instance = new UploadedFile(
+                $path,
+                $file_base_name,
+                $file_mime_type,
+                $file_size,
+            );
+
+            $store_file_name = $file_name . ".webp";
+            try {
+                if ($file_extension != "webp") {
+                    $webp = Webp::make($file_instance)->save($save_path . "/" . $store_file_name);
+                    array_push($output_files_name, $store_file_name);
+                } else {
+                    File::move($file_instance, $save_path . "/" . $file_base_name);
+                    array_push($output_files_name, $file_base_name);
+                }
+            } catch (Exception $e) {
+                return back()->with(['error' => ['Something went wrong! Faild to upload file.']]);
+            }
+        } else { // IF Other Files
+            $file_instance = new UploadedFile(
+                $path,
+                $file_base_name,
+                $file_mime_type,
+                $file_size,
+            );
+
+            try {
+                File::move($file_instance, $save_path . "/" . $file_base_name);
+                array_push($output_files_name, $file_base_name);
+            } catch (Exception $e) {
+                return back()->with(['error' => ['Something went wrong! Faild to upload file.']]);
+            }
+        }
+
+        // Delete Old Files if exists
+        try {
+            if ($old_files) {
+                if (is_array($old_files)) {
+                    // Delete Multiple File
+                    foreach ($old_files as $item) {
+                        $file_link = $save_path . "/" . $item;
+                        delete_file($item);
+                    }
+                } else if (is_string($old_files)) {
+                    // Delete Single File
+                    $file_link = $save_path . "/" . $old_files;
+                    delete_file($file_link);
+                }
+            }
+        } catch (Exception $e) {
+            return back()->with(['error' => ['Something went wrong! Faild to delete old file.']]);
+        }
+    }
+
+    if (count($output_files_name) == 1) {
+        return $output_files_name[0];
+    }
+    // delete_files_from_fileholder($output_files_name);
+    return $output_files_name;
+}
+
+function get_amount($amount, $currency = null, $precision = null)
+{
+    if (!is_numeric($amount)) return "Not Number";
+    if($precision == "double") {
+        $amount = (double) $amount;
+    }else {
+        $amount = ($precision) ? number_format($amount, $precision, ".", "") : number_format($amount, 2, ".", "");
+    }
+    if (!$currency) return $amount;
+    $amount = $amount . " " . $currency;
+    return $amount;
+}
+
+function get_files_from_fileholder($request, $file_input_name)
+{
+    $keyword = "fileholder";
+    $fileholder_stored_file_path = public_path('fileholder/img');
+
+    $files_link = [];
+    if ($request->hasFile($file_input_name)) {
+        $input_name = $keyword . "-" . $file_input_name;
+        $file_name_array = explode(',', $request->$input_name);
+
+        foreach ($file_name_array as $item) {
+            $file_link = $fileholder_stored_file_path . "/" . $item;
+            if (File::isFile($file_link)) {
+                array_push($files_link, $file_link);
+            } else {
+                throw ValidationException::withMessages([
+                    $file_input_name => "Uploaded file is not a proper file. Please upload valid file.",
+                ]);
+            }
+        }
+    } else {
+        throw ValidationException::withMessages([
+            $file_input_name => $file_input_name . " is required.",
+        ]);
+    }
+
+    return $files_link;
+}
+
+function delete_file($file_link)
+{
+    if (File::exists($file_link)) {
+        try {
+            File::delete($file_link);
+        } catch (Exception $e) {
+            return false;
+        }
+    }
+    return true;
+}
+
+
+
+
+function replace_array_key($array, $remove_keyword, $replace_keyword = "")
+{
+    $filter = [];
+    foreach ($array as $key => $value) {
+        $update_key = preg_replace('/' . $remove_keyword . '/i', $replace_keyword, $key);
+        $filter[$update_key] = $value;
+    }
+    return $filter;
+}
+
+

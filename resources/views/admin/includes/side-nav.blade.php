@@ -13,18 +13,18 @@
           <nav class="mt-2">
               <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
                   data-accordion="false">
-                  <li class="nav-item">
+                <li class="nav-item">
                       <a href="{{ route('admin.dashboard') }}" class="nav-link {{ isMenuActive('admin/dashboard*') }}">
                           <i class="nav-icon fas fa-th"></i>
                           <p>
                               Dashboard
                           </p>
                       </a>
-                  </li>
+                </li>
 
-                  <li class="nav-header">AUTHORIZATIONS</li>
+                <li class="nav-header">AUTHORIZATIONS</li>
 
-                  <li class="nav-item {{ isMenuExpand('admin/manage-admins*') }}">
+                <li class="nav-item {{ isMenuExpand('admin/manage-admins*') }}">
                       <a href="#" class="nav-link">
                           <i class="nav-icon fas fa-user-cog"></i>
                           <p>
@@ -52,9 +52,18 @@
                               </a>
                           </li>
                       </ul>
-                  </li>
+                </li>
 
-                  <li class="nav-item">
+                <li class="nav-item">
+                    <a href="{{ route('admin.currencies.index') }}" class="nav-link {{ isMenuActive('admin/currencies*') }}">
+                         <i class="fa fa-money-bill-1"></i>
+                        <p>
+                            All Currencies
+                        </p>
+                    </a>
+                </li>
+
+                <li class="nav-item">
                     <a href="{{ route('admin.subscriber') }}" class="nav-link {{ isMenuActive('admin/subscriber*') }}">
                          <i class="fa fa-user"></i>
                         <p>

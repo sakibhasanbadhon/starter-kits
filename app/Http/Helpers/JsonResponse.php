@@ -2,6 +2,7 @@
 namespace App\Http\Helpers;
 
 class JsonResponse{
+
     public static function success($message = null, $data = [])
     {
         return response()->json(['message' => $message, 'data' => $data], 200);

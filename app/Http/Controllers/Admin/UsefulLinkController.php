@@ -91,4 +91,22 @@ class UsefulLinkController extends Controller
     }
 
 
+
+    public function delete(Request $request) {
+        $request->validate([
+            'target'    => 'required|string',
+        ]);
+
+        $setup_page = Pages::findOrFail($request->target);
+
+        try{
+            $setup_page->delete();
+        }catch(Exception $e) {
+            return back()->with(['error' => [__('Something went wrong. Please try again')]]);
+        }
+
+        return back()->with(['success' => [__('Page deleted successfully').'!']]);
+    }
+
+
 }

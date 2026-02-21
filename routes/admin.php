@@ -1,13 +1,14 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Admin\RoleController;
-use App\Http\Controllers\Admin\PagesController;
-use App\Http\Controllers\Admin\GlobalController;
-use App\Http\Controllers\Admin\DashboardController;
-use App\Http\Controllers\Admin\UserManageController;
 use App\Http\Controllers\Admin\AdminManagementController;
+use App\Http\Controllers\Admin\CurrenciesController;
+use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\GlobalController;
+use App\Http\Controllers\Admin\PagesController;
+use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\UsefulLinkController;
+use App\Http\Controllers\Admin\UserManageController;
+use Illuminate\Support\Facades\Route;
 
 Route::controller(DashboardController::class)->group(function(){
     Route::get('dashboard', 'dashboard')->name('dashboard');
@@ -38,6 +39,15 @@ Route::controller(AdminManagementController::class)->prefix('manage-admins')->na
         Route::post('/search', 'search')->name('search');
     });
 
+});
+
+Route::controller(CurrenciesController::class)->prefix('currencies')->name('currencies.')->group(function(){
+    Route::get('index', 'index')->name('index');
+    Route::post('store', 'store')->name('store');
+    Route::put('status/update', 'statusUpdate')->name('status.update');
+    Route::put('update', 'update')->name('update');
+    Route::delete('delete','delete')->name('delete');
+    Route::post('search','search')->name("search");
 });
 
 
