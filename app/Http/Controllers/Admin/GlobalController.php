@@ -10,29 +10,33 @@ use Illuminate\Http\Request;
 
 class GlobalController extends Controller
 {
-    public function subscriber() {
+    public function subscriber()
+    {
         $breadcrumb = ['Dashboard' => route('admin.dashboard'), 'Subscriber' => ''];
         $subscribers = Subscriber::paginate(10);
-        return view('admin.sections.subscriber', compact('subscribers','breadcrumb'));
+        return view('admin.sections.subscriber', compact('subscribers', 'breadcrumb'));
     }
 
 
-    public function contactMessage() {
+    public function contactMessage()
+    {
         $breadcrumb = ['Dashboard' => route('admin.dashboard'), 'Contact' => ''];
         $contacts = Contact::paginate(10);
-        return view('admin.sections.contact', compact('contacts','breadcrumb'));
+        return view('admin.sections.contact', compact('contacts', 'breadcrumb'));
     }
 
-    public function webSetting() {
-        $websettiongs = WebSetting::first();
+    public function webSetting()
+    {
+        $websettings = WebSetting::first();
         $breadcrumb = ['Dashboard' => route('admin.dashboard'), 'websettings' => ''];
-        return view('admin.sections.websettings',compact('breadcrumb','websettiongs'));
+        return view('admin.sections.websettings', compact('breadcrumb', 'websettings'));
     }
 
 
-    public function webSettingStore(Request $request) {
+    public function webSettingStore(Request $request)
+    {
         // dd($request->all());
-        $websettiongs = WebSetting::first();
+        $websettings = WebSetting::first();
         $validatedData = $request->validate([
             'sitename'       => 'required|string|max:255',
             'siteurl'         => 'required|url',
@@ -50,20 +54,12 @@ class GlobalController extends Controller
         }
 
         try {
-            $websettiongs->update($validatedData);
+            $websettings->update($validatedData);
             $message = ['Web settings saved successfully!'];
             return back()->with(['success' => $message]);
         } catch (\Throwable $th) {
             $message = ['Something went wrong!'];
             return back()->with(['error' => $message]);
         }
-
-
-
     }
-
-
-
-
-
 }

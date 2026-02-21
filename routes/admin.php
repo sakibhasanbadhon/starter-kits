@@ -10,12 +10,12 @@ use App\Http\Controllers\Admin\UsefulLinkController;
 use App\Http\Controllers\Admin\UserManageController;
 use Illuminate\Support\Facades\Route;
 
-Route::controller(DashboardController::class)->group(function(){
+Route::controller(DashboardController::class)->group(function () {
     Route::get('dashboard', 'dashboard')->name('dashboard');
     Route::post('logout', 'logout')->name('logout');
 });
 
-Route::controller(AdminManagementController::class)->prefix('manage-admins')->name('manage-admins.')->group(function(){
+Route::controller(AdminManagementController::class)->prefix('manage-admins')->name('manage-admins.')->group(function () {
     Route::get('/', 'index')->name('index');
     Route::get('/create', 'create')->name('create');
     Route::post('/store', 'store')->name('store');
@@ -23,7 +23,7 @@ Route::controller(AdminManagementController::class)->prefix('manage-admins')->na
     Route::post('/delete', 'delete')->name('delete');
     Route::post('/search', 'search')->name('search');
 
-    Route::controller(RoleController::class)->prefix('roles')->name('roles.')->group(function(){
+    Route::controller(RoleController::class)->prefix('roles')->name('roles.')->group(function () {
         Route::get('/', 'index')->name('index');
         Route::get('/create', 'create')->name('create');
         Route::post('/store', 'store')->name('store');
@@ -33,43 +33,43 @@ Route::controller(AdminManagementController::class)->prefix('manage-admins')->na
     });
 
 
-    Route::controller(UserManageController::class)->prefix('user')->name('user.')->group(function(){
+    Route::controller(UserManageController::class)->prefix('user')->name('user.')->group(function () {
         Route::get('/', 'index')->name('index');
         Route::get('details/{id}', 'userDetails')->name('details');
         Route::post('/search', 'search')->name('search');
     });
-
 });
 
-Route::controller(CurrenciesController::class)->prefix('currencies')->name('currencies.')->group(function(){
+Route::controller(CurrenciesController::class)->prefix('currencies')->name('currencies.')->group(function () {
     Route::get('index', 'index')->name('index');
+    Route::get('create', 'create')->name('create');
     Route::post('store', 'store')->name('store');
+    Route::get('edit/{id}', 'edit')->name('edit');
+    Route::post('update', 'update')->name('update');
     Route::put('status/update', 'statusUpdate')->name('status.update');
-    Route::put('update', 'update')->name('update');
-    Route::delete('delete','delete')->name('delete');
-    Route::post('search','search')->name("search");
+    Route::get('countries', 'getCountries')->name('countries');
+
+    Route::delete('delete', 'delete')->name('delete');
+    Route::post('search', 'search')->name("search");
 });
 
 
-Route::controller(GlobalController::class)->group(function(){
+Route::controller(GlobalController::class)->group(function () {
     Route::get('subscriber/', 'subscriber')->name('subscriber');
     Route::get('contact/message', 'contactMessage')->name('contact.message');
     Route::get('web/settings', 'webSetting')->name('web.settings');
     Route::post('web/settings/store', 'webSettingStore')->name('web.settings.store');
 });
 
-Route::controller(PagesController::class)->prefix('pages')->name('pages.')->group(function(){
+Route::controller(PagesController::class)->prefix('pages')->name('pages.')->group(function () {
     Route::get('index', 'index')->name('index');
     Route::post('status/update', 'statusUpdate')->name('status.update');
-
 });
 
-Route::controller(UsefulLinkController::class)->prefix('useful-links')->name('useful-links.')->group(function(){
+Route::controller(UsefulLinkController::class)->prefix('useful-links')->name('useful-links.')->group(function () {
     Route::get('index', 'index')->name('index');
     Route::post('store', 'store')->name('store');
     Route::get('status/update', 'StatusUpdate')->name('status.update');
     Route::post('delete', 'delete')->name('delete');
     Route::post('update', 'update')->name('update');
 });
-
-

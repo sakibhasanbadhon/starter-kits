@@ -36,6 +36,9 @@ function filesPath($slug)
         'admin-profile'         => [
             'path'              => 'media/backend/images/admin/profile',
         ],
+        'flag'         => [
+            'path'              => 'media/backend/images/currency-flag',
+        ],
     ];
     return (object) $data[$slug];
 }
@@ -592,7 +595,7 @@ function upload_files_from_path_dynamic($files_path, $destination_path, $old_fil
     return $output_files_name;
 }
 
-function get_amount($amount, $currency = null, $precision = null)
+function display_amount($amount, $currency = null, $precision = null)
 {
     if (!is_numeric($amount)) return "Not Number";
     if($precision == "double") {

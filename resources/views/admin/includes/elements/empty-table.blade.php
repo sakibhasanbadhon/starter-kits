@@ -1,3 +1,3 @@
 <div class="alert alert-primary text-center" role="alert">
-    No Data Found!    
+    No Data Found!
 </div>

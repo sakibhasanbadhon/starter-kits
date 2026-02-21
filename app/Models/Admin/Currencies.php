@@ -19,7 +19,7 @@ class Currencies extends Model
     ];
 
     protected $casts = [
-        'id'        => 'integer',
+        'id'       => 'integer',
         'admin_id' => 'integer',
         'country'  => 'string',
         'name'     => 'string',
@@ -35,92 +35,118 @@ class Currencies extends Model
         'updated_at' => 'date:Y-m-d',
     ];
 
-     public function getBothAttribute() {
-        if($this->sender == true && $this->receiver == true) {
-            return true;
+
+    public function getCurrencyImageAttribute()
+    {
+        $image = $this->flag;
+
+        if ($image == null) {
+            $image = '<span class="image_text">' . substr($this->name, 0, 1) . '</span>';
+        } else {
+            $image = '<img src="' . getImagePath($image, 'flag') . '" alt="">';
         }
-        return false;
+        return $image;
     }
 
-    public function getSenderCurrencyAttribute() {
-        if($this->sender == true) {
-            return true;
+    public function getStatusTypeAttribute()
+    {
+        $status_type = [];
+        if ($this->status) {
+            $status_type['name'] = "Active";
+            $status_type['class'] = "badge-success";
+        } else {
+            $status_type['name'] = 'Deavtivate';
+            $status_type['class'] = 'badge-danger';
         }
-        return false;
+        return $status_type;
     }
 
-    public function getReceiverCurrencyAttribute() {
-        if($this->receiver == true) {
-            return true;
-        }
-        return false;
-    }
+    //  public function getBothAttribute() {
+    //     if($this->sender == true && $this->receiver == true) {
+    //         return true;
+    //     }
+    //     return false;
+    // }
 
-    public function getEditDataAttribute() {
-        $role = "";
-        if($this->sender == true && $this->receiver == true) {
-            $role = "both";
-        }else if($this->sender == true && $this->receiver == false) {
-            $role = "sender";
-        }else if($this->receiver == true && $this->sender == false) {
-            $role = "receiver";
-        }
-        $data = [
-            'name'      => $this->name,
-            'code'      => $this->code,
-            'flag'      => $this->flag,
-            'role'      => $role,
-            'option'    => ($this->default == true) ? 1 : 0,
-            'symbol'    => $this->symbol,
-            'type'      => $this->type,
-            'rate'      => get_amount($this->rate),
-            'country'   => $this->country,
-        ];
+    // public function getSenderCurrencyAttribute() {
+    //     if($this->sender == true) {
+    //         return true;
+    //     }
+    //     return false;
+    // }
 
-        return json_encode($data);
-    }
+    // public function getReceiverCurrencyAttribute() {
+    //     if($this->receiver == true) {
+    //         return true;
+    //     }
+    //     return false;
+    // }
+
+    // public function getEditDataAttribute() {
+    //     $role = "";
+    //     if($this->sender == true && $this->receiver == true) {
+    //         $role = "both";
+    //     }else if($this->sender == true && $this->receiver == false) {
+    //         $role = "sender";
+    //     }else if($this->receiver == true && $this->sender == false) {
+    //         $role = "receiver";
+    //     }
+    //     $data = [
+    //         'name'      => $this->name,
+    //         'code'      => $this->code,
+    //         'flag'      => $this->flag,
+    //         'role'      => $role,
+    //         'option'    => ($this->default == true) ? 1 : 0,
+    //         'symbol'    => $this->symbol,
+    //         'type'      => $this->type,
+    //         'rate'      => display_amount($this->rate),
+    //         'country'   => $this->country,
+    //     ];
+
+    //     return json_encode($data);
+    // }
 
 
-    public function scopeDefault() {
-        return $this->where('default',true)->first() ?? false;
-    }
+    // public function scopeDefault() {
+    //     return $this->where('default',true)->first() ?? false;
+    // }
 
 
-    public function isDefault() {
-        if($this->default == true) return true;
-        return false;
-    }
+    // public function isDefault() {
+    //     if($this->default == true) return true;
+    //     return false;
+    // }
 
-    public function scopeSearch($query,$text) {
-        $query->where(function($q) use ($text) {
-            $q->where("country","like","%".$text."%");
-        })->orWhere("name","like","%".$text."%")->orWhere("code","like","%".$text."%");
-    }
+    // public function scopeSearch($query,$text) {
+    //     $query->where(function($q) use ($text) {
+    //         $q->where("country","like","%".$text."%");
+    //     })->orWhere("name","like","%".$text."%")->orWhere("code","like","%".$text."%");
+    // }
 
-    public function scopeActive($query) {
-        return $query->where("status",true);
-    }
+    // public function scopeActive($query) {
+    //     return $query->where("status",true);
+    // }
 
-    public function scopeSender($query) {
-        return $query->where("sender",true);
-    }
+    // public function scopeSender($query) {
+    //     return $query->where("sender",true);
+    // }
 
-    public function scopeReceiver($query) {
-        return $query->where("receiver",true);
-    }
+    // public function scopeReceiver($query) {
+    //     return $query->where("receiver",true);
+    // }
 
-    public function scopeRoleBoth($query) {
-        return $query->where("sender",true)->where('receiver',true);
-    }
+    // public function scopeRoleBoth($query) {
+    //     return $query->where("sender",true)->where('receiver',true);
+    // }
 
-    public function scopeRoleHasOne($query) {
-        return $query->where(function($q) {
-            $q->where('sender',true);
-        })->orWhere('receiver',true);
-    }
+    // public function scopeRoleHasOne($query) {
+    //     return $query->where(function($q) {
+    //         $q->where('sender',true);
+    //     })->orWhere('receiver',true);
+    // }
 
-    public function getCurrencyCodeAttribute() {
-        return $this->code;
-    }
+    // public function getCurrencyCodeAttribute() {
+    //     return $this->code;
+    // }
 
 }
