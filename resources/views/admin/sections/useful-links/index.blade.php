@@ -184,6 +184,15 @@
 
         });
 
+        $(document).on('click', '.delete-btn', function(e) {
+            let method = 'POST';
+            let url = "{{ route('admin.useful-links.delete') }}";
+            let title = 'Delete Useful Link';
+            let message = "Are Your Sure To Delete Useful Link?";
+            let target = $(this).data('target');
+            alertModalShow(method, url, title, message, target);
+        });
+
 
 
     </script>

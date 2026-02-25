@@ -52,68 +52,157 @@ class AdminManagementController extends Controller
      * @param @return Illuminate\Http\Request $request
      * @return Illuminate\Http\Request Response
      */
-    public function store(Request $request)
-    {
+    // public function store(Request $request)
+    // {
 
-        // dd($request->all());
-        Gate::authorize('create-role');
+    //     // dd($request->all());
+    //     Gate::authorize('create-role');
 
-        if($request->target){
-            // come from edit request
-            $email_validation = 'required|email|unique:admins,email,'.$request->target;
-            $phone_validation = 'required|min:9|unique:admins,phone,'.$request->target;
-            $password_validation = 'nullable';
-            $confirm_password_validation = 'nullable';
-            $role_validation = 'nullable';
-        }else{
-            // come from create request
-            $email_validation = 'required|email|unique:admins,email';
-            $phone_validation = 'required|min:9|unique:admins,phone';
-            $password_validation = 'required|confirmed|min:6';
-            $confirm_password_validation = 'required';
-            $role_validation = 'required';
-        }
+    //     if($request->target){
+    //         // come from edit request
+    //         $email_validation = 'required|email|unique:admins,email,'.$request->target;
+    //         $phone_validation = 'required|min:9|unique:admins,phone,'.$request->target;
+    //         $password_validation = 'nullable';
+    //         $confirm_password_validation = 'nullable';
+    //         $role_validation = 'nullable';
+    //     }else{
+    //         // come from create request
+    //         $email_validation = 'required|email|unique:admins,email';
+    //         $phone_validation = 'required|min:9|unique:admins,phone';
+    //         $password_validation = 'required|confirmed|min:6';
+    //         $confirm_password_validation = 'required';
+    //         $role_validation = 'required';
+    //     }
 
-        $validator = Validator::make($request->all(), [
-            'first_name'            => 'required|max:60|string',
-            'last_name'             => 'required|max:60|string',
-            'email'                 =>  $email_validation,
-            'phone'                 => $phone_validation,
-            'password'              => $password_validation,
-            'password_confirmation' => $confirm_password_validation,
-            'role'                  => $role_validation,
-        ]);
+    //     $validator = Validator::make($request->all(), [
+    //         'first_name'            => 'required|max:60|string',
+    //         'last_name'             => 'required|max:60|string',
+    //         'email'                 =>  $email_validation,
+    //         'phone'                 => $phone_validation,
+    //         'password'              => $password_validation,
+    //         'password_confirmation' => $confirm_password_validation,
+    //         'role'                  => $role_validation,
+    //     ]);
 
-        if($validator->fails()){
-            return back()->withErrors($validator)->withInput();
-        }
+    //     if($validator->fails()){
+    //         return back()->withErrors($validator)->withInput();
+    //     }
 
-        $validated = $validator->validated();
+    //     $validated = $validator->validated();
 
-        if ($request->hasFile('image')) {
-            $image = uploadLocalImage($request->image, 'admin-profile', $request->old_image);
-            $image_path = uploadImage([$image['dev_path']], 'admin-profile', $request->old_image);
-            deleteFile($image['dev_path']);
-            $validated['image'] = $image_path;
-        }
-        // if come from create form
-        if(!$request->target){
-            $validated['password'] = Hash::make($validated['password']);
-            $validated['role_id'] = $validated['role'];
-            $validated['status'] = true;
-        }
+    //     if ($request->hasFile('image')) {
+    //         $image = uploadLocalImage($request->image, 'admin-profile', $request->old_image);
+    //         $image_path = uploadImage([$image['dev_path']], 'admin-profile', $request->old_image);
+    //         deleteFile($image['dev_path']);
+    //         $validated['image'] = $image_path;
+    //     }
+    //     // if come from create form
+    //     if(!$request->target){
+    //         $validated['password'] = Hash::make($validated['password']);
+    //         $validated['role_id'] = $validated['role'];
+    //         $validated['status'] = true;
+    //     }
 
-        $validated['user_name'] = generateUsername($validated['first_name'],$validated['last_name'],"admins");
+    //     $validated['user_name'] = generateUsername($validated['first_name'],$validated['last_name'],"admins");
 
 
-        try {
-            Admin::updateOrCreate(['id' => $request->target], $validated);
-            return redirect()->route('admin.manage-admins.index')->with(['success' => ['Admin Created Successfull']]);
-        } catch (\Exception $e) {
-            return back()->with(['error' => [SOMETHING_WRONG]]);
-        }
+    //     try {
+    //         Admin::updateOrCreate(['id' => $request->target], $validated);
+    //         return redirect()->route('admin.manage-admins.index')->with(['success' => ['Admin Created Successfull']]);
+    //     } catch (\Exception $e) {
+    //         return back()->with(['error' => [SOMETHING_WRONG]]);
+    //     }
 
+    // }
+
+    public function store(Request $request){
+
+    Gate::authorize('create-role');
+
+    if($request->target){
+        // come from edit request
+        $email_validation = 'required|email|unique:admins,email,'.$request->target;
+        $phone_validation = 'required|min:9|unique:admins,phone,'.$request->target;
+        $password_validation = 'nullable';
+        $confirm_password_validation = 'nullable';
+        $role_validation = 'nullable';
+    }else{
+        // come from create request
+        $email_validation = 'required|email|unique:admins,email';
+        $phone_validation = 'required|min:9|unique:admins,phone';
+        $password_validation = 'required|confirmed|min:6';
+        $confirm_password_validation = 'required';
+        $role_validation = 'required';
     }
+
+    $validator = Validator::make($request->all(), [
+        'first_name'            => 'required|max:60|string',
+        'last_name'             => 'required|max:60|string',
+        'email'                 =>  $email_validation,
+        'phone'                 => $phone_validation,
+        'password'              => $password_validation,
+        'password_confirmation' => $confirm_password_validation,
+        'role'                  => $role_validation,
+    ]);
+
+    if($validator->fails()){
+        return back()->withErrors($validator)->withInput();
+    }
+
+    $validated = $validator->validated();
+
+    if ($request->hasFile('image')) {
+        // For update, get the old image from the database if not provided in request
+        $oldImage = null;
+        if($request->target) {
+            $admin = Admin::find($request->target);
+            $oldImage = $admin ? $admin->image : null;
+        } else {
+            $oldImage = $request->old_image;
+        }
+
+        // Upload the image
+        $image = uploadLocalImage($request->image, 'admin-profile', $oldImage);
+
+        if($image && isset($image['dev_path'])) {
+            $image_path = uploadImage([$image['dev_path']], 'admin-profile', $oldImage);
+            deleteFile($image['dev_path']);
+
+            if($image_path) {
+                $validated['image'] = $image_path;
+            }
+        }
+    }
+
+    // if come from create form
+    if(!$request->target){
+        $validated['password'] = Hash::make($validated['password']);
+        $validated['role_id'] = $validated['role'];
+        $validated['status'] = true;
+    } else {
+        // For update, remove password from validated if it's empty
+        if(empty($validated['password'])) {
+            unset($validated['password']);
+        } else {
+            $validated['password'] = Hash::make($validated['password']);
+        }
+
+        // Set role_id for update if role is provided
+        if(isset($validated['role'])) {
+            $validated['role_id'] = $validated['role'];
+        }
+    }
+
+    $validated['user_name'] = generateUsername($validated['first_name'], $validated['last_name'], "admins");
+
+    try {
+        Admin::updateOrCreate(['id' => $request->target], $validated);
+        $message = $request->target ? 'Admin Updated Successfully' : 'Admin Created Successfully';
+        return redirect()->route('admin.manage-admins.index')->with(['success' => [$message]]);
+    } catch (\Exception $e) {
+        return back()->with(['error' => [SOMETHING_WRONG]]);
+    }
+}
 
     /**
      * Form page show

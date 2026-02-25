@@ -9,13 +9,13 @@
                 @if($loop->last) {{ $title }} @else <a href="{{ $url }}">{{ $title }}</a> @endif</li>
             @endforeach
           </ol>
-        </div><!-- /.col -->
+        </div>
         <div class="col-sm-6">
           <div class="float-sm-right">
               @yield('button-area')
           </div>
-        </div><!-- /.col -->
-      </div><!-- /.row -->
-    </div><!-- /.container-fluid -->
+        </div>
+      </div>
+    </div>
   </div>
-  <!-- /.content-header -->
+

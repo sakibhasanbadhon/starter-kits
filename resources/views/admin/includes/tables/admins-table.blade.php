@@ -30,7 +30,7 @@
             <td>{{ @$item->role->name }}</td>
             <td>{{ $item->phone ?? "N/A" }}</td>
             <td>
-                <span class="badge badge-sm py-1 px-2 fs-3 {{ $item->statusType['class'] }}">{{ $item->statusType['name'] }}</span>
+                <span class="badge badge-sm py-1 px-2 {{ $item->statusType['class'] }}">{{ $item->statusType['name'] }}</span>
             </td>
             <td>{{ $item->created_at->diffForHumans() }}</td>
             <td>

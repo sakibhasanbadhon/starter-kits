@@ -1,3 +1,185 @@
+
+/* Sidebar Enhancements */
+.main-sidebar {
+    background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
+    box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+}
+
+/* Brand Logo Enhancement */
+.brand-link {
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    padding: 15px;
+    transition: all 0.3s;
+}
+
+.brand-link:hover {
+    background: rgba(255,255,255,0.05);
+}
+
+.brand-text {
+    font-size: 1.2rem;
+    letter-spacing: 0.5px;
+}
+
+/* User Panel Enhancement */
+.user-panel {
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    padding: 15px;
+}
+
+.user-panel .info a {
+    font-weight: 500;
+    font-size: 0.95rem;
+}
+
+/* Navigation Items */
+.nav-sidebar .nav-item > .nav-link {
+    border-radius: 0;
+    padding: 12px 15px;
+    margin: 2px 0;
+    transition: all 0.2s;
+    border-left: 3px solid transparent;
+}
+
+.nav-sidebar .nav-item > .nav-link.active {
+    background: linear-gradient(90deg, rgba(52,144,220,0.15) 0%, rgba(52,144,220,0) 100%);
+    border-left-color: #3490dc;
+}
+
+.nav-sidebar .nav-item > .nav-link:hover {
+    background: rgba(255,255,255,0.05);
+    border-left-color: rgba(255,255,255,0.3);
+}
+
+/* Treeview (Dropdown) Items */
+.nav-treeview {
+    background: rgba(0,0,0,0.2);
+    padding-left: 0;
+}
+
+.nav-treeview .nav-item .nav-link {
+    padding: 8px 15px 8px 45px;
+    font-size: 0.9rem;
+}
+
+.nav-treeview .nav-item .nav-link .nav-icon {
+    margin-right: 8px;
+    color: #6c757d;
+}
+
+/* Section Headers */
+.nav-header {
+    color: #6c757d;
+    font-size: 0.7rem;
+    letter-spacing: 1px;
+    padding: 15px 15px 5px 15px;
+    text-transform: uppercase;
+}
+
+/* Badges */
+.nav-link .badge {
+    padding: 3px 6px;
+    font-size: 0.65rem;
+    font-weight: 400;
+    border-radius: 4px;
+}
+
+/* Icons */
+.nav-icon {
+    font-size: 1.1rem;
+    width: 25px;
+    text-align: center;
+}
+
+/* Search Box */
+.form-control-sidebar {
+    background-color: rgba(255,255,255,0.1);
+    border: none;
+    color: #fff;
+    padding: 10px 15px;
+}
+
+.form-control-sidebar::placeholder {
+    color: rgba(255,255,255,0.5);
+}
+
+.form-control-sidebar:focus {
+    background-color: rgba(255,255,255,0.15);
+    box-shadow: none;
+}
+
+.btn-sidebar {
+    background-color: rgba(255,255,255,0.1);
+    border: none;
+    color: rgba(255,255,255,0.5);
+}
+
+.btn-sidebar:hover {
+    background-color: rgba(255,255,255,0.2);
+    color: #fff;
+}
+
+/* Scrollbar Styling */
+.sidebar {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255,255,255,0.2) rgba(255,255,255,0.1);
+}
+
+.sidebar::-webkit-scrollbar {
+    width: 6px;
+}
+
+.sidebar::-webkit-scrollbar-track {
+    background: rgba(255,255,255,0.1);
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+    background-color: rgba(255,255,255,0.2);
+    border-radius: 3px;
+}
+
+/* Sidebar Footer */
+.sidebar-footer {
+    border-top: 1px solid rgba(255,255,255,0.1);
+    font-size: 0.8rem;
+}
+
+.sidebar-footer a {
+    transition: all 0.2s;
+}
+
+.sidebar-footer a:hover {
+    color: #3490dc !important;
+}
+
+/* Animation for dropdown arrows */
+.nav-link .right {
+    transition: transform 0.3s;
+}
+
+.menu-open > .nav-link .right {
+    transform: rotate(-90deg);
+}
+
+/* Compact Mode Toggle (Optional) */
+.sidebar-compact .nav-link {
+    padding: 10px !important;
+}
+
+.sidebar-compact .nav-link p {
+    display: none;
+}
+
+.sidebar-compact .nav-header {
+    text-align: center;
+    padding: 10px 0;
+}
+
+.sidebar-compact .brand-text {
+    display: none;
+}
+
+
 /*************************
 * Common Start
 ****************/

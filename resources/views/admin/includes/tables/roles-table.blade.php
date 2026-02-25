@@ -17,9 +17,9 @@
                 <td>{{ $item->slug }}</td>
                 <td>
                     @if ($item->permissions->count() > 0)
-                        <span class="badge badge-sm badge-success py-1 px-2 fs-3">{{ $item->permissions->count() }}</span>
+                        <span class="badge badge-sm badge-success py-1 px-2 ">{{ $item->permissions->count() }}</span>
                     @else
-                        <span class="badge badge-sm badge-warning py-1 px-2 fs-3">{{ __('No Permission') }}</span>
+                        <span class="badge badge-sm badge-warning py-1 px-2">{{ __('No Permission') }}</span>
                     @endif
                 </td>
                 <td>{{ $item->created_at->diffForHumans() }}</td>

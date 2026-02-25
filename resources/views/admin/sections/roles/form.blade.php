@@ -61,12 +61,12 @@
                                         @foreach ($module->permissions as $permission)
                                             <li>
                                                 <div class="form-check">
-                                                    <input 
-                                                        type="checkbox" 
-                                                        class="form-check-input select_single_permission select_single_permission2 single_{{ $module->id }}" 
-                                                        onclick="singlePermission('single_{{ $module->id }}', 'module_{{ $module->id }}')"  
+                                                    <input
+                                                        type="checkbox"
+                                                        class="form-check-input select_single_permission select_single_permission2 single_{{ $module->id }}"
+                                                        onclick="singlePermission('single_{{ $module->id }}', 'module_{{ $module->id }}')"
                                                         id="permission_item_{{ $permission->id }}"
-                                                        name="permission[]" 
+                                                        name="permission[]"
                                                         value="{{ $permission->id }}"
 
                                                         @isset($role)
@@ -78,7 +78,7 @@
                                                     <label class="form-check-label" for="permission_item_{{ $permission->id }}">{{ $permission->name }}</label>
                                                 </div>
 
-                                                
+
                                             </li>
                                         @endforeach
                                     </ul>
