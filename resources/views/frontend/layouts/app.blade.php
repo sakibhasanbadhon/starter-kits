@@ -5,12 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="csrf-token" content="{{ csrf_token() }}">
   <title>{{ $title ?? 'Dashboard' }} | Starter Kits</title>
-  @include('admin.partials.style')
+  @include('frontend.partials.style')
 </head>
 <body class="hold-transition sidebar-mini">
 <div class="wrapper">
 
-    @include('admin.includes.preloader')
+    {{-- @include('admin.includes.preloader') --}}
 
     @include('frontend.includes.header')
 
@@ -19,14 +19,14 @@
     @yield('content')
 
   <!-- /.content-wrapper -->
-  @include('admin.includes.footer')
+  @include('frontend.includes.footer')
 
   {{-- @include('admin.includes.modals.alert') --}}
 </div>
 
 <!-- REQUIRED SCRIPTS -->
-@include('admin.partials.script')
-@include('admin.includes.noty')
+@include('frontend.partials.script')
+@include('frontend.includes.noty')
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
 <script>
