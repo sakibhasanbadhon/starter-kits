@@ -2,20 +2,20 @@
 
 namespace App\Http\Controllers\Admin;
 
-use Exception;
-use Illuminate\Support\Str;
-use Illuminate\Http\Request;
-use App\Constants\GlobalConst;
+use App\Constants\LanguageConst;
+use App\Constants\SiteSectionConst;
+use App\Constants\UiConst;
+use App\Http\Controllers\Controller;
 use App\Http\Helpers\Response;
 use App\Models\Admin\Language;
-use App\Constants\LanguageConst;
 use App\Models\Admin\SiteSections;
-use App\Http\Controllers\Controller;
+use Exception;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
-use App\Constants\SiteSectionConst;
+use Illuminate\Support\Str;
 
-class ContentManagerController extends Controller
+class UiController extends Controller
 {
     protected $activeLanguages;
     protected $contentDefinitions;
@@ -32,8 +32,8 @@ class ContentManagerController extends Controller
     private function initializeContentDefinitions()
     {
         $this->contentDefinitions = [
-            'main-banner' => [
-                'display'   => 'renderBannerPage',
+            'banner' => [
+                'display'   => 'BannerPage',
                 'persist'   => 'persistBannerData',
                 'add'       => null,
                 'modify'    => null,
@@ -129,10 +129,11 @@ class ContentManagerController extends Controller
     /**
      * Display banner configuration page
      */
-    public function renderBannerPage($pageKey)
+
+    public function BannerPage($pageKey)
     {
         $pageTitle = "Hero Banner Configuration";
-        $storageKey = Str::slug(SiteSectionConst::BANNER_SECTION);
+        $storageKey = Str::slug(UiConst::BANNER);
         $contentData = SiteSections::getData($storageKey)->first();
         $availableLanguages = $this->activeLanguages;
 

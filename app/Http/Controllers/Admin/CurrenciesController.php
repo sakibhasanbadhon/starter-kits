@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Gate;
 
 class CurrenciesController extends Controller
 {
@@ -22,6 +23,7 @@ class CurrenciesController extends Controller
      */
     public function index()
     {
+        Gate::authorize('access-currencies');
         $page_title = "Setup Currency";
         $breadcrumb = ['Dashboard' => route('admin.dashboard'), 'Currencies' => ''];
         $currencies = Currencies::orderByDesc('default')->paginate(10);
@@ -40,6 +42,7 @@ class CurrenciesController extends Controller
      */
     public function create()
     {
+        Gate::authorize('create-currencies');
         $page_title = "Create Currency";
         $breadcrumb = ['Dashboard' => route('admin.dashboard'), 'Currencies' => route('admin.currencies.index'), 'Create' => ''];
         return view('admin.sections.currency.create', compact('page_title', 'breadcrumb'));
@@ -64,6 +67,7 @@ class CurrenciesController extends Controller
      */
     public function store(Request $request)
     {
+        Gate::authorize('create-currencies');
         $validator = Validator::make($request->all(), [
             'country'   => 'required|string',
             'name'      => 'required|string',
@@ -128,6 +132,7 @@ class CurrenciesController extends Controller
      */
     public function statusUpdate(Request $request)
     {
+        Gate::authorize('status-currencies');
         $validator = Validator::make($request->all(), [
             'status'                    => 'required|boolean',
             'data_target'               => 'required|string',
@@ -166,6 +171,7 @@ class CurrenciesController extends Controller
      */
     public function edit($id)
     {
+        Gate::authorize('edit-currencies');
         $page_title = "Edit Currency";
         $currency = Currencies::findOrFail($id);
         $breadcrumb = ['Dashboard' => route('admin.dashboard'), 'Currencies' => route('admin.currencies.index'), 'Edit' => ''];
@@ -181,6 +187,7 @@ class CurrenciesController extends Controller
      */
     public function update(Request $request)
     {
+       
         $currency = Currencies::find($request->target);
         if (!$currency) {
             return back()->with(['warning' => ['Currency not found!']]);
@@ -248,6 +255,7 @@ class CurrenciesController extends Controller
 
     public function delete(Request $request)
     {
+        Gate::authorize('delete-currencies');
         $validator = Validator::make($request->all(), [
             'target'        => 'required|string|exists:currencies,code',
         ]);

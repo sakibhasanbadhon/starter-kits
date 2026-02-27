@@ -94,6 +94,63 @@ class PermissionSeeder extends Seeder
         ]);
 
 
+        // currencies
+        $module_currencies = Module::updateOrCreate(['name' => 'Currencies Management'],['name' => 'Currencies Management']);
+        Permission::updateOrCreate(['slug' => 'access-currencies'],[
+            'module_id' => $module_currencies->id,
+            'name' => 'Access currencies',
+            'slug' => 'access-currencies',
+        ]);
+        Permission::updateOrCreate(['slug' => 'create-currencies'],[
+            'module_id' => $module_currencies->id,
+            'name' => 'Create currencies',
+            'slug' => 'create-currencies',
+        ]);
+        Permission::updateOrCreate(['slug' => 'edit-currencies'],[
+            'module_id' => $module_currencies->id,
+            'name' => 'Edit currencies',
+            'slug' => 'edit-currencies',
+        ]);
+        Permission::updateOrCreate(['slug' => 'delete-currencies'],[
+            'module_id' => $module_currencies->id,
+            'name' => 'Delete currencies',
+            'slug' => 'delete-currencies',
+        ]);
+        Permission::updateOrCreate(['slug' => 'status-currencies'],[
+            'module_id' => $module_currencies->id,
+            'name' => 'Status currencies',
+            'slug' => 'status-currencies',
+        ]);
+
+        // useful links
+        $module_useful_links = Module::updateOrCreate(['name' => 'Useful Links Management'],['name' => 'Useful Links Management']);
+        Permission::updateOrCreate(['slug' => 'access-useful-links'],[
+            'module_id' => $module_useful_links->id,
+            'name' => 'Access useful links',
+            'slug' => 'access-useful-links',
+        ]);
+        Permission::updateOrCreate(['slug' => 'create-useful-links'],[
+            'module_id' => $module_useful_links->id,
+            'name' => 'Create useful links',
+            'slug' => 'create-useful-links',
+        ]);
+        Permission::updateOrCreate(['slug' => 'edit-useful-links'],[
+            'module_id' => $module_useful_links->id,
+            'name' => 'Edit useful links',
+            'slug' => 'edit-useful-links',
+        ]);
+        Permission::updateOrCreate(['slug' => 'delete-useful-links'],[
+            'module_id' => $module_useful_links->id,
+            'name' => 'Delete useful links',
+            'slug' => 'delete-useful-links',
+        ]);
+        Permission::updateOrCreate(['slug' => 'status-useful-links'],[
+            'module_id' => $module_useful_links->id,
+            'name' => 'Status useful links',
+            'slug' => 'status-useful-links',
+        ]);
+
+
 
     }
 }

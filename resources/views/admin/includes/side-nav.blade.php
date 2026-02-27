@@ -34,7 +34,7 @@
 
                 <!-- Manage Admin (with dropdown) -->
                 <li class="nav-item {{ isMenuExpand('admin/manage-admins*') ? 'menu-open' : '' }}">
-                    <a href="#" class="nav-link {{ isMenuActive('admin/manage-admins*') ? 'active' : '' }}">
+                    <a href="javascript:void(0)" class="nav-link {{ isMenuActive('admin/manage-admins*') ? 'active' : '' }}">
                         <i class="nav-icon fas fa-users-cog"></i>
                         <p>
                             Admin Management
@@ -73,7 +73,7 @@
 
                 <!-- UI Elements (Collapsible) -->
                 <li class="nav-item {{ isMenuExpand('admin/ui*') ? 'menu-open' : '' }}">
-                    <a href="#" class="nav-link">
+                    <a href="" class="nav-link">
                         <i class="nav-icon fas fa-paint-brush"></i>
                         <p>
                             UI Elements
@@ -82,37 +82,37 @@
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="#" class="nav-link">
+                            <a href="{{ route('admin.ui-content.page', 'banner') }}" class="nav-link {{ isMenuActive('admin/ui-content/page/banner') }}">
                                 <i class="fas fa-circle nav-icon" style="font-size: 0.5rem;"></i>
                                 <p>Banner Manager</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="#" class="nav-link">
+                            <a href="javascript:void(0)" class="nav-link">
                                 <i class="fas fa-circle nav-icon" style="font-size: 0.5rem;"></i>
                                 <p>About Section</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="#" class="nav-link">
+                            <a href="javascript:void(0)" class="nav-link">
                                 <i class="fas fa-circle nav-icon" style="font-size: 0.5rem;"></i>
                                 <p>Testimonials</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="#" class="nav-link">
+                            <a href="javascript:void(0)" class="nav-link">
                                 <i class="fas fa-circle nav-icon" style="font-size: 0.5rem;"></i>
                                 <p>Services</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="#" class="nav-link">
+                            <a href="javascript:void(0)" class="nav-link">
                                 <i class="fas fa-circle nav-icon" style="font-size: 0.5rem;"></i>
                                 <p>FAQ</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="#" class="nav-link">
+                            <a href="javascript:void(0)" class="nav-link">
                                 <i class="fas fa-circle nav-icon" style="font-size: 0.5rem;"></i>
                                 <p>Blog Posts</p>
                             </a>
@@ -122,7 +122,7 @@
 
                 <!-- Pages & Links -->
                 <li class="nav-item">
-                    <a href="{{ route('admin.pages.index') }}" class="nav-link {{ isMenuActive('admin.pages*') }}">
+                    <a href="{{ route('admin.pages.index') }}" class="nav-link {{ isMenuActive('admin/pages*') }}">
                         <i class="nav-icon fas fa-file-alt"></i>
                         <p>Pages</p>
                     </a>
@@ -158,7 +158,7 @@
                 <li class="nav-header mt-3">SYSTEM</li>
 
                 <li class="nav-item {{ isMenuExpand('admin/settings*') ? 'menu-open' : '' }}">
-                    <a href="#" class="nav-link {{ isMenuActive('admin/settings*') ? 'active' : '' }}">
+                    <a href="javascript:void(0)" class="nav-link {{ isMenuActive('admin/settings*') ? 'active' : '' }}">
                         <i class="nav-icon fas fa-cogs"></i>
                         <p>
                             Settings

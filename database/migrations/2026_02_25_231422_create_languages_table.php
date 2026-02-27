@@ -18,19 +18,11 @@ return new class extends Migration
             $table->string('code', 20)->unique()->comment('ISO language code');
             $table->boolean('status')->default(true)->comment('language status on the site');
             $table->enum('direction', ['ltr', 'rtl'])->default('ltr')->comment('Text direction');
-            $table->unsignedBigInteger('modified_by')->comment('Admin who last modified');
+            $table->integer('modified_by')->nullable()->comment('Admin who last modified');
             $table->timestamps();
 
             // Indexes for better performance
             $table->index(['code', 'status'], 'idx_active_locales');
-
-            // Foreign key constraint
-            $table->foreign('modified_by')
-                  ->references('id')
-                  ->on('admins')
-                  ->onDelete('restrict')
-                  ->onUpdate('cascade')
-                  ->comment('Reference to the admin who made changes');
         });
 
         // Insert default languages

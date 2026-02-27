@@ -1,5 +1,6 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/noty@3.2.0-beta/lib/noty.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/noty@3.2.0-beta/lib/themes/nest.css">
+<script src="https://cdn.jsdelivr.net/npm/noty@3.2.0-beta/lib/noty.min.js"></script>
 <style>
     .noty_theme__nest.noty_bar .noty_body {
         padding: 12px !important;
@@ -82,4 +83,3 @@
         }).show();
     }
 </script>
-<script src="https://cdn.jsdelivr.net/npm/noty@3.2.0-beta/lib/noty.min.js"></script>

@@ -1,11 +1,13 @@
 <!-- jQuery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <!-- Bootstrap 4 -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+<!-- AdminLTE -->
+<script src="{{ asset('public/backend/js/adminlte.min.js') }}"></script>
 <!-- Seelct 2 -->
-<script src="{{ asset('public/frontend/js/select2.min.js') }}"></script>
+<script src="{{ asset('public/backend/js/select2.min.js') }}"></script>
 <!-- spartan multi image picker -->
-<script src="{{ asset('public/frontend/js/spartan-multi-image-picker-min.js') }}"></script>
+<script src="{{ asset('public/backend/js/spartan-multi-image-picker-min.js') }}"></script>
 
  <!-- Bootstrap JS Bundle with Popper -->
 
@@ -22,7 +24,7 @@
 <script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.print.min.js"></script>
 <script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.colVis.min.js"></script>
 
-<script src="{{ asset('public/frontend') }}/js/main.js"></script>
+<script src="{{ asset('public/backend') }}/js/main.js"></script>
 <script>
     $(document).ready(function () {
         $(document).on('click', '.logout-btn', function(){

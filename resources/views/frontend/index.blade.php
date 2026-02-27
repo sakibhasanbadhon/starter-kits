@@ -142,8 +142,8 @@
             <div class="newsletter-section bg-light p-5">
                 <div class="row justify-content-center">
                     <div class="col-md-8 text-center">
-                        <h3 class="fw-bold mb-3">Stay in the loop</h3>
-                        <p class="text-secondary mb-4">Subscribe to get special offers, free giveaways, and exclusive deals.</p>
+                        <h3 class="fw-bold mb-3">{{ __('Stay in the loop') }}</h3>
+                        <p class="text-secondary mb-4">{{ __('Subscribe to get special offers, free giveaways, and exclusive deals.') }}</p>
 
                         <form class="row g-2 justify-content-center">
                             <div class="col-md-8">

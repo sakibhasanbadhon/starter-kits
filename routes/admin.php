@@ -1,11 +1,13 @@
 <?php
 
 use App\Http\Controllers\Admin\AdminManagementController;
+use App\Http\Controllers\Admin\ContentManagerController;
 use App\Http\Controllers\Admin\CurrenciesController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\GlobalController;
 use App\Http\Controllers\Admin\PagesController;
 use App\Http\Controllers\Admin\RoleController;
+use App\Http\Controllers\Admin\UiController;
 use App\Http\Controllers\Admin\UsefulLinkController;
 use App\Http\Controllers\Admin\UserManageController;
 use Illuminate\Support\Facades\Route;
@@ -72,4 +74,15 @@ Route::controller(UsefulLinkController::class)->prefix('useful-links')->name('us
     Route::get('status/update', 'StatusUpdate')->name('status.update');
     Route::post('delete', 'delete')->name('delete');
     Route::post('update', 'update')->name('update');
+});
+
+
+// Site Content Management Routes
+Route::controller(UiController::class)->prefix('ui-content')->name('ui-content.')->group(function () {
+    Route::get('{page}', 'displayContentPage')->name('page');
+    Route::post('save/{page}', 'saveContentData')->name('save');
+    Route::post('create-item/{page}', 'addContentItem')->name('item.create');
+    Route::post('edit-item/{page}', 'editContentItem')->name('item.edit');
+    Route::delete('remove-item/{page}', 'deleteContentItem')->name('item.remove');
+    Route::put('toggle-status/{page}', 'changeItemStatus')->name('status.toggle');
 });

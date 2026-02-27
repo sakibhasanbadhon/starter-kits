@@ -10,7 +10,7 @@
 <body class="hold-transition sidebar-mini">
 <div class="wrapper">
 
-  @include('admin.includes.preloader')
+  {{-- @include('admin.includes.preloader') --}}
 
   @include('admin.includes.header')
 

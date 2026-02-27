@@ -12,7 +12,9 @@
         </div>
     </div>
     <div class="link-area ml-3">
+        @permission('create-currencies')
         <a href="{{ route('admin.currencies.create') }}" class="btn btn-primary"><i class="fas fa-plus button-icon"></i> {{ __('Add New') }}</a>
+        @endpermission
     </div>
 
 </div>
