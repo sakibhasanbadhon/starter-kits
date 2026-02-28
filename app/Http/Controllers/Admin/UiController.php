@@ -9,11 +9,12 @@ use App\Http\Controllers\Controller;
 use App\Http\Helpers\Response;
 use App\Models\Admin\Language;
 use App\Models\Admin\SiteSections;
-use Exception;
+use App\Models\Admin\UiSection;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
+use Exception;
 
 class UiController extends Controller
 {
@@ -107,6 +108,7 @@ class UiController extends Controller
     /**
      * Delete content item
      */
+
     public function deleteContentItem(Request $request, $pageKey)
     {
         $handler = $this->resolveHandler($pageKey, 'remove');
@@ -115,7 +117,8 @@ class UiController extends Controller
 
     /**
      * Toggle item status
-     */
+    */
+
     public function changeItemStatus(Request $request, $pageKey)
     {
         $handler = $this->resolveHandler($pageKey, 'toggle');
@@ -132,16 +135,17 @@ class UiController extends Controller
 
     public function BannerPage($pageKey)
     {
-        $pageTitle = "Hero Banner Configuration";
+        $breadcrumb = ['Dashboard' => route('admin.dashboard'), 'Banner' => ''];
+        $this->setPageTitle('Banner Section');
         $storageKey = Str::slug(UiConst::BANNER);
-        $contentData = SiteSections::getData($storageKey)->first();
+        $contentData = UiSection::getData($storageKey)->first();
         $availableLanguages = $this->activeLanguages;
 
-        return view('admin.sections.content.banner-section', compact(
-            'pageTitle',
+        return view('admin.sections.ui-sections.banner', compact(
             'contentData',
             'availableLanguages',
             'pageKey',
+            'breadcrumb'
         ));
     }
 

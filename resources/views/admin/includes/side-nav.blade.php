@@ -23,7 +23,7 @@
                 <li class="nav-header">MAIN</li>
                 <li class="nav-item">
                     <a href="{{ route('admin.dashboard') }}" class="nav-link {{ isMenuActive('admin/dashboard*') }}">
-                        <i class="nav-icon fas fa-tachometer-alt"></i>
+                        <i class="nav-icon fa-solid fa-gauge"></i>
                         <p>Dashboard</p>
                         <span class="badge badge-info right">NEW</span>
                     </a>
