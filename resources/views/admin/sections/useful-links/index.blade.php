@@ -51,7 +51,7 @@
 
                                         <td>
                                         <td>
-                                            <button href="{{ route('admin.manage-admins.edit', $item->id) }}" data-toggle="modal" data-target=".bd-example-modal-lg-edit" title="Edit" class="edit-modal-button action-btn"><i class="fas fa-edit"></i></button>
+                                            <button data-toggle="modal" data-target=".bd-example-modal-lg-edit" title="Edit" class="edit-modal-button action-btn"><i class="fas fa-edit"></i></button>
                                             <button title="Delete" data-target="{{ $item->id }}" class="action-btn delete-btn action-danger mr-1"><i class="fas fa-trash-alt"></i></button>
 
                                         </td>

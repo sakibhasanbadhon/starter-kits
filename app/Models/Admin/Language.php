@@ -20,6 +20,18 @@ class Language extends Model
         'status' => 'boolean',
     ];
 
+    public function getStatusTypeAttribute() {
+        $status_type = [];
+        if($this->status){
+            $status_type['name'] = "Active";
+            $status_type['class'] = "badge-success";
+        }else{
+            $status_type['name'] = 'Deavtivate';
+            $status_type['class'] = 'badge-danger';
+        }
+        return $status_type;
+    }
+
     // Provide a `dir` attribute accessor for code that expects ->dir
     public function getDirAttribute()
     {

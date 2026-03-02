@@ -21,8 +21,6 @@ return new class extends Migration
             $table->integer('modified_by')->nullable()->comment('Admin who last modified');
             $table->timestamps();
 
-            // Indexes for better performance
-            $table->index(['code', 'status'], 'idx_active_locales');
         });
 
         // Insert default languages
@@ -53,18 +51,7 @@ return new class extends Migration
                 'direction' => 'ltr',
                 'status' => false,
             ],
-            [
-                'name' => 'Arabic',
-                'code' => 'ar',
-                'direction' => 'rtl',
-                'status' => false,
-            ],
-            [
-                'name' => 'Chinese',
-                'code' => 'zh',
-                'direction' => 'ltr',
-                'status' => false,
-            ],
+
 
         ];
 

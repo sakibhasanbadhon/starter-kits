@@ -65,7 +65,7 @@ class UsefulLinkController extends Controller
 
 
 
-     public function update(Request $request){
+    public function update(Request $request){
 
         $validated = $request->validate([
             'target'  => 'required',

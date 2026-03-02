@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\ContentManagerController;
 use App\Http\Controllers\Admin\CurrenciesController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\GlobalController;
+use App\Http\Controllers\Admin\LanguageController;
 use App\Http\Controllers\Admin\PagesController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\UiController;
@@ -85,4 +86,17 @@ Route::controller(UiController::class)->prefix('ui-content')->name('ui-content.'
     Route::post('edit-item/{page}', 'editContentItem')->name('item.edit');
     Route::delete('remove-item/{page}', 'deleteContentItem')->name('item.remove');
     Route::put('toggle-status/{page}', 'changeItemStatus')->name('status.toggle');
+});
+
+// Language Section
+Route::controller(LanguageController::class)->prefix('languages')->name('languages.')->group(function () {
+    Route::get('index', 'index')->name('index');
+    Route::post('store','store')->name('store');
+    Route::put('update','update')->name('update');
+    Route::put('status/update','statusUpdate')->name('status.update');
+    Route::get('info/{code}','info')->name('info');
+    // Route::post('import','import')->name('import');
+    // Route::delete('delete','delete')->name('delete');
+    // Route::post('switch','switch')->name('switch');
+    // Route::get('download','download')->name('download');
 });
