@@ -35,7 +35,7 @@ class UiController extends Controller
         $this->contentDefinitions = [
             'banner' => [
                 'display'   => 'BannerPage',
-                'persist'   => 'persistBannerData',
+                'update'   => 'updateBannerData',
                 'add'       => null,
                 'modify'    => null,
                 'remove'    => null,
@@ -44,7 +44,7 @@ class UiController extends Controller
 
             'process-flow' => [
                 'display'   => 'renderProcessFlowPage',
-                'persist'   => 'persistProcessFlowData',
+                'update'   => 'updateProcessFlowData',
                 'add'       => 'addProcessFlowItem',
                 'modify'    => 'updateProcessFlowItem',
                 'remove'    => 'deleteProcessFlowItem',
@@ -81,9 +81,9 @@ class UiController extends Controller
     /**
      * Save content data for a page
      */
-    public function saveContentData(Request $request, $pageKey)
+    public function updateContentData(Request $request, $pageKey)
     {
-        $handler = $this->resolveHandler($pageKey, 'persist');
+        $handler = $this->resolveHandler($pageKey, 'update');
         return $this->$handler($request, $pageKey);
     }
 
@@ -152,21 +152,23 @@ class UiController extends Controller
     /**
      * Save banner data
      */
-    public function persistBannerData(Request $request, $pageKey)
+    public function updateBannerData(Request $request, $pageKey)
     {
+
         $fieldDefinitions = [
-            'main_heading'      => "required|string|max:100",
-            'secondary_heading' => "required|string",
-            'action_button'     => "required|string|max:50",
+            'title'       => "required|string|max:100",
+            'subtitle'    => "required|string",
+            'button_name' => "required|string|max:50",
+            'button_link' => "required|string|max:255",
         ];
 
-        $storageKey = Str::slug(SiteSectionConst::BANNER_SECTION);
-        $existingData = SiteSections::where("key", $storageKey)->first();
+        $storageKey = Str::slug(UiConst::BANNER);
+        $existingData = UiSection::where("key", $storageKey)->first();
 
-        $preparedData['visual'] = $existingData->value->visual ?? null;
+        $preparedData['image'] = $existingData->value->image ?? null;
 
         if ($request->hasFile("cover_image")) {
-            $preparedData['visual'] = $this->processImageUpload($request, "cover_image", $existingData->value->visual ?? null);
+            $preparedData['image'] = $this->processImageUpload($request, "cover_image", $existingData->value->image ?? null);
         }
 
         $preparedData['localized'] = $this->processLocalizedContent($request, $fieldDefinitions);
@@ -174,7 +176,7 @@ class UiController extends Controller
         $finalData['key'] = $storageKey;
 
         try {
-            SiteSections::updateOrCreate(['key' => $storageKey], $finalData);
+            UiSection::updateOrCreate(['key' => $storageKey], $finalData);
         } catch (Exception $e) {
             return back()->with(['error' => ['Unable to save changes. Please try again.']]);
         }
@@ -207,7 +209,7 @@ class UiController extends Controller
     /**
      * Save process flow main data
      */
-    public function persistProcessFlowData(Request $request, $pageKey)
+    public function updateProcessFlowData(Request $request, $pageKey)
     {
         $fieldDefinitions = [
             'section_header'    => "required|string|max:100",
@@ -488,7 +490,7 @@ class UiController extends Controller
             ])->validate();
 
             $fileData = get_files_from_fileholder($request, $fieldName);
-            $uploadedPath = upload_files_from_path_dynamic($fileData, 'site-section', $existingImage);
+            $uploadedPath = uploadImage($fileData, 'site-section', $existingImage);
 
             return $uploadedPath;
         }

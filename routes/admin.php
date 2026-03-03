@@ -81,10 +81,11 @@ Route::controller(UsefulLinkController::class)->prefix('useful-links')->name('us
 // Site Content Management Routes
 Route::controller(UiController::class)->prefix('ui-content')->name('ui-content.')->group(function () {
     Route::get('{page}', 'displayContentPage')->name('page');
-    Route::post('save/{page}', 'saveContentData')->name('save');
+    Route::post('save/{page}', 'updateContentData')->name('save');
     Route::post('create-item/{page}', 'addContentItem')->name('item.create');
+    Route::post('update-item/{page}', 'updateContentItem')->name('item.update');
     Route::post('edit-item/{page}', 'editContentItem')->name('item.edit');
-    Route::delete('remove-item/{page}', 'deleteContentItem')->name('item.remove');
+    Route::delete('delete-item/{page}', 'deleteContentItem')->name('item.delete');
     Route::put('toggle-status/{page}', 'changeItemStatus')->name('status.toggle');
 });
 
@@ -93,10 +94,10 @@ Route::controller(LanguageController::class)->prefix('languages')->name('languag
     Route::get('index', 'index')->name('index');
     Route::post('store','store')->name('store');
     Route::put('update','update')->name('update');
-    Route::put('status/update','statusUpdate')->name('status.update');
+    Route::post('status/update', 'statusUpdate')->name('status.update');
     Route::get('info/{code}','info')->name('info');
+    Route::post('delete','delete')->name('delete');
     // Route::post('import','import')->name('import');
-    // Route::delete('delete','delete')->name('delete');
     // Route::post('switch','switch')->name('switch');
     // Route::get('download','download')->name('download');
 });

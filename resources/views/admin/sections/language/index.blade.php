@@ -40,13 +40,22 @@
                                     <td>{{ @$item->code }} </td>
                                     <td>{{ @$item->direction }}</td>
                                     <td>
-                                        {{-- <span class="badge badge-sm py-1 px-2 fs-3 {{ $item->statusType['class'] }}">{{ $item->statusType['name'] }}</span> --}}
-                                        <span class="badge badge-sm py-1 px-2 {{ $item->statusType['class'] }}">{{ $item->statusType['name'] }}</span>
-                                    </td>
+                                            <label class="switch">
+                                                @php
+                                                    $status = (int) $item->status; // Make sure it's a strict integer
+                                                @endphp
+                                                <input type="checkbox" class="statusToggle" data-id="{{ $item->id }}" {{ $status === 1 ? 'checked' : '' }}>
+                                                <span class="slider round"></span>
+                                            </label>
+                                            <span class="ml-3 badge statusText-{{ $item->id }} {{ $status === 1 ? 'badge-success' : 'badge-warning' }}">
+                                                {{ $status === 1 ? 'Active' : 'Deactive' }}
+                                            </span>
+                                        </td>
                                     <td>{{ $item->created_at->diffForHumans() }}</td>
                                     <td>
-                                        <a href="" title="Edit" class="action-btn edit-modal-button" data-toggle="modal" data-target="#editModal"><i class="fas fa-edit"></i></a>
-                                        <a href="" title="Delete" class="action-btn text-danger"><i class="fas fa-trash-alt"></i></a>
+                                        <button title="Edit" class="action-btn edit-modal-button" data-toggle="modal" data-target="#editModal"><i class="fas fa-edit"></i></button>
+                                         <button title="Delete" data-target="{{ $item->id }}" class="action-btn delete-btn action-danger mr-1"><i class="fas fa-trash-alt"></i></button>
+
                                     </td>
                                 </tr>
                             @empty
@@ -69,38 +78,42 @@
 
     <div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="addModalTitle" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLongTitle">Add New Language</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
+
+                <div class="modal-content">
                     <form action="{{ route('admin.languages.store') }}" method="POST">
                         @csrf
-                        <div class="form-group">
-                            <label for="name">{{ __('Name') }}</label>
-                            <input type="text" class="form-control" name="name" id="name" placeholder="{{ __('Enter Name') }}" required>
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLongTitle">Add New Language</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                            </button>
                         </div>
-                        <div class="form-group">
-                            <label for="code">{{ __('Code') }}</label>
-                            <input type="text" class="form-control" name="code" id="code" placeholder="{{ __('Enter Code') }}" required>
+                        <div class="modal-body">
+
+                                <div class="form-group">
+                                    <label for="name">{{ __('Name') }}</label>
+                                    <input type="text" class="form-control" name="name" id="name" placeholder="{{ __('Enter Name') }}" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="code">{{ __('Code') }}</label>
+                                    <input type="text" class="form-control" name="code" id="code" placeholder="{{ __('Enter Code') }}" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="direction">{{ __('Direction') }}</label>
+                                    <select name="direction" id="direction" class="form-control" required>
+                                        <option value="" disabled selected>{{ __('Select Direction') }}</option>
+                                        <option value="ltr">{{ __('Left to Right') }}</option>
+                                        <option value="rtl">{{ __('Right to Left') }}</option>
+                                    </select>
+                                </div>
                         </div>
-                        <div class="form-group">
-                            <label for="direction">{{ __('Direction') }}</label>
-                            <select name="direction" id="direction" class="form-control" required>
-                                <option value="" disabled selected>{{ __('Select Direction') }}</option>
-                                <option value="ltr">{{ __('Left to Right') }}</option>
-                                <option value="rtl">{{ __('Right to Left') }}</option>
-                            </select>
+                        <div class="modal-footer">
+                            {{-- <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button> --}}
+                            <button type="submit" class="btn btn-primary">Save</button>
                         </div>
+                    </form>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary">Save</button>
-                </div>
-            </div>
+            </form>
         </div>
     </div>
 
@@ -108,37 +121,40 @@
     <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalTitle" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLongTitle">Edit Language</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <form action="{{ route('admin.languages.update') }}" method="POST">
-                        @csrf
-                        <input type="hidden" name="target" value="{{ old('target') }}">
-                        <div class="form-group">
-                            <label for="name">{{ __('Name') }}</label>
-                            <input type="text" class="form-control" name="name" id="name" placeholder="{{ __('Enter Name') }}" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="code">{{ __('Code') }}</label>
-                            <input type="text" class="form-control" name="code" id="code" placeholder="{{ __('Enter Code') }}" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="direction">{{ __('Direction') }}</label>
-                            <select name="direction" id="direction" class="form-control" required>
-                                <option value="" disabled selected>{{ __('Select Direction') }}</option>
-                                <option value="ltr">{{ __('Left to Right') }}</option>
-                                <option value="rtl">{{ __('Right to Left') }}</option>
-                            </select>
-                        </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary">Update</button>
-                </div>
+                <form action="{{ route('admin.languages.update') }}" method="POST">
+                    @csrf
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLongTitle">Edit Language</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+
+                            @method("PUT")
+                            <input type="hidden" name="target" value="{{ old('target') }}">
+                            <div class="form-group">
+                                <label for="name">{{ __('Name') }}</label>
+                                <input type="text" class="form-control" name="name" id="name" placeholder="{{ __('Enter Name') }}" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="code">{{ __('Code') }}</label>
+                                <input type="text" class="form-control" name="code" id="code" placeholder="{{ __('Enter Code') }}" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="direction">{{ __('Direction') }}</label>
+                                <select name="direction" id="direction" class="form-control" required>
+                                    <option value="" disabled selected>{{ __('Select Direction') }}</option>
+                                    <option value="ltr">{{ __('Left to Right') }}</option>
+                                    <option value="rtl">{{ __('Right to Left') }}</option>
+                                </select>
+                            </div>
+                    </div>
+                    <div class="modal-footer">
+                        {{-- <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button> --}}
+                        <button type="submit" class="btn btn-primary">Update</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
@@ -149,6 +165,37 @@
 
 @push('script')
 <script>
+    $(document).ready(function () {
+            $('.statusToggle').on('change', function () {
+                var $this = $(this);
+                var target = $this.data('id');
+                var status = $this.is(':checked') ? 1 : 0;
+
+                $.ajax({
+                    url: '{{ route('admin.languages.status.update') }}',
+                    type: 'POST',
+                    data: {
+                        _token: $('meta[name="csrf-token"]').attr('content'),
+                        target: target,
+                        status: status
+                    },
+                    success: function (response) {
+                        let $badge = $('.statusText-' + target);
+                        $badge.text(status === 1 ? 'Active' : 'Deactive');
+                        $badge
+                            .removeClass('badge-success badge-warning')
+                            .addClass(status === 1 ? 'badge-success' : 'badge-warning');
+
+                        console.log(response.message);
+                    },
+                    error: function (response) {
+                        console.log(response.message);
+                        alert('Something went wrong. Please try again.');
+                    }
+                });
+            });
+        });
+
         $(".edit-modal-button").click(function(){
             var oldData = JSON.parse($(this).parents("tr").attr("data-item"));
             $("input[name=target]").val(oldData.id);
@@ -159,9 +206,9 @@
 
         $(document).on('click', '.delete-btn', function(e) {
             let method = 'POST';
-            let url = "{{ route('admin.useful-links.delete') }}";
-            let title = 'Delete Useful Link';
-            let message = "Are Your Sure To Delete Useful Link?";
+            let url = "{{ route('admin.languages.delete') }}";
+            let title = 'Delete Language';
+            let message = "Are Your Sure To Delete Language?";
             let target = $(this).data('target');
             alertModalShow(method, url, title, message, target);
         });

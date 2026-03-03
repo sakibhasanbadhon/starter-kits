@@ -151,6 +151,35 @@ class PermissionSeeder extends Seeder
         ]);
 
 
+        // Language links
+        $module_languages = Module::updateOrCreate(['name' => 'Languages Management'],['name' => 'Languages Management']);
+        Permission::updateOrCreate(['slug' => 'access-languages'],[
+            'module_id' => $module_languages->id,
+            'name' => 'Access languages',
+            'slug' => 'access-languages',
+        ]);
+        Permission::updateOrCreate(['slug' => 'create-languages'],[
+            'module_id' => $module_languages->id,
+            'name' => 'Create languages',
+            'slug' => 'create-languages',
+        ]);
+        Permission::updateOrCreate(['slug' => 'edit-languages'],[
+            'module_id' => $module_languages->id,
+            'name' => 'Edit languages',
+            'slug' => 'edit-languages',
+        ]);
+        Permission::updateOrCreate(['slug' => 'delete-languages'],[
+            'module_id' => $module_languages->id,
+            'name' => 'Delete languages',
+            'slug' => 'delete-languages',
+        ]);
+        Permission::updateOrCreate(['slug' => 'status-languages'],[
+            'module_id' => $module_languages->id,
+            'name' => 'Status languages',
+            'slug' => 'status-languages',
+        ]);
+
+
 
     }
 }

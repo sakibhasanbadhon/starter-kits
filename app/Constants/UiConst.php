@@ -4,7 +4,7 @@ namespace App\Constants;
 
 class UiConst {
 
-    const BANNER = 'BANNER';
-    
+    const BANNER = 'banner';
+
 
 }

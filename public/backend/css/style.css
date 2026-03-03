@@ -196,6 +196,7 @@
 .action-btn {
     height: 33px;
     width: 33px;
+    border: none !important;
     background: #ebebeb;
     font-size: 14px;
     display: inline-block;
