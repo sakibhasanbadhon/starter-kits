@@ -72,8 +72,8 @@
                 <li class="nav-header mt-3">CONTENT MANAGEMENT</li>
 
                 <!-- UI Elements (Collapsible) -->
-                <li class="nav-item {{ isMenuExpand('admin/ui*') ? 'menu-open' : '' }}">
-                    <a href="" class="nav-link">
+                <li class="nav-item {{ isMenuExpand('admin/ui-content*') ? 'menu-open' : '' }}">
+                    <a href="javascript:void(0)" class="nav-link {{ isMenuActive('admin/ui-content*') ? 'active' : '' }}">
                         <i class="nav-icon fas fa-paint-brush"></i>
                         <p>
                             UI Elements
@@ -82,15 +82,15 @@
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="{{ route('admin.ui-content.page', 'banner') }}" class="nav-link {{ isMenuActive('admin/ui-content/page/banner') }}">
+                            <a href="{{ route('admin.ui-content.page', 'banner') }}" class="nav-link">
                                 <i class="fas fa-circle nav-icon" style="font-size: 0.5rem;"></i>
                                 <p>Banner Manager</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="javascript:void(0)" class="nav-link">
+                            <a href="{{ route('admin.ui-content.page', 'feature') }}" class="nav-link">
                                 <i class="fas fa-circle nav-icon" style="font-size: 0.5rem;"></i>
-                                <p>About Section</p>
+                                <p>Feature Section</p>
                             </a>
                         </li>
                         <li class="nav-item">

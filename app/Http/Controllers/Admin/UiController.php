@@ -36,19 +36,27 @@ class UiController extends Controller
         $this->contentDefinitions = [
             'banner' => [
                 'display'   => 'BannerPage',
-                'update'   => 'updateBannerData',
-                'add'       => null,
-                'modify'    => null,
-                'remove'    => null,
+                'update'   => 'updateBanner',
+                'addItem'       => null,
+                'updateItem'    => null,
+                'removeItem'    => null,
+                'toggle'    => null,
+            ],
+            'feature' => [
+                'display'   => 'FeaturePage',
+                'update'   => 'updateFeature',
+                'addItem'       => null,
+                'updateItem'    => null,
+                'removeItem'    => null,
                 'toggle'    => null,
             ],
 
             'process-flow' => [
                 'display'   => 'renderProcessFlowPage',
                 'update'   => 'updateProcessFlowData',
-                'add'       => 'addProcessFlowItem',
-                'modify'    => 'updateProcessFlowItem',
-                'remove'    => 'deleteProcessFlowItem',
+                'addItem'       => 'addProcessFlowItem',
+                'updateItem'    => 'updateProcessFlowItem',
+                'removeItem'    => 'deleteProcessFlowItem',
                 'toggle'    => 'toggleProcessFlowItemStatus',
             ],
         ];
@@ -93,7 +101,7 @@ class UiController extends Controller
      */
     public function addContentItem(Request $request, $pageKey)
     {
-        $handler = $this->resolveHandler($pageKey, 'add');
+        $handler = $this->resolveHandler($pageKey, 'addItem');
         return $this->$handler($request, $pageKey);
     }
 
@@ -102,7 +110,7 @@ class UiController extends Controller
      */
     public function editContentItem(Request $request, $pageKey)
     {
-        $handler = $this->resolveHandler($pageKey, 'modify');
+        $handler = $this->resolveHandler($pageKey, 'updateItem');
         return $this->$handler($request, $pageKey);
     }
 
@@ -112,7 +120,7 @@ class UiController extends Controller
 
     public function deleteContentItem(Request $request, $pageKey)
     {
-        $handler = $this->resolveHandler($pageKey, 'remove');
+        $handler = $this->resolveHandler($pageKey, 'removeItem');
         return $this->$handler($request, $pageKey);
     }
 
@@ -153,7 +161,7 @@ class UiController extends Controller
     /**
      * Save banner data
      */
-    public function updateBannerData(Request $request, $pageKey)
+    public function updateBanner(Request $request, $pageKey)
     {
 
         $fieldDefinitions = [
@@ -185,6 +193,74 @@ class UiController extends Controller
 
         return back()->with(['success' => ['Banner section updated successfully!']]);
     }
+
+    /**
+     * ==================== Feature section  ====================
+     */
+
+    public function FeaturePage($pageKey)
+    {
+        $breadcrumb = ['Dashboard' => route('admin.dashboard'), 'Feature' => ''];
+        $this->setPageTitle('Feature Section');
+        $storageKey = Str::slug(UiConst::FEATURE);
+        $contentData = UiSection::displayData($storageKey)->first();
+        $availableLanguages = $this->activeLanguages;
+
+        return view('admin.sections.ui-sections.feature', compact(
+            'contentData',
+            'availableLanguages',
+            'pageKey',
+            'breadcrumb'
+        ));
+    }
+
+    /**
+     * Save feature data
+     */
+    public function updateFeature(Request $request, $pageKey)
+    {
+
+        $fieldDefinitions = [
+            'title'       => "required|string|max:100",
+            'subtitle'    => "required|string",
+            'button_name' => "required|string|max:50",
+            'button_link' => "required|string|max:255",
+        ];
+
+        $storageKey = Str::slug(UiConst::BANNER);
+        $existingData = UiSection::where("key", $storageKey)->first();
+
+        $preparedData['image'] = $existingData->value->image ?? null;
+
+        if ($request->hasFile("image")) {
+            $preparedData['image'] = $this->processImageUpload($request, "image", $existingData->value->image ?? null);
+        }
+
+        $preparedData['lang'] = $this->processLocalizedContent($request, $fieldDefinitions);
+        $finalData['value'] = $preparedData;
+        $finalData['key'] = $storageKey;
+
+        try {
+            UiSection::updateOrCreate(['key' => $storageKey], $finalData);
+        } catch (Exception $e) {
+            dd($e);
+            return back()->with(['error' => ['Unable to save changes. Please try again.']]);
+        }
+
+        return back()->with(['success' => ['Banner section updated successfully!']]);
+    }
+
+
+
+    /**
+     * ==================== Feature section  ====================
+     */
+
+
+
+
+
+
 
     /**
      * ==================== PROCESS FLOW (HOW IT WORKS) HANDLERS ====================

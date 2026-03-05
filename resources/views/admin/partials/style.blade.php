@@ -13,5 +13,6 @@
 <link href="https://cdn.datatables.net/1.11.3/css/dataTables.bootstrap4.min.css" rel="stylesheet">
 <link href="https://cdn.datatables.net/responsive/2.2.9/css/responsive.bootstrap4.min.css" rel="stylesheet">
 
+
 <link rel="stylesheet" href="{{ asset('public/backend/css/style.css') }}">
 @stack('style')

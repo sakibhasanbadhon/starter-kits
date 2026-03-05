@@ -272,15 +272,10 @@ function deleteFile($file_link)
 function getImagePath($image_name, $path_type = null)
 {
     $image_path = filesPath($path_type)->path;
-
     $image_link = $image_path . "/" . $image_name;
-
     if (file_exists(public_path($image_link))) {
-        // dd('ONE');
         $image = asset('public/' . $image_link);
-        // dd($image);
     }else{
-        // dd('two');
         return false;
     }
 

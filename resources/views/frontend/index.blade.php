@@ -7,12 +7,17 @@
         $default    = App\Constants\GlobalConst::DEFAULT_LANG;
         $slug       = Illuminate\Support\Str::slug(App\Constants\UiConst::BANNER);
         $banner     = App\Models\Admin\UiSection::displayData($slug)->first();
-        // dd($banner->value->lang->$local_lang->title);
-        // dd($local_lang);
     @endphp
 
     <!-- ========== HERO SECTION ========== -->
-    <section class="hero-section">
+    @php
+        // compute image URL if available
+        $bannerImageUrl = null;
+        if (!empty($banner->value->image)) {
+            $bannerImageUrl = getImagePath($banner->value->image, 'ui-section');
+        }
+    @endphp
+    <section class="hero-section" @if($bannerImageUrl) style="background: url('{{ $bannerImageUrl }}') center/cover no-repeat;" @endif>
         <div class="container text-center">
             <h1 class="display-4 fw-bold mb-4">{{ $banner->value->lang->$local_lang->title ?? '' }}</h1>
             <p class="lead mb-5 mx-auto" style="max-width: 600px;">{{ $banner->value->lang->$local_lang->subtitle ?? '' }}</p>
