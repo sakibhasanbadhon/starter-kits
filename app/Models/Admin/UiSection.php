@@ -11,9 +11,11 @@ class UiSection extends Model
 
     protected $guarded = ['id'];
 
+    protected $casts = [
+        'value'     => 'object',
+    ];
 
-
-    public function scopeGetData($query,$slug) {
+    public function scopeDisplayData($query,$slug) {
         return $this->where("key",$slug);
     }
 

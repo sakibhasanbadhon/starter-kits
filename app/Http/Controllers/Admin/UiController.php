@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Constants\GlobalConst;
 use App\Constants\LanguageConst;
 use App\Constants\SiteSectionConst;
 use App\Constants\UiConst;
@@ -10,11 +11,11 @@ use App\Http\Helpers\Response;
 use App\Models\Admin\Language;
 use App\Models\Admin\SiteSections;
 use App\Models\Admin\UiSection;
+use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
-use Exception;
 
 class UiController extends Controller
 {
@@ -138,7 +139,7 @@ class UiController extends Controller
         $breadcrumb = ['Dashboard' => route('admin.dashboard'), 'Banner' => ''];
         $this->setPageTitle('Banner Section');
         $storageKey = Str::slug(UiConst::BANNER);
-        $contentData = UiSection::getData($storageKey)->first();
+        $contentData = UiSection::displayData($storageKey)->first();
         $availableLanguages = $this->activeLanguages;
 
         return view('admin.sections.ui-sections.banner', compact(
@@ -167,17 +168,18 @@ class UiController extends Controller
 
         $preparedData['image'] = $existingData->value->image ?? null;
 
-        if ($request->hasFile("cover_image")) {
-            $preparedData['image'] = $this->processImageUpload($request, "cover_image", $existingData->value->image ?? null);
+        if ($request->hasFile("image")) {
+            $preparedData['image'] = $this->processImageUpload($request, "image", $existingData->value->image ?? null);
         }
 
-        $preparedData['localized'] = $this->processLocalizedContent($request, $fieldDefinitions);
+        $preparedData['lang'] = $this->processLocalizedContent($request, $fieldDefinitions);
         $finalData['value'] = $preparedData;
         $finalData['key'] = $storageKey;
 
         try {
             UiSection::updateOrCreate(['key' => $storageKey], $finalData);
         } catch (Exception $e) {
+            dd($e);
             return back()->with(['error' => ['Unable to save changes. Please try again.']]);
         }
 
@@ -195,7 +197,7 @@ class UiController extends Controller
     {
         $pageTitle = "Process Flow Configuration";
         $storageKey = Str::slug(SiteSectionConst::HOW_IT_WORK_SECTION);
-        $contentData = SiteSections::getData($storageKey)->first();
+        $contentData = SiteSections::displayData($storageKey)->first();
         $availableLanguages = $this->activeLanguages;
 
         return view('admin.sections.content.process-flow-section', compact(
@@ -299,7 +301,7 @@ class UiController extends Controller
         ];
 
         $storageKey = Str::slug(SiteSectionConst::HOW_IT_WORK_SECTION);
-        $existingData = SiteSections::getData($storageKey)->first();
+        $existingData = SiteSections::displayData($storageKey)->first();
 
         if (!$existingData) {
             return back()->with(['error' => ['Content section not found!']]);
@@ -353,7 +355,7 @@ class UiController extends Controller
         ]);
 
         $storageKey = Str::slug(SiteSectionConst::HOW_IT_WORK_SECTION);
-        $existingData = SiteSections::getData($storageKey)->first();
+        $existingData = SiteSections::displayData($storageKey)->first();
 
         if (!$existingData) {
             return back()->with(['error' => ['Content section not found!']]);
@@ -422,14 +424,14 @@ class UiController extends Controller
      */
     private function getAllLanguages()
     {
-        $languages = Language::whereNot('code', LanguageConst::NOT_REMOVABLE)
+        $languages = Language::whereNot('code', GlobalConst::DEFAULT_LANG)
             ->select("code", "name")
             ->get()
             ->toArray();
 
         $languages[] = [
-            'name' => LanguageConst::NOT_REMOVABLE_CODE,
-            'code' => LanguageConst::NOT_REMOVABLE,
+            'name' => GlobalConst::DEFAULT_LANG_NAME,
+            'code' => GlobalConst::DEFAULT_LANG,
         ];
 
         return $languages;
@@ -441,7 +443,7 @@ class UiController extends Controller
     private function processLocalizedContent($request, $fieldDefinitions, $modalReference = null)
     {
         $availableLanguages = $this->getAllLanguages();
-        $defaultLocale = get_default_language_code();
+        $defaultLocale = display_default_lang_code();
 
         $validationRules = [];
         $localizedContent = [];
@@ -489,10 +491,11 @@ class UiController extends Controller
                 $fieldName => "image|mimes:png,jpg,webp,jpeg,svg",
             ])->validate();
 
-            $fileData = get_files_from_fileholder($request, $fieldName);
-            $uploadedPath = uploadImage($fileData, 'site-section', $existingImage);
+            $image = uploadLocalImage($request->image, 'placeholder-image', $existingImage);
+            // dd($image);
+            $image_path = uploadImage([$image['dev_path']], 'ui-section', $existingImage);
 
-            return $uploadedPath;
+            return $image_path;
         }
 
         return false;

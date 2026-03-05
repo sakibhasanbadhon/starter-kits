@@ -44,12 +44,15 @@
                         <div class="col-md-12 px-0 text-center">
                             <div id="image"></div>
                         </div>
-                        <input type="hidden" name="old_image" value="{{ @$admin->image }}">
+                        <input type="hidden" name="old_image" value="{{ @$contentData->value->image }}">
                     </div>
                 </div>
 
                 <div class="tab-content" id="myTabContent">
                     @foreach ($availableLanguages as $index => $item)
+                        @php
+                            $lang_code = $item->code;
+                        @endphp
                         <div class="tab-pane fade {{ $loop->first ? 'show active' : '' }}"
                             id="content-{{ $item->id }}"
                             role="tabpanel"
@@ -59,6 +62,7 @@
                                 <div class="card-body">
                                     <div class="row">
 
+
                                         <div class="col-md-12">
                                             <x-forms.textbox
                                                 name="{{ $item->code }}_title"
@@ -66,7 +70,7 @@
                                                 placeholder="Enter title"
                                                 required="required"
                                                 type="text"
-                                                value="{{ old($item->code . '_title', @$admin->title) }}">
+                                                value="{{ old($item->code . '_title', $contentData->value->lang->$lang_code->title ?? '') }}">
                                             </x-forms.textbox>
                                         </div>
 
@@ -77,7 +81,7 @@
                                                 placeholder="Enter subtitle"
                                                 required="required"
                                                 type="text"
-                                                value="{{ old($item->code . '_subtitle', @$admin->subtitle) }}">
+                                                value="{{ old($item->code . '_subtitle', $contentData->value->lang->$lang_code->subtitle ?? '') }}">
                                             </x-forms.textbox>
                                         </div>
 
@@ -88,7 +92,7 @@
                                                 placeholder="Enter button name"
                                                 required="required"
                                                 type="text"
-                                                value="{{ old($item->code . '_button_name', @$admin->button_name) }}">
+                                                value="{{ old($item->code . '_button_name', $contentData->value->lang->$lang_code->button_name ?? '') }}">
                                             </x-forms.textbox>
                                         </div>
 
@@ -99,7 +103,7 @@
                                                 placeholder="Enter button link"
                                                 required="required"
                                                 type="text"
-                                                value="{{ old($item->code . '_button_link', @$admin->button_link) }}">
+                                                value="{{ old($item->code . '_button_link', $contentData->value->lang->$lang_code->button_link ?? '') }}">
                                             </x-forms.textbox>
                                         </div>
                                     </div>
@@ -147,17 +151,21 @@
             }
         });
 
-        // @if(isset($admin->image))
-        //     $('#image img.spartan_image_placeholder').css('display','none');
-        //     $('#image .spartan_remove_row').css('display','none');
-        //     $('#image .img_').css('display','block');
-        //     $('#image .img_').attr('src','{{ getImagePath($admin->image, "admin-profile") }}');
-        //     $('#image input[name="image"]').attr('required',false);
-        // @endif
+
+
+        @if(isset($contentData->value->image))
+            $('#image img.spartan_image_placeholder').css('display','none');
+            $('#image .spartan_remove_row').css('display','none');
+            $('#image .img_').css('display','block');
+            $('#image .img_').attr('src','{{ getImagePath($contentData->value->image, "ui-section") }}');
+            $('#image input[name="image"]').attr('required',false);
+        @endif
 
         $('.remove-files').on('click', function () {
             $(this).parents('.col-md-12').remove();
         });
+
+
 
     </script>
 @endpush

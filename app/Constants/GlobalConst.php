@@ -8,6 +8,9 @@ class GlobalConst {
     const USEFUL_LINKS = 'USEFUL_LINKS';
     const SUCCESS = true;
 
+    const DEFAULT_LANG = "en";
+    const DEFAULT_LANG_NAME = "English";
+
     const ACTIVE = true;
     const BANNED = false;
 

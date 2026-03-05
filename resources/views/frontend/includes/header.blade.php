@@ -39,11 +39,4 @@
     </div>
 </nav>
 
-<!-- ========== HERO SECTION ========== -->
-<section class="hero-section">
-    <div class="container text-center">
-        <h1 class="display-4 fw-bold mb-4">Welcome to MyStore</h1>
-        <p class="lead mb-5 mx-auto" style="max-width: 600px;">Discover amazing products at great prices, curated just for you.</p>
-        <a href="#products" class="btn btn-primary btn-lg">Shop Now</a>
-    </div>
-</section>
+

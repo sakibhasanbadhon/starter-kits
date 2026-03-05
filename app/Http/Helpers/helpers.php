@@ -1,13 +1,14 @@
 <?php
 
-use Illuminate\Support\Str;
+use Buglinjo\LaravelWebp\Facades\Webp;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
-use Intervention\Image\Facades\Image;
-use Buglinjo\LaravelWebp\Facades\Webp;
+use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
+use Intervention\Image\Facades\Image;
 
 /**************************************
  *  Static Variables Start
@@ -33,11 +34,17 @@ function isMenuExpand($url){
 function filesPath($slug)
 {
     $data = [
-        'admin-profile'         => [
-            'path'              => 'media/backend/images/admin/profile',
+        'admin-profile'=> [
+            'path' => 'media/backend/images/admin/profile',
         ],
         'flag'         => [
-            'path'              => 'media/backend/images/currency-flag',
+            'path' => 'media/backend/images/currency-flag',
+        ],
+        'ui-section'   => [
+            'path' => 'media/backend/images/ui-section',
+        ],
+        'placeholder-image'   => [
+            'path' => 'media/placeholder-image',
         ],
     ];
     return (object) $data[$slug];
@@ -265,15 +272,22 @@ function deleteFile($file_link)
 function getImagePath($image_name, $path_type = null)
 {
     $image_path = filesPath($path_type)->path;
+
     $image_link = $image_path . "/" . $image_name;
+
     if (file_exists(public_path($image_link))) {
+        // dd('ONE');
         $image = asset('public/' . $image_link);
+        // dd($image);
     }else{
+        // dd('two');
         return false;
     }
 
     return $image;
 }
+
+
 
 /**************************************
  *  Image Uploader Start
@@ -504,4 +518,6 @@ function replace_array_key($array, $remove_keyword, $replace_keyword = "")
     return $filter;
 }
 
-
+function display_default_lang_code() {
+    return App::currentLocale();
+}
