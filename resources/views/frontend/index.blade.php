@@ -3,7 +3,7 @@
 @section('content')
 
     @php
-        $local_lang  = display_default_lang_code();
+        $local_lang  = display_app_lang_code();
         $default    = App\Constants\GlobalConst::DEFAULT_LANG;
         $slug       = Illuminate\Support\Str::slug(App\Constants\UiConst::BANNER);
         $banner     = App\Models\Admin\UiSection::displayData($slug)->first();

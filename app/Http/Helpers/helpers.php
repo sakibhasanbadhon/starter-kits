@@ -513,6 +513,6 @@ function replace_array_key($array, $remove_keyword, $replace_keyword = "")
     return $filter;
 }
 
-function display_default_lang_code() {
+function display_app_lang_code() {
     return App::currentLocale();
 }

@@ -24,7 +24,7 @@ class UiController extends Controller
 
     public function __construct()
     {
-        $this->activeLanguages = Language::get();
+        $this->activeLanguages = Language::active()->get();
         $this->initializeContentDefinitions();
     }
 
@@ -45,9 +45,9 @@ class UiController extends Controller
             'feature' => [
                 'display'   => 'FeaturePage',
                 'update'   => 'updateFeature',
-                'addItem'       => null,
-                'updateItem'    => null,
-                'removeItem'    => null,
+                'addItem'       => 'addFeatureItem',
+                'updateItem'    => 'updateFeatureItem',
+                'removeItem'    => 'deleteFeatureItem',
                 'toggle'    => null,
             ],
 
@@ -219,22 +219,13 @@ class UiController extends Controller
      */
     public function updateFeature(Request $request, $pageKey)
     {
-
         $fieldDefinitions = [
             'title'       => "required|string|max:100",
             'subtitle'    => "required|string",
-            'button_name' => "required|string|max:50",
-            'button_link' => "required|string|max:255",
         ];
 
-        $storageKey = Str::slug(UiConst::BANNER);
+        $storageKey = Str::slug(UiConst::FEATURE);
         $existingData = UiSection::where("key", $storageKey)->first();
-
-        $preparedData['image'] = $existingData->value->image ?? null;
-
-        if ($request->hasFile("image")) {
-            $preparedData['image'] = $this->processImageUpload($request, "image", $existingData->value->image ?? null);
-        }
 
         $preparedData['lang'] = $this->processLocalizedContent($request, $fieldDefinitions);
         $finalData['value'] = $preparedData;
@@ -243,11 +234,48 @@ class UiController extends Controller
         try {
             UiSection::updateOrCreate(['key' => $storageKey], $finalData);
         } catch (Exception $e) {
-            dd($e);
             return back()->with(['error' => ['Unable to save changes. Please try again.']]);
         }
 
-        return back()->with(['success' => ['Banner section updated successfully!']]);
+        return back()->with(['success' => ['Feature section updated successfully!']]);
+    }
+
+
+    public function addFeatureItem(Request $request, $pageKey)
+    {
+        $fieldDefinitions = [
+            'item_icon'        => "required|string|max:100",
+            'item_title'       => "required|string|max:100",
+            'item_subtitle'    => "required|string",
+        ];
+
+        $localizedData = $this->processLocalizedContent($request, $fieldDefinitions, "process-add-modal");
+
+
+        if ($localizedData instanceof RedirectResponse) {
+            return $localizedData;
+        }
+
+        $storageKey = Str::slug(UiConst::FEATURE);
+        $existingData = UiSection::where("key", $storageKey)->first();
+
+        $sectionData = $existingData ? json_decode(json_encode($existingData->value), true) : [];
+
+        $uniqueIdentifier = uniqid();
+        $sectionData['items'][$uniqueIdentifier]['lang'] = $localizedData;
+        $sectionData['items'][$uniqueIdentifier]['identifier'] = $uniqueIdentifier;
+        $sectionData['items'][$uniqueIdentifier]['is_active'] = 1;
+
+        $finalData['key'] = $storageKey;
+        $finalData['value'] = $sectionData;
+
+        try {
+            UiSection::updateOrCreate(['key' => $storageKey], $finalData);
+        } catch (Exception $e) {
+            return back()->with(['error' => ['Failed to add new process step.']]);
+        }
+
+        return back()->with(['success' => ['Process step added successfully!']]);
     }
 
 
@@ -516,45 +544,44 @@ class UiController extends Controller
     /**
      * Process and validate multilingual content
      */
-    private function processLocalizedContent($request, $fieldDefinitions, $modalReference = null)
-    {
-        $availableLanguages = $this->getAllLanguages();
-        $defaultLocale = display_default_lang_code();
+    public function processLocalizedContent($request,$basic_field_name,$modal = null) {
+        $languages = $this->getAllLanguages();
 
-        $validationRules = [];
-        $localizedContent = [];
+        // dd($languages,$request,$basic_field_name);
 
-        foreach ($request->all() as $inputName => $inputValue) {
-            foreach ($availableLanguages as $language) {
-                $nameParts = explode("_", $inputName);
-                $langCode = array_shift($nameParts);
-                $fieldName = implode("_", $nameParts);
-
-                if ($langCode == $language['code'] && array_key_exists($fieldName, $fieldDefinitions)) {
-                    $code = $language['code'];
-
-                    if ($defaultLocale == $code) {
-                        $validationRules[$inputName] = $fieldDefinitions[$fieldName];
-                    } else {
-                        $validationRules[$inputName] = str_replace("required", "nullable", $fieldDefinitions[$fieldName]);
+        $current_local = display_app_lang_code();
+        $validation_rules = [];
+        $language_wise_data = [];
+        foreach($request->all() as $input_name => $input_value) {
+            foreach($languages as $language) {
+                $input_name_check = explode("_",$input_name);
+                $input_lang_code = array_shift($input_name_check);
+                $input_name_check = implode("_",$input_name_check);
+                if($input_lang_code == $language['code']) {
+                    if(array_key_exists($input_name_check,$basic_field_name)) {
+                        $langCode = $language['code'];
+                        if($current_local == $langCode) {
+                            $validation_rules[$input_name] = $basic_field_name[$input_name_check];
+                        }else {
+                            $validation_rules[$input_name] = str_replace("required","nullable",$basic_field_name[$input_name_check]);
+                        }
+                        $language_wise_data[$langCode][$input_name_check] = $input_value;
                     }
-
-                    $localizedContent[$code][$fieldName] = $inputValue;
+                    break;
                 }
             }
         }
-
-        if ($modalReference === null) {
-            $validated = Validator::make($request->all(), $validationRules)->validate();
-        } else {
-            $validator = Validator::make($request->all(), $validationRules);
-            if ($validator->fails()) {
-                return back()->withErrors($validator)->withInput()->with("modal", $modalReference);
+        if($modal == null) {
+            $validated = Validator::make($request->all(),$validation_rules)->validate();
+        }else {
+            $validator = Validator::make($request->all(),$validation_rules);
+            if($validator->fails()) {
+                return back()->withErrors($validator)->withInput()->with("modal",$modal);
             }
             $validated = $validator->validate();
         }
 
-        return $localizedContent;
+        return $language_wise_data;
     }
 
     /**

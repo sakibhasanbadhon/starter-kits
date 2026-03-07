@@ -43,8 +43,9 @@ class Language extends Model
         return self::where('status', true)->first() ?? self::first();
     }
 
-    public static function getActive()
+    public function scopeActive($query)
     {
-        return self::where('status', true)->get();
+        return $query->where('status', true);
     }
+    
 }
