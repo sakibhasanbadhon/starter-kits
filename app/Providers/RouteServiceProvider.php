@@ -38,11 +38,11 @@ class RouteServiceProvider extends ServiceProvider
                 ->name('admin.')
                 ->group(base_path('routes/admin.php'));
 
-            Route::middleware('web')
+            Route::middleware(['system.maintenance','web'])
                 ->group(base_path('routes/auth.php'));
 
 
-            Route::middleware('web')
+            Route::middleware(['system.maintenance','web'])
                 ->group(base_path('routes/web.php'));
         });
     }

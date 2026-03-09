@@ -23,12 +23,11 @@
                         </div>
 
                         <!-- Title -->
-                        <h1 class="h2 fw-bold mb-3">Under Maintenance</h1>
+                        <h1 class="h2 fw-bold mb-3">{{ @$system_maintenance->title }}</h1>
 
                         <!-- Description -->
                         <p class="text-secondary mb-4">
-                            We're performing scheduled maintenance.
-                            We'll be back online shortly.
+                            {{ @$system_maintenance->details }}
                         </p>
 
                         <!-- Time Estimate -->
@@ -50,7 +49,7 @@
                         <!-- Footer -->
                         <hr class="my-4">
                         <p class="text-secondary small mb-0">
-                            &copy; 2026 Your Company
+                            &copy; {{ date('Y') }} Your Company
                         </p>
                     </div>
                 </div>
