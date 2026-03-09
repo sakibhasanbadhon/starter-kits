@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\GlobalController;
 use App\Http\Controllers\Admin\LanguageController;
 use App\Http\Controllers\Admin\PagesController;
 use App\Http\Controllers\Admin\RoleController;
+use App\Http\Controllers\Admin\SystemMaintenanceController;
 use App\Http\Controllers\Admin\UiController;
 use App\Http\Controllers\Admin\UsefulLinkController;
 use App\Http\Controllers\Admin\UserManageController;
@@ -85,7 +86,7 @@ Route::controller(UiController::class)->prefix('ui-content')->name('ui-content.'
     Route::post('create-item/{page}', 'addContentItem')->name('item.create');
     Route::post('update-item/{page}', 'updateContentItem')->name('item.update');
     Route::post('edit-item/{page}', 'editContentItem')->name('item.edit');
-    Route::delete('delete-item/{page}', 'deleteContentItem')->name('item.delete');
+    Route::post('delete-item/{page}', 'deleteContentItem')->name('item.delete');
     Route::put('toggle-status/{page}', 'changeItemStatus')->name('status.toggle');
 });
 
@@ -100,4 +101,10 @@ Route::controller(LanguageController::class)->prefix('languages')->name('languag
     // Route::post('import','import')->name('import');
     // Route::post('switch','switch')->name('switch');
     // Route::get('download','download')->name('download');
+});
+
+// System Under Maintenance
+Route::controller(SystemMaintenanceController::class)->prefix('system-maintenance')->name('system.maintenance.')->group(function () {
+    Route::get('index', 'index')->name('index');
+    Route::put('update', 'update')->name('update');
 });

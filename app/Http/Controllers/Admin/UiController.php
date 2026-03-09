@@ -108,7 +108,7 @@ class UiController extends Controller
     /**
      * Modify existing content item
      */
-    public function editContentItem(Request $request, $pageKey)
+    public function updateContentItem(Request $request, $pageKey)
     {
         $handler = $this->resolveHandler($pageKey, 'updateItem');
         return $this->$handler($request, $pageKey);
@@ -278,6 +278,102 @@ class UiController extends Controller
         return back()->with(['success' => ['Process step added successfully!']]);
     }
 
+
+
+    public function updateFeatureItem(Request $request, $pageKey)
+    {
+        $request->validate([
+            'target' => 'required|string',
+        ]);
+
+        $fieldDefinitions = [
+            'item_icon_edit' => "required|string|max:255",
+            'item_title_edit' => "required|string|max:255",
+            'item_subtitle_edit' => "required|string",
+        ];
+
+        $storageKey = Str::slug(UiConst::FEATURE);
+        $existingData = UiSection::where("key", $storageKey)->first();
+
+        if (!$existingData) {
+            return back()->with(['error' => ['Content section not found!']]);
+        }
+
+        $sectionData = json_decode(json_encode($existingData->value), true);
+
+        if (!isset($sectionData['items'])) {
+            return back()->with(['error' => ['No items found in this section!']]);
+        }
+
+        if (!array_key_exists($request->target, $sectionData['items'])) {
+            return back()->with(['error' => ['Invalid item reference']]);
+        }
+
+        $localizedData = $this->processLocalizedContent($request, $fieldDefinitions, "process-edit-modal");
+        // dd($localizedData);
+
+        if ($localizedData instanceof RedirectResponse) {
+            return $localizedData;
+        }
+
+        // Remove '_edit' suffix from field names
+        $localizedData = array_map(function ($languageContent) {
+            $cleanedContent = [];
+            foreach ($languageContent as $key => $value) {
+                $cleanedContent[str_replace('_edit', '', $key)] = $value;
+            }
+            return $cleanedContent;
+        }, $localizedData);
+
+        $sectionData['items'][$request->target]['lang'] = $localizedData;
+
+        try {
+            $existingData->update([
+                'value' => $sectionData,
+            ]);
+        } catch (Exception $e) {
+            return back()->with(['error' => ['Failed to update process step.']]);
+        }
+
+        return back()->with(['success' => ['Process step updated successfully!']]);
+    }
+
+
+
+    public function deleteFeatureItem(Request $request, $pageKey)
+    {
+        $request->validate([
+            'target' => 'required|string',
+        ]);
+
+        $storageKey = Str::slug(UiConst::FEATURE);
+        $existingData = UiSection::where("key", $storageKey)->first();
+
+        if (!$existingData) {
+            return back()->with(['error' => ['Content section not found!']]);
+        }
+
+        $sectionData = json_decode(json_encode($existingData->value), true);
+
+        if (!isset($sectionData['items'])) {
+            return back()->with(['error' => ['No items found in this section!']]);
+        }
+
+        if (!array_key_exists($request->target, $sectionData['items'])) {
+            return back()->with(['error' => ['Invalid item reference!']]);
+        }
+
+        try {
+            unset($sectionData['items'][$request->target]);
+            $existingData->update([
+                'value' => $sectionData,
+            ]);
+        } catch (Exception $e) {
+            return back()->with(['error' => ['Failed to delete process step.']]);
+        }
+
+        return back()->with(['success' => ['Process step removed successfully!']]);
+    }
 
 
     /**

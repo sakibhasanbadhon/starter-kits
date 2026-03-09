@@ -201,7 +201,7 @@
                 </li>
 
                 <li class="nav-item">
-                    <a href="#" class="nav-link {{ isMenuActive('admin/maintenance*') }}">
+                    <a href="{{ route('admin.system.maintenance.index') }}" class="nav-link {{ isMenuActive('admin/system-maintenance*') }}">
                         <i class="nav-icon fas fa-tools"></i>
                         <p>Maintenance Mode</p>
                         <span class="badge badge-warning right">OFF</span>

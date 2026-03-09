@@ -157,7 +157,7 @@
                                    {{-- @dd() --}}
                                     <tr data-item="{{ json_encode($item) }}">
                                         <td>
-                                            <span class="icon-preview me-2">
+                                            <span class="icon-preview me-2 bg-info p-2 rounded">
                                                 <i class="{{ $item->lang->$local_lang->item_icon ?? 'fas fa-question-circle' }}"></i>
                                             </span>
                                         </td>
@@ -168,7 +168,7 @@
                                                 <i class="fas fa-edit"></i>
                                             </button>
 
-                                            <button class="action-btn action-danger" onclick="deleteItem('{{ $lang_code }}')">
+                                            <button class="action-btn action-danger delete-modal-button" title="Delete">
                                                 <i class="fas fa-trash"></i>
                                             </button>
                                         </td>
@@ -177,9 +177,9 @@
                                     <tr>
                                         <td colspan="4" class="text-center py-4">
                                             <div class="empty-state">
-                                                <i class="fas fa-language fa-3x text-muted mb-3"></i>
-                                                <h6>No Languages Found</h6>
-                                                <p class="text-muted">Click the "Add New" button to add language content.</p>
+                                                <i class="fas fa-database fa-3x text-muted mb-3"></i>
+                                                <h6>No Items Found</h6>
+                                                <p class="text-muted">Click the "Add New" button to add items.</p>
                                             </div>
                                         </td>
                                     </tr>
@@ -260,13 +260,12 @@
                                                         <div class="col-md-12">
                                                             <x-forms.textbox
                                                                 name="{{ $lang_code }}_item_icon"
-                                                                labelName="Title ({{ $item->name }})"
-                                                                placeholder="Enter title"
+                                                                labelName="Icon ({{ $item->name }})"
+                                                                placeholder="Enter Icon"
                                                                 required="required"
                                                                 type="text"
                                                                 class="form-control icp icp-auto iconpicker-element iconpicker-input">
                                                             </x-forms.textbox>
-                                                            <small class="text-muted">Enter Font Awesome or Bootstrap icon class</small>
                                                         </div>
 
                                                         <div class="col-md-12">
@@ -286,16 +285,13 @@
                                                                     name="{{ $lang_code }}_item_subtitle"
                                                                     rows="3"
                                                                     placeholder="Enter subtitle"
-                                                                    required>
-                                                            </textarea>
+                                                                    required></textarea>
                                                         </div>
 
                                                     </div>
                                                     <div class="modal-footer">
-                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                                                            <i class="fas fa-times me-2"></i>Cancel
-                                                        </button>
-                                                        <button type="submit" class="btn btn-primary">
+
+                                                        <button type="submit" class="btn btn-primary mt-2">
                                                             <i class="fas fa-save me-2"></i>Save Content
                                                         </button>
                                                     </div>
@@ -324,8 +320,9 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-            <form action="{{ route('admin.ui-content.item.create', $pageKey) }}" method="POST">
+            <form action="{{ route('admin.ui-content.item.update', $pageKey) }}" method="POST">
                 @csrf
+                <input type="hidden" name="target" value="{{ old('target') }}">
                 <div class="modal-body p-0">
                     <!-- Modern Card Layout -->
                     <div class="row modern-card m-0">
@@ -339,15 +336,15 @@
                                     </div>
                                 </div>
 
-                                <ul class="nav nav-tabs" id="modalTab" role="tablist">
+                                <ul class="nav nav-tabs" id="editModalTab" role="tablist">
                                     @foreach ($availableLanguages as $index => $item)
                                         <li class="nav-item">
                                             <a class="nav-link {{ $loop->first ? 'active' : '' }}"
-                                               id="modal-tab-{{ $item->id }}"
+                                               id="edit-modal-tab-{{ $item->id }}"
                                                data-toggle="tab"
-                                               href="#modal-content-{{ $item->id }}"
+                                               href="#edit-modal-content-{{ $item->id }}"
                                                role="tab"
-                                               aria-controls="modal-content-{{ $item->id }}"
+                                               aria-controls="edit-modal-content-{{ $item->id }}"
                                                aria-selected="{{ $loop->first ? 'true' : 'false' }}">
                                                 <span>{{ $item->name }}</span>
                                                 <i class="fas fa-chevron-right ml-auto"></i>
@@ -361,15 +358,15 @@
                         <!-- Right Side - Content Forms -->
                         <div class="col-md-8 col-lg-9 p-0">
                             <div class="tab-content-wrapper">
-                                <div class="tab-content" id="modalTabContent">
+                                <div class="tab-content" id="editModalTabContent">
                                     @foreach ($availableLanguages as $index => $item)
                                         @php
                                             $lang_code = $item->code;
                                         @endphp
                                         <div class="tab-pane fade {{ $loop->first ? 'show active' : '' }}"
-                                             id="modal-content-{{ $item->id }}"
+                                             id="edit-modal-content-{{ $item->id }}"
                                              role="tabpanel"
-                                             aria-labelledby="modal-tab-{{ $item->id }}">
+                                             aria-labelledby="edit-modal-tab-{{ $item->id }}">
 
                                             <div class="content-card card border-0">
                                                 <div class="card-body">
@@ -387,7 +384,6 @@
                                                                 type="text"
                                                                 class="form-control icp icp-auto iconpicker-element iconpicker-input">
                                                             </x-forms.textbox>
-                                                            <small class="text-muted">Enter Font Awesome or Bootstrap icon class</small>
                                                         </div>
 
                                                         <div class="col-md-12">
@@ -413,9 +409,7 @@
 
                                                     </div>
                                                     <div class="modal-footer">
-                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                                                            <i class="fas fa-times me-2"></i>Cancel
-                                                        </button>
+
                                                         <button type="submit" class="btn btn-primary">
                                                             <i class="fas fa-save me-2"></i>Save Content
                                                         </button>
@@ -444,62 +438,90 @@
 @push('script')
 <script src="{{ asset('public/backend/js/fontawesome-iconpicker.js') }}"></script>
 <script>
-$(document).ready(function() {
-    // Initialize icon picker
-    if (typeof $.fn.iconpicker === 'function') {
-        $('.icp-auto').each(function() {
-            var $this = $(this);
-            $this.iconpicker({
-                title: 'Select Icon',
-                selected: false,
-                defaultValue: false,
-                placement: 'bottom'
-            });
-
-            // Update icon on change
-            $this.on('iconpickerSelected', function(e) {
-                $(this).val(e.iconpickerValue);
-            });
-        });
-
-        // Handle tab changes
-        $('button[data-bs-toggle="tab"], a[data-toggle="tab"]').on('shown.bs.tab', function(e) {
+    $(document).ready(function() {
+        // Initialize icon picker
+        if (typeof $.fn.iconpicker === 'function') {
             $('.icp-auto').each(function() {
                 var $this = $(this);
-                if ($this.data('iconpicker')) {
-                    $this.iconpicker('destroy');
-                }
                 $this.iconpicker({
                     title: 'Select Icon',
                     selected: false,
                     defaultValue: false,
                     placement: 'bottom'
                 });
+
+                // Update icon on change
+                $this.on('iconpickerSelected', function(e) {
+                    $(this).val(e.iconpickerValue);
+                });
             });
-        });
-    } else {
-        console.error('Iconpicker plugin not loaded');
-    }
-});
+
+            // Handle tab changes
+            $('button[data-bs-toggle="tab"], a[data-toggle="tab"]').on('shown.bs.tab', function(e) {
+                $('.icp-auto').each(function() {
+                    var $this = $(this);
+                    if ($this.data('iconpicker')) {
+                        $this.iconpicker('destroy');
+                    }
+                    $this.iconpicker({
+                        title: 'Select Icon',
+                        selected: false,
+                        defaultValue: false,
+                        placement: 'bottom'
+                    });
+                });
+            });
+        } else {
+            console.error('Iconpicker plugin not loaded');
+        }
+    });
 </script>
 
 <script>
-    var default = "{{ $default }}";
+    var default_lang = "{{ $default }}";
     var local_lang = "{{ $local_lang }}";
-    var languages = "{{ $languages_for_json }}";
-    languages     = JSON.parse(languages.replace(/&quot;/g,'"'));
+    var languages = {!! $languages_for_json !!};
 
-    $(".edit-modal-button").click(function(){
-        alert("Edit button clicked!"); // Debugging alert
-        var oldData = JSON.parse($(this).parents("tr").attr("data-item"));
-        var editModal = $("#feature-edit");
+    $(document).on("click", ".edit-modal-button", function() {
+        var rowData = $(this).closest("tr").attr("data-item");
+        var oldData = JSON.parse(rowData);
+        // Use the correct modal selector
+        var editModal = $(".bd-example-modal-lg-edit");
 
-        editModal.find("form").first().find("input[name=target]").val(oldData.id);
-        editModal.find("input[name="+default+"_item_title_edit]").val(oldData.language[default].item_title);
-        $.each(languages,function(index,item) {
-            editModal.find("input[name="+item.code+"_item_title_edit]").val((oldData.language[item.code] == undefined) ? "" : oldData.language[item.code].item_title);
+        // Set the target identifier
+        editModal.find("input[name='target']").val(oldData.identifier);
+
+        // Loop through all languages and set the data
+        $.each(languages, function(index, language) {
+            var langCode = language.code;
+            var langData = oldData.lang[langCode] || {}; // Empty object if language data doesn't exist
+
+            editModal.find("input[name='" + langCode + "_item_icon_edit']").val(langData.item_icon || '');
+
+            // Set title field
+            editModal.find("input[name='" + langCode + "_item_title_edit']").val(langData.item_title || '');
+
+            // Set subtitle textarea
+            editModal.find("textarea[name='" + langCode + "_item_subtitle_edit']").val(langData.item_subtitle || '');
         });
-        openModalBySelector("#feature-edit");
+
+        // Open the modal
+        editModal.modal('show');
     });
+
+
+
+    $(".delete-modal-button").click(function(){
+        let method  = 'POST';
+        var oldData = JSON.parse($(this).parents("tr").attr("data-item"));
+        var url     = "{{ route('admin.ui-content.item.delete',$pageKey)}}";
+        var target  = oldData.identifier;
+        let title   = 'Delete Useful Link';
+        var message = `{{ __("Are you sure to") }} <strong>{{ __("delete") }}</strong> {{ __("this item?") }}`;
+
+        alertModalShow(method, url, title, message, target);
+    });
+
+
 </script>
 @endpush
